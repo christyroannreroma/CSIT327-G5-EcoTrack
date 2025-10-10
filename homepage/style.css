@@ -419,7 +419,7 @@ nav a.active::after {
         width: 100%;
         justify-content: center;
     }
-    
+
     .footer-content {
         grid-template-columns: 1fr;
         gap: 2rem;
