@@ -1,0 +1,20 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dashboard — EcoTrack</title>
+  <link rel="stylesheet" href="{% static 'Login_App/login.css' %}">
+</head>
+<body>
+  <main class="login-card">
+    <h1>Welcome to EcoTrack</h1>
+    <p class="lead">This is a simple dashboard placeholder. From here students can explore how to build real features (carbon tracking, challenges, tips).</p>
+
+    <p class="help-text">You can extend this page to show user stats and gamification elements.</p>
+
+    <p><a href="{% url 'Login_App:logout' %}" class="btn">Log out</a></p>
+  </main>
+</body>
+</html>
