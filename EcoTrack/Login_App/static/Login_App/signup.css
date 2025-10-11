@@ -1,0 +1,11 @@
+/* signup.css - inherits login.css, add custom styles below if needed */
+@import url('login.css');
+
+/* Example: highlight signup button differently */
+.btn {
+  background: #1e7e34;
+}
+
+.login-card h1 {
+  color: #155724;
+}
