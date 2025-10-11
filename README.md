@@ -1,10 +1,12 @@
 # EcoTrack – Sustainability & Carbon Footprint Tracking Platform
 
 **Proponents / Team Roles:**  
-- Christy Roan Reroma – Product Owner / Project Manager  
-- Zilfa Edz Quirante – Business Analyst  
-- Karl Miguel Penida – Scrum Master  
-- Development Team – Software engineers, AI engineers, UI/UX designers  
+- Christy Roan Reroma – Product Owner / christyroan.reroma@cit.edu
+- Zilfa Edz Quirante – Business Analyst / zilfaedz.quirante@cit.edu
+- Karl Miguel Penida – Scrum Master / karlmiguel.penida@cit.edu
+- Joji O. Matsuda - Lead Developer / joji.matsuda@cit.edu
+- Sittie Sharimah M. Macasindel - Developer / sittiesharima.macasindel@cit.edu
+- Dharell Dave H. Melliza - Developer / dharelldave.melliza@cit.edu
 
 **Date:** August 13, 2025  
 
