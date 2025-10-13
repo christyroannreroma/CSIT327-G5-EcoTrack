@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Sign up — EcoTrack</title>
-  <link rel="stylesheet" href="{% static 'Login_App/signup.css' %}">
+  <link rel="stylesheet" href="{% static 'Login_App/login.css' %}">
 </head>
 <body>
   <main class="login-card" role="main">
@@ -33,6 +33,12 @@
         <button class="pw-toggle" data-target="id_password" aria-pressed="false" aria-label="Toggle password visibility">Show</button>
       </div>
 
+      <div class="form-group password-row">
+        <label for="id_confirm_password">Confirm Password</label>
+        <input type="password" name="confirm_password" id="id_confirm_password" required>
+        <button class="pw-toggle" data-target="id_confirm_password" aria-pressed="false" aria-label="Toggle password visibility">Show</button>
+      </div>
+
       <div class="form-group">
         <label style="font-weight:500"><input type="checkbox" name="remember"> Remember me</label>
       </div>
@@ -41,10 +47,10 @@
         <button type="submit" class="btn">Sign up</button>
       </div>
 
-      <p class="help-text">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+      <p class="help-text">Already have an account? <a href="/login/">Log in</a></p>
     </form>
   </main>
 
-  <script src="{% static 'Login_App/signup.js' %}"></script>
+  <script src="{% static 'Signup_App/signup.js' %}"></script>
 </body>
 </html>
