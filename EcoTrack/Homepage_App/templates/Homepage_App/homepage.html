@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,13 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoTrack - Track Your Carbon Footprint</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'Homepage_App/style.css' %}">
 </head>
 <body>
  
     <header>
         <div class="logo">
-            <img src="images/EcoTrack_Logo.svg">
+            <img src="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}">
             <span>EcoTrack</span>
         </div>
         <nav>
@@ -22,8 +24,8 @@
             </ul>
         </nav>
         <div class="auth-buttons">
-            <a href="login.html" class="btn login-btn" style="text-decoration: none; display: inline-block;">Login</a>
-            <a href="signup.html" class="btn signup-btn" style="text-decoration: none; display: inline-block;">Sign Up</a>
+            <a href="{% url 'Login_App:login' %}" class="btn login-btn" style="text-decoration: none; display: inline-block;">Login</a>
+            <a href="" class="btn signup-btn" style="text-decoration: none; display: inline-block;">Sign Up</a>
         </div>
     </header>
     
@@ -74,7 +76,7 @@
                 <a href="#" class="cta-btn">Learn More</a>
             </div>
             <div class="about-image">
-                <img src="C:\Users\PC\Downloads\carbonfootprint.webp">
+                <img src="{% static 'Homepage_App/images/carbonfootprint.webp' %}">
             </div>
         </div>
     </section>
