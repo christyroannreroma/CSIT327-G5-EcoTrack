@@ -1,19 +1,19 @@
 @font-face {
   font-family: 'NotoSerif_Condensed-Medium';
-  src: url(fonts/NotoSerif_Condensed-Medium.ttf) format('ttf');
+  src: url(../fonts/NotoSerif_Condensed-Medium.ttf) format('ttf');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'Sansation-Regular';
-  src: url(fonts/Sansation-Regular.ttf) format('ttf');
+  src: url(../fonts/Sansation-Regular.ttf) format('ttf');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Sansation-Bold';
-  src: url(fonts/Sansation-Bold.ttf) format('ttf');
+  src: url(../fonts/Sansation-Bold.ttf) format('ttf');
   font-weight: normal;
   font-style: normal;
 }
