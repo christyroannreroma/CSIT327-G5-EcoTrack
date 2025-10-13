@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if(password.length && !/[0-9]/.test(password)){
       errors.push('Password must contain at least one number.');
     }
-    if(password.length && !/[!@#$%^&*(),.?":{}|<>]/.test(password)){
+    if(password.length && !/[-!@#$%^&*(),.?":{}|<>]/.test(password)){
       errors.push('Password must contain at least one symbol.');
     }
     if(confirm.length && password !== confirm){
