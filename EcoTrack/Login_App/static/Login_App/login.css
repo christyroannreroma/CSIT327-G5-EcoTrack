@@ -33,5 +33,12 @@ input[type="text"],input[type="password"]{width:100%;padding:10px 12px;border:1p
 
 .messages{list-style:none;padding:0;margin:8px 0}
 .messages .error{background:#ffecec;color:#a94442;border:1px solid #f5c6cb;padding:8px;border-radius:6px}
+.messages .success {
+  background: #e6ffed;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  padding: 8px;
+  border-radius: 6px;
+}
 
 @media (max-width:480px){.login-card{padding:20px;border-radius:10px}}

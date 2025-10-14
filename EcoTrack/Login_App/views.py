@@ -2,6 +2,26 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
+def signup_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        confirm = request.POST.get('confirm_password')
+        # Add your validation logic here
+        if not username or not password or password != confirm:
+            messages.error(request, 'Please correct the errors below.')
+            return render(request, 'Signup_App/signup.html')
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists.')
+            return render(request, 'Signup_App/signup.html')
+        # Create user
+        user = User.objects.create_user(username=username, password=password)
+        user.save()
+        messages.success(request, 'Account created successfully! You can now log in.')
+        return redirect('login')  # 'login' should be the name of your login url
+    return render(request, 'Signup_App/signup.html')
 
 
 def login_view(request):
