@@ -37,3 +37,11 @@ yarn-error.log*
 # VS Code settings
 # =========================
 .vscode/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore Django migrations cache if needed
+db.sqlite3
+
