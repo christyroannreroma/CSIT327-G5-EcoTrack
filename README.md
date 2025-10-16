@@ -27,11 +27,11 @@ Core Features for Implementation:
 
 ## 2. Tech Stack
 
-- Frontend: Next.js, Tailwind CSS, Framer Motion  
-- Backend: Node.js, Express.js  
-- Database: TiDB (or MySQL/PostgreSQL for local dev)  
-- Authentication: Clerk  
-- Other Tools: ImageKit (image handling), SurveyJS (interactive forms)  
+- Frontend: Vanilla HTML, CSS, and JavaScript (no frameworks) 
+- Backend: Django 5.2.7 
+- Database: PostgreSQL (Supabase) 
+- Authentication: Clerk [Tentative]
+- Other Tools: ImageKit (image handling), SurveyJS (interactive forms) [Tentative]
 
 ---
 
