@@ -5,9 +5,29 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Sign up — EcoTrack</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="{% static 'Signup_App/signup.css' %}">
 </head>
 <body>
+  
+  <header class="login-header">
+    <div class="logo">
+      <img src="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}">
+      <span>EcoTrack</span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="{% url 'homepage' %}">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Project</a></li>
+      </ul>
+    </nav>
+    <div class="auth-buttons">
+      <a href="{% url 'Login_App:login' %}" class="btn login-btn" style="text-decoration: none; display: inline-block;">Login</a>
+      <a href="/signup/" class="btn signup-btn active" style="text-decoration: none; display: inline-block;">Sign Up</a>
+    </div>
+  </header>
+
   <main class="login-card" role="main">
     <h1>Sign up for EcoTrack</h1>
     <p class="lead">Enter your details to create an account.</p>
