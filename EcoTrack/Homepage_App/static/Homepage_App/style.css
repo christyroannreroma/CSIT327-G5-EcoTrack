@@ -18,8 +18,11 @@
   font-style: normal;
 }
 
-.p-welcome {
-    font-family: 'Sansation-Regular', sans-serif;
+p.p-welcome {
+    font-family: 'Sansation-Bold', sans-serif;
+    font-size: 0.2rem;
+    color: rgba(0, 3, 1, 0.9)
+    
 }
 
 .h2-welcome {
@@ -30,6 +33,7 @@
 .h1-welcome {
   font-family: 'NotoSerif_Condensed-Medium', serif;
   color: #e9f7da;
+  color: rgba(26, 77, 46, 0.9)
 }
 
 
@@ -50,9 +54,17 @@
 }
 
 body {
-    background-color: var(--white);
+    /* background-color: var(--white);
     color: #333;
-    line-height: 1.6;
+    line-height: 1.6; */
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: white;
+    min-height: 100vh;
+    line-height: 1.4;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
 }
 
 header {
@@ -69,6 +81,8 @@ header {
     z-index: 100;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
+    min-height: 90px;
+    width: 100%;
 }
 
 
@@ -78,7 +92,6 @@ header {
     gap: 10px;
     font-size: 1.8rem;
     font-weight: 700;
-    
 }
 
 .logo-img {
@@ -124,19 +137,52 @@ nav a:hover::after {
     gap: 1rem;
 }
 
-.btn {
+/* .btn {
     padding: 0.5rem 1.5rem;
     border-radius: 30px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
     border: none;
+} */
+
+.btn {
+    padding: 0.7rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .login-btn {
     background-color: transparent;
     color: white;
+    border: 2px solid var(--light-green); 
+}
+
+.login-btn:hover {
+    background-color: var(--light-green);
+    color: var(--dark-green);
+}
+
+.signup-btn {
+    background-color: transparent;
+    color: white;
     border: 2px solid var(--light-green);
+}
+
+.signup-btn:hover {
+    background-color: var(--light-green);
+    color: var(--dark-green);
+}
+
+/* .login-btn {
+    background-color: transparent;
+    color: white;
+    border: 2px solid var(--light-green); 
 }
 
 .login-btn:hover {
@@ -151,11 +197,11 @@ nav a:hover::after {
 
 .signup-btn:hover {
     background-color: var(--light-green);
-    transform: translateY(-2px);
-}
+    transform: translateY(-2px); 
+} */
 
 .hero {
-    background: url('images/EcoTrack_Homepage.jpg') center/cover;
+    background: url('images/EcoTrack_Homepage1.jpg') center/cover;
     color: white;
     padding: 8rem 2rem;
     text-align: center;
