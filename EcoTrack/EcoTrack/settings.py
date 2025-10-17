@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'Login_App',
     'Signup_App',
     'Homepage_App',
+    'Dashboard_App',
 ]
 
 MIDDLEWARE = [
