@@ -197,6 +197,9 @@ input[type="email"] {
     border: none;
     padding: 6px;
     cursor: pointer;
+    margin-top: 15px;
+    font-weight: bold;
+    color:#e6b857;
 }
 
 .btn[type="submit"] {
