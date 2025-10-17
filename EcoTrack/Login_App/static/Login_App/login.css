@@ -170,7 +170,10 @@ label {
     font-weight: 600;
     color: #163a2b;
 }
-
+ .password-row .pw-toggle:hover {
+    background-color: var(--light-gray);
+    border-color: var(--muted);
+}
 input[type="text"],
 input[type="password"] {
     width: 100%;
@@ -193,7 +196,10 @@ input[type="password"] {
     border: none;
     padding: 6px;
     cursor: pointer;
-}
+    margin-top: 15px;
+    font-weight: bold;
+    color:#e6b857
+}  
 
 .btn[type="submit"] {
     display: inline-block;
