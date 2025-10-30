@@ -9,15 +9,15 @@ backend/node_modules/
 # Build / output folders
 # =========================
 dist/
-frontend/.next/   # Next.js build output
-frontend/out/     # Next.js static export
-backend/build/    # Backend build (if any)
+frontend/.next/
+frontend/out/
+backend/build/
 
 # =========================
 # Environment files
 # =========================
-.env              # Local environment variables
-backend/.env      # Backend environment
+.env 
+EcoTrack/.env
 
 # =========================
 # OS generated files
