@@ -6,10 +6,10 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 echo "==> Running migrations"
-python manage.py makemigrations
-python manage.py migrate --noinput
+python EcoTrack/manage.py makemigrations
+python EcoTrack/manage.py migrate --noinput
 
 echo "==> Collecting static files"
-python manage.py collectstatic --noinput
+python EcoTrack/manage.py collectstatic --noinput
 
 echo "==> Build complete"
