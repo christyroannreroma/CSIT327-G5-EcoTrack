@@ -446,6 +446,57 @@ header {
     bottom: -35px;
 }
 
+.badge.earned {
+    background: linear-gradient(135deg, #66bb6a, #2e7d32);
+    color: #fff;
+    transform: scale(1.03);
+    box-shadow: 0 6px 18px rgba(46,125,50,0.18);
+}
+
+.badge .prereq {
+    font-size: 11px;
+    color: rgba(255,255,255,0.9);
+}
+
+.badge .earned-text {
+    font-size: 12px;
+    color: rgba(255,255,255,0.95);
+}
+
+/* keep locked hover showing prereq text */
+.badge.locked .badge-tooltip {
+    background: rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+    padding: 6px 10px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    border-radius: 6px;
+    white-space: normal;
+}
+
+/* Ensure prerequisite text (small) also appears white and readable */
+.badge.locked .badge-tooltip small,
+.badge.locked .badge-tooltip .prereq {
+    color: #ffffff;
+    opacity: 0.95;
+    display: block;
+    margin-top: 6px;
+    font-weight: 600;
+    font-size: 12px;
+}
+
+/* Tooltip arrow matching the dark background */
+.badge.locked .badge-tooltip::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent rgba(0,0,0,0.85) transparent;
+}
+
+
 .add-activity-btn {
     position: fixed;
     bottom: 30px;
