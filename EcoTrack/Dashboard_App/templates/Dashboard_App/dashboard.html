@@ -50,8 +50,20 @@
         <span>EcoTrack</span>
       </div>
       <div class="user-profile" id="userProfile">
-        <div class="avatar">JS</div>
-        <span>Jane Smith</span>
+        <div class="avatar">
+          {% if user.is_authenticated %}
+            {{ user.username|slice:":2"|upper }}
+          {% else %}
+            Guest
+          {% endif %}
+        </div>
+        <span>
+          {% if user.is_authenticated %}
+            {{ user.get_full_name|default:user.username }}
+          {% else %}
+            Guest
+          {% endif %}
+        </span>
         <i class="fas fa-chevron-down"></i>
         <div class="profile-menu" id="profileMenu">
           <div class="profile-menu-item">
@@ -76,16 +88,16 @@
         <!-- Carbon Footprint Score -->
         <div class="card score-card">
           <h2>Your Carbon Footprint Score</h2>
-          <div class="score-value">7.2</div>
-          <div class="score-label">Tons CO2/year</div>
-          <div class="score-description">15% lower than last month! Keep it up!</div>
-          <div class="trend-indicator trend-down">
+          <div class="score-value" id="scoreValue">0.0</div>
+          <div class="score-label" id="scoreLabel">kg CO2</div>
+          <div class="score-description">All analytics reset to 0.</div>
+          <div class="trend-indicator trend-down" id="trendIndicator" style="display:none;">
             <i class="fas fa-arrow-down"></i>
-            <span>Trending down this week</span>
+            <span id="trendText">Trending down this week</span>
           </div>
         </div>
         
-        <!-- Chart (Pie Graph) -->
+        <!-- Chart (Doughnut Graph) -->
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">Carbon Breakdown</h3>
@@ -105,7 +117,7 @@
             <div class="detail-text">
               <div class="detail-label">Transportation</div>
             </div>
-            <div class="detail-value">45%</div>
+            <div class="detail-value" id="transportValue">0%</div>
           </div>
           <div class="detail-item">
             <div class="detail-icon">
@@ -114,7 +126,7 @@
             <div class="detail-text">
               <div class="detail-label">Food</div>
             </div>
-            <div class="detail-value">30%</div>
+            <div class="detail-value" id="dietValue">0%</div>
           </div>
           <div class="detail-item">
             <div class="detail-icon">
@@ -123,7 +135,16 @@
             <div class="detail-text">
               <div class="detail-label">Energy</div>
             </div>
-            <div class="detail-value">25%</div>
+            <div class="detail-value" id="energyValue">0%</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <i class="fas fa-shopping-bag"></i>
+            </div>
+            <div class="detail-text">
+              <div class="detail-label">Shopping</div>
+            </div>
+            <div class="detail-value" id="shoppingValue">0%</div>
           </div>
         </div>
       </div>
@@ -141,13 +162,13 @@
               <svg width="80" height="80" viewBox="0 0 80 80">
                 <circle cx="40" cy="40" r="35" stroke="#E8F5E9" stroke-width="6" fill="none"></circle>
                 <circle cx="40" cy="40" r="35" stroke="#4CAF50" stroke-width="6" fill="none" 
-                        stroke-dasharray="220" stroke-dashoffset="66" stroke-linecap="round" transform="rotate(-90 40 40)"></circle>
+                        stroke-dasharray="220" stroke-dashoffset="220" stroke-linecap="round" transform="rotate(-90 40 40)"></circle>
               </svg>
             </div>
             <div>
-              <div class="progress-value">70%</div>
+              <div class="progress-value" id="progressValue">0%</div>
               <div class="progress-text">of daily goal achieved</div>
-              <div class="progress-text">2.1 kg of 3.0 kg target</div>
+              <div class="progress-text" id="progressKg">0.0 kg of 3.0 kg target</div>
             </div>
           </div>
         </div>
@@ -159,25 +180,25 @@
             <i class="fas fa-award"></i>
           </div>
           <div class="badges-container">
-            <div class="badge">
+            <div class="badge locked" id="badge-eco_commuter" data-badge="eco_commuter" data-prereq="Take 5 bike/walk trips or accumulate 50 km by bike/walk">
               <i class="fas fa-bicycle"></i>
-              <div class="badge-tooltip">Eco Commuter</div>
+              <div class="badge-tooltip">Eco Commuter<br><small class="prereq">Prereq: Take 5 bike/walk trips or 50 km</small></div>
             </div>
-            <div class="badge">
+            <div class="badge locked" id="badge-green_eater" data-badge="green_eater" data-prereq="Log 7 vegetarian/vegan meals">
               <i class="fas fa-leaf"></i>
-              <div class="badge-tooltip">Green Eater</div>
+              <div class="badge-tooltip">Green Eater<br><small class="prereq">Prereq: 7 veg/vegan meals</small></div>
             </div>
-            <div class="badge">
+            <div class="badge locked" id="badge-recycling_champion" data-badge="recycling_champion" data-prereq="Record 5 recycling actions (shopping note includes 'recycle')">
               <i class="fas fa-recycle"></i>
-              <div class="badge-tooltip">Recycling Champion</div>
+              <div class="badge-tooltip">Recycling Champion<br><small class="prereq">Prereq: 5 recycling actions</small></div>
             </div>
-            <div class="badge locked">
+            <div class="badge locked" id="badge-energy_saver" data-badge="energy_saver" data-prereq="Use renewable energy 5 times or log low energy usage">
               <i class="fas fa-solar-panel"></i>
-              <div class="badge-tooltip">Energy Saver</div>
+              <div class="badge-tooltip">Energy Saver<br><small class="prereq">Prereq: 5 renewable energy uses</small></div>
             </div>
-            <div class="badge locked">
+            <div class="badge locked" id="badge-carbon_neutral" data-badge="carbon_neutral" data-prereq="Achieve total footprint ≤ 0.5 kg CO2">
               <i class="fas fa-wind"></i>
-              <div class="badge-tooltip">Carbon Neutral</div>
+              <div class="badge-tooltip">Carbon Neutral<br><small class="prereq">Prereq: Total ≤ 0.5 kg CO2</small></div>
             </div>
           </div>
         </div>
@@ -224,52 +245,8 @@
         <h3 class="card-title">Recent Activities</h3>
         <i class="fas fa-history"></i>
       </div>
-      <ul class="activity-list">
-        <li class="activity-item">
-          <div class="activity-category">
-            <div class="category-icon">
-              <i class="fas fa-car"></i>
-            </div>
-            <span>Drove to work (15 km)</span>
-          </div>
-          <div class="activity-impact">+2.4 kg</div>
-        </li>
-        <li class="activity-item">
-          <div class="activity-category">
-            <div class="category-icon">
-              <i class="fas fa-utensils"></i>
-            </div>
-            <span>Vegetarian meal</span>
-          </div>
-          <div class="activity-impact">-1.2 kg</div>
-        </li>
-        <li class="activity-item">
-          <div class="activity-category">
-            <div class="category-icon">
-              <i class="fas fa-bolt"></i>
-            </div>
-            <span>Reduced energy use</span>
-          </div>
-          <div class="activity-impact">-0.8 kg</div>
-        </li>
-        <li class="activity-item">
-          <div class="activity-category">
-            <div class="category-icon">
-              <i class="fas fa-bus"></i>
-            </div>
-            <span>Public transport (10 km)</span>
-          </div>
-          <div class="activity-impact">-1.5 kg</div>
-        </li>
-        <li class="activity-item">
-          <div class="activity-category">
-            <div class="category-icon">
-              <i class="fas fa-shopping-bag"></i>
-            </div>
-            <span>Local grocery shopping</span>
-          </div>
-          <div class="activity-impact">-0.5 kg</div>
-        </li>
+      <ul class="activity-list" id="recentActivities">
+        <!-- populated by JS -->
       </ul>
     </div>
     
@@ -309,7 +286,7 @@
           </select>
           
           <label class="form-label" for="distance">Distance (km)</label>
-          <input type="number" class="form-input" id="distance" min="0" step="0.1">
+          <input type="number" class="form-input" id="distance" min="0" step="0.1" value="0">
         </div>
         
         <div class="form-group" id="dietFields" style="display: none;">
@@ -333,7 +310,14 @@
           </select>
           
           <label class="form-label" for="energyAmount">Amount (kWh)</label>
-          <input type="number" class="form-input" id="energyAmount" min="0" step="0.1">
+          <input type="number" class="form-input" id="energyAmount" min="0" step="0.1" value="0">
+        </div>
+
+        <div class="form-group" id="shoppingFields" style="display: none;">
+          <label class="form-label" for="shoppingDesc">Shopping description</label>
+          <input type="text" class="form-input" id="shoppingDesc" placeholder="e.g. New shoes">
+          <label class="form-label" for="shoppingImpact">Estimated impact (kg CO2)</label>
+          <input type="number" class="form-input" id="shoppingImpact" min="0" step="0.1" value="0">
         </div>
         
         <button type="submit" class="submit-btn">Add Activity</button>
@@ -343,7 +327,7 @@
 
   <div class="notification" id="notification">
     <i class="fas fa-check-circle"></i>
-    <span>Activity added successfully!</span>
+    <span id="notificationText">Activity added successfully!</span>
   </div>
 
   <!-- JavaScript -->
