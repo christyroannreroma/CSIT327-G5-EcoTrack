@@ -34,10 +34,10 @@
 
     <div class="sidebar-bottom">
       <a href="#" class="nav-item">
-        <span class="icon">👤</span> Profile
-      </a>
-      <a href="#" class="nav-item">
         <span class="icon">⚙️</span> Settings
+      </a>
+      <a href="{% url 'Login_App:logout' %}" class="nav-item">
+        <i class="fas fa-sign-out-alt"></i> Log out
       </a>
     </div>
   </aside>
@@ -58,20 +58,14 @@
             <i class="fas fa-user"></i>
             <span>My Profile</span>
           </div>
-          <div class="profile-menu-item">
-            <i class="fas fa-cog"></i>
-            <span>Settings</span>
-          </div>
-          <div class="profile-menu-item">
-            <i class="fas fa-sign-out-alt"></i>
-            <a href="{% url 'Login_App:logout' %}" class="btn-logout">Log out</a>
-          </div>
         </div>
       </div>
     </header>
+
+    <h1>Hello,</h1>
+    <p>Track your daily choices to measure your impact</p><br/>
     
     <div class="dashboard-grid">
-      <!-- Left Column -->
       <div class="left-column">
         <!-- Carbon Footprint Score -->
         <div class="card score-card">
@@ -209,8 +203,8 @@
             </li>
             <li class="activity-item">
               <div class="activity-category">
-                <i class="fas fa-plug" style="color: var(--primary-green);"></i>
-                <span>Unplug devices when not in use</span>
+                <i class="fas fa-droplet" style="color: var(--primary-green);"></i>
+                <span>Turn off the taps when not in use</span>
               </div>
             </li>
           </ul>

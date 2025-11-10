@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'Signup_App',
     'Homepage_App',
     'Dashboard_App',
+    'Activity_App',
 ]
 
 MIDDLEWARE = [
