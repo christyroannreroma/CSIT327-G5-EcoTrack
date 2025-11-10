@@ -27,7 +27,11 @@ INSTALLED_APPS = [
     'Signup_App',
     'Homepage_App',
     'Dashboard_App',
+<<<<<<< HEAD
+    'Activity_App',
+=======
     'EcoTrack',
+>>>>>>> upstream/main
 ]
 
 MIDDLEWARE = [
