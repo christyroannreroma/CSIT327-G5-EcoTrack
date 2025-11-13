@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-dev-key")
-DEBUG = os.environ.get("DJANGO_DEBUG", "False").lower() == "true"
+DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() == "true"
 
 ALLOWED_HOSTS = [h.strip() for h in os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",") if h.strip()]
 if DEBUG and not ALLOWED_HOSTS:
@@ -27,11 +27,8 @@ INSTALLED_APPS = [
     'Signup_App',
     'Homepage_App',
     'Dashboard_App',
-<<<<<<< HEAD
     'Activity_App',
-=======
     'EcoTrack',
->>>>>>> upstream/main
 ]
 
 MIDDLEWARE = [

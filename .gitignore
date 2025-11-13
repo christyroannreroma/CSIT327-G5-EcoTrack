@@ -45,3 +45,21 @@ __pycache__/
 # Ignore Django migrations cache if needed
 db.sqlite3
 
+
+# Django
+media/
+.env.local
+.env.production
+
+# Virtual environment
+.venv/
+venv/
+env/
+ENV/
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+

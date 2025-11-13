@@ -1,0 +1,405 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dashboard — EcoTrack</title>
+  
+  <!-- External Libraries -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Local Styles -->
+  <link rel="stylesheet" href="{% static 'Activity_App/activity.css' %}">
+  <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}">
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <h2 class="sidebar-logo">EcoTrack</h2>
+      <nav class="nav-links">
+        <a href="{% url 'Dashboard_App:dashboard' %}" class="nav-item">
+          <span class="icon">🏠</span> Home
+        </a>
+        <a href="{% url 'Activity_App:activity' %}" class="nav-item active">
+          <span class="icon">➕</span> Add Activity
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">📜</span> History
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <a href="#" class="nav-item">
+        <span class="icon">⚙️</span> Settings
+      </a>
+      <a href="{% url 'Login_App:logout' %}" class="nav-item">
+        <i class="fas fa-sign-out-alt"></i> Log out
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Dashboard Content -->
+  <div class="dashboard">
+    <header>
+      <div class="logo">
+        <img src="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}" alt="EcoTrack Logo">
+        <span>EcoTrack</span>
+      </div>
+      <div class="user-profile" id="userProfile">
+        <div class="avatar">
+          {% if user.is_authenticated %}
+            {{ user.username|slice:":2"|upper }}
+          {% else %}
+            Guest
+          {% endif %}
+        </div>
+        <span>
+          {% if user.is_authenticated %}
+            {{ user.get_full_name|default:user.username }}
+          {% else %}
+            Guest
+          {% endif %}
+        </span>
+        <i class="fas fa-chevron-down"></i>
+        <div class="profile-menu" id="profileMenu">
+          <div class="profile-menu-item">
+            <i class="fas fa-user"></i>
+            <span>My Profile</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Activity Selection Columns -->
+    <div class="activity-selection" id="activitySelection">
+      <h2 class="section-title">Track Your Environmental Impact</h2>
+      <p class="section-subtitle">Choose a category to log your activity</p>
+      
+      <div class="selection-columns">
+        <!-- Transportation Column -->
+        <div class="selection-column" data-category="transportation">
+          <div class="column-icon">
+            <i class="fas fa-car"></i>
+          </div>
+          <h3>Transportation</h3>
+          <p>Track your travel emissions from cars, buses, trains, and more</p>
+          <div class="activity-stats">
+            <span class="stat-count">0</span>
+            <span class="stat-label">activities this week</span>
+          </div>
+          <button class="select-category-btn">Select Transportation</button>
+        </div>
+        
+        <!-- Diet Column -->
+        <div class="selection-column" data-category="diet">
+          <div class="column-icon">
+            <i class="fas fa-utensils"></i>
+          </div>
+          <h3>Diet</h3>
+          <p>Log your meals and understand their environmental impact</p>
+          <div class="activity-stats">
+            <span class="stat-count">0</span>
+            <span class="stat-label">meals this week</span>
+          </div>
+          <button class="select-category-btn">Select Diet</button>
+        </div>
+        
+        <!-- Energy Column -->
+        <div class="selection-column" data-category="energy">
+          <div class="column-icon">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <h3>Energy</h3>
+          <p>Monitor your electricity, heating, and renewable energy usage</p>
+          <div class="activity-stats">
+            <span class="stat-count">0</span>
+            <span class="stat-label">activities this week</span>
+          </div>
+          <button class="select-category-btn">Select Energy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Forms (Hidden by default) -->
+    <div class="activity-forms" style="display: none;">
+      <!-- Transportation Form -->
+      <div class="activity-form" id="transportation-form">
+        <div class="form-header">
+          <button class="back-to-selection">
+            <i class="fas fa-arrow-left"></i>
+            
+          </button>
+          <div class="form-title">
+            <div class="form-icon">
+              <i class="fas fa-car"></i>
+            </div>
+            <div>
+              <h2>Transportation Activity</h2>
+              <p>Log your travel and calculate emissions</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-content">
+          <div class="form-card">
+            <h3>Travel Details</h3>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="transportType">Transport Type</label>
+                <select class="form-select" id="transportType" required>
+                  <option value="">Select transport type</option>
+                  <option value="car">Car</option>
+                  <option value="bus">Bus</option>
+                  <option value="train">Train</option>
+                  <option value="bicycle">Bicycle</option>
+                  <option value="walk">Walking</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label" for="distance">Distance (km)</label>
+                <input type="number" class="form-input" id="distance" min="0" step="0.1" placeholder="Enter distance">
+                <div class="input-hint">Approximate distance traveled</div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label" for="transportDate">Date</label>
+                <input type="date" class="form-input" id="transportDate">
+              </div>
+            </div>
+            
+            <div class="impact-preview">
+              <h4>Estimated Environmental Impact</h4>
+              <div class="impact-value">0 kg CO2</div>
+              <p class="impact-description">Based on your transportation choice and distance</p>
+            </div>
+            
+            <div class="form-actions">
+              <button class="cancel-btn">Cancel</button>
+              <button class="submit-btn add-activity" data-category="transportation">
+                Add Transportation Activity
+              </button>
+            </div>
+          </div>
+          
+          <div class="form-tips">
+            <h4>💡 Transportation Tips</h4>
+            <ul>
+              <li>Walking and cycling produce zero emissions</li>
+              <li>Public transport is more efficient than individual cars</li>
+              <li>Carpooling can reduce your carbon footprint by up to 50%</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Diet Form -->
+      <div class="activity-form" id="diet-form">
+        <div class="form-header">
+          <button class="back-to-selection">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <div class="form-title">
+            <div class="form-icon">
+              <i class="fas fa-utensils"></i>
+            </div>
+            <div>
+              <h2>Diet Activity</h2>
+              <p>Log your meals and their environmental impact</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-content">
+          <div class="form-card">
+            <h3>Meal Details</h3>
+            <div class="form-group">
+              <label class="form-label">Meal Type</label>
+              <div class="radio-grid">
+                <label class="radio-option large">
+                  <input type="radio" name="mealType" value="vegetarian">
+                  <div class="radio-content">
+                    <div class="radio-icon">🥦</div>
+                    <div class="radio-text">
+                      <div class="radio-title">Vegetarian</div>
+                      <div class="radio-description">Plant-based with dairy and eggs</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="radio-option large">
+                  <input type="radio" name="mealType" value="vegan">
+                  <div class="radio-content">
+                    <div class="radio-icon">🌱</div>
+                    <div class="radio-text">
+                      <div class="radio-title">Vegan</div>
+                      <div class="radio-description">100% plant-based</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="radio-option large">
+                  <input type="radio" name="mealType" value="meat">
+                  <div class="radio-content">
+                    <div class="radio-icon">🍖</div>
+                    <div class="radio-text">
+                      <div class="radio-title">Meat-based</div>
+                      <div class="radio-description">Contains meat products</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="radio-option large">
+                  <input type="radio" name="mealType" value="fish">
+                  <div class="radio-content">
+                    <div class="radio-icon">🐟</div>
+                    <div class="radio-text">
+                      <div class="radio-title">Fish-based</div>
+                      <div class="radio-description">Contains fish or seafood</div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label" for="mealDate">Date</label>
+              <input type="date" class="form-input" id="mealDate">
+            </div>
+            
+            <div class="impact-preview">
+              <h4>Estimated Environmental Impact</h4>
+              <div class="impact-value">0 kg CO2</div>
+              <p class="impact-description">Based on your meal choice</p>
+            </div>
+            
+            <div class="form-actions">
+              <button class="cancel-btn">Cancel</button>
+              <button class="submit-btn add-activity" data-category="diet">
+                Add Meal
+              </button>
+            </div>
+          </div>
+          
+          <div class="form-tips">
+            <h4>💡 Diet Tips</h4>
+            <ul>
+              <li>Plant-based meals have significantly lower carbon footprints</li>
+              <li>Local and seasonal produce reduces transportation emissions</li>
+              <li>Reducing food waste can cut your dietary emissions by 25%</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Energy Form -->
+      <div class="activity-form" id="energy-form">
+        <div class="form-header">
+          <button class="back-to-selection">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <div class="form-title">
+            <div class="form-icon">
+              <i class="fas fa-bolt"></i>
+            </div>
+            <div>
+              <h2>Energy Activity</h2>
+              <p>Track your energy consumption and savings</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-content">
+          <div class="form-card">
+            <h3>Energy Usage</h3>
+            <div class="form-group">
+              <label class="form-label">Energy Type</label>
+              <div class="radio-grid">
+                <label class="radio-option large">
+                  <input type="radio" name="energyType" value="electricity">
+                  <div class="radio-content">
+                    <div class="radio-icon">💡</div>
+                    <div class="radio-text">
+                      <div class="radio-title">Electricity Usage</div>
+                      <div class="radio-description">Home or appliance electricity</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="radio-option large">
+                  <input type="radio" name="energyType" value="heating">
+                  <div class="radio-content">
+                    <div class="radio-icon">🔥</div>
+                    <div class="radio-text">
+                      <div class="radio-title">Heating</div>
+                      <div class="radio-description">Heating system usage</div>
+                    </div>
+                  </div>
+                </label>
+                
+                <label class="radio-option large">
+                  <input type="radio" name="energyType" value="renewable">
+                  <div class="radio-content">
+                    <div class="radio-icon">☀️</div>
+                    <div class="radio-text">
+                      <div class="radio-title">Renewable Energy</div>
+                      <div class="radio-description">Solar, wind, or other renewables</div>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" for="energyAmount">Amount (kWh)</label>
+                <input type="number" class="form-input" id="energyAmount" min="0" step="0.1" placeholder="Enter energy amount">
+                <div class="input-hint">Kilowatt-hours consumed or saved</div>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label" for="energyDate">Date</label>
+                <input type="date" class="form-input" id="energyDate">
+              </div>
+            </div>
+            
+            <div class="impact-preview">
+              <h4>Estimated Environmental Impact</h4>
+              <div class="impact-value">0 kg CO2</div>
+              <p class="impact-description">Based on your energy type and amount</p>
+            </div>
+            
+            <div class="form-actions">
+              <button class="cancel-btn">Cancel</button>
+              <button class="submit-btn add-activity" data-category="energy">
+                Add Energy Activity
+              </button>
+            </div>
+          </div>
+          
+          <div class="form-tips">
+            <h4>💡 Energy Tips</h4>
+            <ul>
+              <li>LED bulbs use 75% less energy than incandescent bulbs</li>
+              <li>Smart thermostats can reduce heating costs by 10-15%</li>
+              <li>Unplug electronics when not in use to avoid phantom loads</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle"></i>
+    <span id="notificationText">Activity added successfully!</span>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="{% static 'Activity_App/activity.js' %}"></script>
+</body>
+</html>
