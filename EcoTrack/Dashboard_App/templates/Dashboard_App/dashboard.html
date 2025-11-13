@@ -20,10 +20,10 @@
     <div class="sidebar-top">
       <h2 class="sidebar-logo">EcoTrack</h2>
       <nav class="nav-links">
-        <a href="#" class="nav-item active">
+        <a href="{% url 'Dashboard_App:dashboard' %}" class="nav-item active">
           <span class="icon">🏠</span> Home
         </a>
-        <a href="#" class="nav-item">
+        <a href="{% url 'Activity_App:activity' %}" class="nav-item">
           <span class="icon">➕</span> Add Activity
         </a>
         <a href="#" class="nav-item">
@@ -74,8 +74,14 @@
       </div>
     </header>
 
-    <h1>Hello,</h1>
-    <p>Track your daily choices to measure your impact</p><br/>
+    <h1>Welcome, 
+      {% if user.is_authenticated %}
+          {{ user.get_full_name|default:user.username }}
+      {% else %}
+          Guest
+      {% endif %}
+    </h1>
+    <br/>
     
     <div class="dashboard-grid">
       <div class="left-column">
@@ -131,15 +137,6 @@
             </div>
             <div class="detail-value" id="energyValue">0%</div>
           </div>
-          <div class="detail-item">
-            <div class="detail-icon">
-              <i class="fas fa-shopping-bag"></i>
-            </div>
-            <div class="detail-text">
-              <div class="detail-label">Shopping</div>
-            </div>
-            <div class="detail-value" id="shoppingValue">0%</div>
-          </div>
         </div>
       </div>
       
@@ -182,10 +179,10 @@
               <i class="fas fa-leaf"></i>
               <div class="badge-tooltip">Green Eater<br><small class="prereq">Prereq: 7 veg/vegan meals</small></div>
             </div>
-            <div class="badge locked" id="badge-recycling_champion" data-badge="recycling_champion" data-prereq="Record 5 recycling actions (shopping note includes 'recycle')">
+            <!-- <div class="badge locked" id="badge-recycling_champion" data-badge="recycling_champion" data-prereq="Record 5 recycling actions (shopping note includes 'recycle')">
               <i class="fas fa-recycle"></i>
               <div class="badge-tooltip">Recycling Champion<br><small class="prereq">Prereq: 5 recycling actions</small></div>
-            </div>
+            </div> -->
             <div class="badge locked" id="badge-energy_saver" data-badge="energy_saver" data-prereq="Use renewable energy 5 times or log low energy usage">
               <i class="fas fa-solar-panel"></i>
               <div class="badge-tooltip">Energy Saver<br><small class="prereq">Prereq: 5 renewable energy uses</small></div>
@@ -264,7 +261,6 @@
             <option value="transport">Transportation</option>
             <option value="diet">Diet</option>
             <option value="energy">Energy</option>
-            <option value="shopping">Shopping</option>
           </select>
         </div>
         
@@ -307,12 +303,12 @@
           <input type="number" class="form-input" id="energyAmount" min="0" step="0.1" value="0">
         </div>
 
-        <div class="form-group" id="shoppingFields" style="display: none;">
+        <!-- <div class="form-group" id="shoppingFields" style="display: none;">
           <label class="form-label" for="shoppingDesc">Shopping description</label>
           <input type="text" class="form-input" id="shoppingDesc" placeholder="e.g. New shoes">
           <label class="form-label" for="shoppingImpact">Estimated impact (kg CO2)</label>
           <input type="number" class="form-input" id="shoppingImpact" min="0" step="0.1" value="0">
-        </div>
+        </div> -->
         
         <button type="submit" class="submit-btn">Add Activity</button>
       </form>
