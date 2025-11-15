@@ -41,6 +41,8 @@ yarn-error.log*
 # Ignore Python cache files
 __pycache__/
 *.pyc
+*/__pycache__/
+*/migrations/
 EcoTrack/__pycache__/
 Activity_App/__pycache__/
 Dashboard_App/__pycache__/
