@@ -9,7 +9,4 @@ echo "==> Running migrations"
 python EcoTrack/manage.py makemigrations
 python EcoTrack/manage.py migrate --noinput
 
-echo "==> Collecting static files"
-python EcoTrack/manage.py collectstatic --noinput
-
 echo "==> Build complete"
