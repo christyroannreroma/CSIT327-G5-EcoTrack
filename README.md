@@ -1,242 +1,225 @@
-# EcoTrack – Sustainability & Carbon Footprint Tracking Platform
+# 🌍 EcoTrack
 
-**Proponents / Team Roles:**  
-- Christy Roan Reroma – Product Owner / christyroan.reroma@cit.edu
-- Zilfa Edz Quirante – Business Analyst / zilfaedz.quirante@cit.edu
-- Karl Miguel Penida – Scrum Master / karlmiguel.penida@cit.edu
-- Joji O. Matsuda - Lead Developer / joji.matsuda@cit.edu
-- Sittie Sharimah M. Macasindel - Developer / sittiesharima.macasindel@cit.edu
-- Dharell Dave H. Melliza - Developer / dharelldave.melliza@cit.edu
+A web platform designed to promote sustainable habits by tracking user
+activity, visualizing progress, and strengthening environmental
+awareness.
 
-**Date:** August 13, 2025  
+🔗 **Live Deployment:**\
+👉 https://csit327-g5-ecotrack.onrender.com/
 
----
+------------------------------------------------------------------------
 
-## 1. Project Overview
+## 📌 Overview
 
-EcoTrack is a web-based sustainability platform designed to help users track their carbon footprint, manage recycling, and engage in eco-friendly challenges. The platform provides actionable insights, personalized eco-advice, and gamified features to encourage sustainable lifestyle changes.
+EcoTrack is a sustainability-focused web application developed in partial fulfillment of the requirements for the courses of
+**CSIT327 (Information Management 2) and IT317 (Project Management for IT)**. It allows users to:
 
-Core Features for Implementation:
-- Carbon footprint calculator (transport, diet, energy use)  
-- Real-time activity logging and instant carbon feedback  
-- Gamification (points, badges, leaderboards, challenges)  
-- AI-powered eco-advice chatbot  
-- Recycling guidance and community engagement tools  
+-   Register and log in securely
+-   Track eco-friendly tasks and activities
+-   View sustainability insights through dashboards
+-   Manage their environmental progress
 
----
+------------------------------------------------------------------------
 
-## 2. Tech Stack
+## 🛠️ Tech Stack
 
-- Frontend: Vanilla HTML, CSS, and JavaScript (no frameworks) 
-- Backend: Django 5.2.7 
-- Database: PostgreSQL (Supabase) 
-- Authentication: Clerk [Tentative]
-- Other Tools: ImageKit (image handling), SurveyJS (interactive forms) [Tentative]
+### **Frontend:**
 
----
+  **HTML5** - Page structure and content
 
-# 🪟 EcoTrack Setup & Contribution Guide (Windows)
+  **CSS3** - Visual design and responsiveness
 
-This guide will help you:
+  **JavaScript (Vanilla JS)** - Interactivity without external frameworks
+                                   
+  -----------------------------------------------------------------------
 
-- Install Node.js & Git  
-- Clone the EcoTrack repo  
-- Open the project in VS Code  
-- Run frontend and backend locally  
-- Set up the database  
-- Keep your repo updated  
-- Create a branch & contribute on GitHub  
+### **Backend:**
 
----
+  **Django (Python)** - Backend framework for handling logic, routing, authentication, and templating
 
-## 3. Install Node.js 🟢
+  -----------------------------------------------------------------------
 
-1. Download Node.js from https://nodejs.org/en/download/  
-2. Run the installer and keep defaults.  
-3. Verify installation:
+### **Database:**
 
-node -v
-npm -v
+  **Supabase (PostgreSQL)** - Cloud-managed PostgreSQL database for persistent data
 
-Expected output:
-Node v18.x.x
-npm 9.x.x
-yaml
-Copy code
+  -----------------------------------------------------------------------
 
----
+### **Deployment:**
 
-## 4. Install Git 🔧
+  **Render** - Used for hosting the Django application with Gunicorn
 
-1. Download Git from https://git-scm.com/download/win  
-2. Keep defaults during installation  
-3. Ensure "Git from the command line and also from 3rd-party software" is selected  
-4. Verify installation:
+------------------------------------------------------------------------
 
-git --version
+## 📂 Project Structure
 
-Expected output:
-git version 2.x.x.windows.1
-yaml
-Copy code
+(Current as of latest commit)
 
----
+    CSIT327-G5-EcoTrack/
+    │
+    ├── manage.py
+    ├── requirements.txt
+    ├── build.sh
+    │
+    ├── EcoTrack/                # Django project configuration
+    │   ├── __init__.py
+    │   ├── asgi.py
+    │   ├── settings.py
+    │   ├── urls.py
+    │   └── wsgi.py
+    │
+    ├── Activity_App/
+    ├── Dashboard_App/
+    ├── Homepage_App/
+    ├── Login_App/
+    ├── Signup_App/
+    └── static/...
 
-## 5. Clone the Repository 📂
+------------------------------------------------------------------------
 
-git clone https://github.com/christyroannreroma/EcoTrack.git
-cd EcoTrack
+## ⚙️ Installation & Setup
 
-yaml
-Copy code
+### **1. Clone the Repository**
 
----
+``` bash
+git clone https://github.com/sanggreterra/CSIT327-G5-EcoTrack.git
+cd CSIT327-G5-EcoTrack
+```
 
-## 6. Open in VS Code 🖥️
+### **2. (Optional) Create a Virtual Environment**
 
-code .
+``` bash
+python -m venv venv
+source venv/bin/activate      # macOS/Linux
+venv\Scripts ctivate         # Windows
+```
 
-yaml
-Copy code
+### **3. Install Dependencies**
 
----
+``` bash
+pip install -r requirements.txt
+python manage.py makemigrations
+python manage.py migrate
+```
 
-## 7. Install Recommended VS Code Extensions 🔌
+### **4. Run the Development Server**
 
-Recommended extensions:
-- ESLint
-- Prettier
-- GitLens
-- Tailwind CSS IntelliSense
-- Node.js Extension Pack
-yaml
-Copy code
+``` bash
+python manage.py runserver
+```
 
----
+🌐 Your app will be available at:
+http://127.0.0.1:8000/
 
-## 8. Frontend Setup 💻
+------------------------------------------------------------------------
 
-cd frontend
-npm install # Install dependencies
-npm run dev # Start frontend dev server (localhost:3000)
+# 📡 API Endpoints
 
-Open your browser: http://localhost:3000
-yaml
-Copy code
+Although EcoTrack primarily uses Django templates, below are the **main
+routes/endpoints** exposed by the application.
 
----
+### **Authentication:**
 
-## 9. Backend Setup 💻
+  - GET      `/login/`    Render login page
+  - POST     `/login/`    Authenticate user
+  - GET      `/signup/`   Render registration page
+  - POST     `/signup/`   Create new user account
+  - GET      `/logout/`   Log out user and redirect
 
-cd backend
-npm install # Install dependencies
+### **Homepage:**
 
-bash
-Copy code
+  - GET      `/`        Homepage view
 
-Create `.env` file in backend/:
+### **Dashboard**
 
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=123456
-DB_NAME=ecotrack
-PORT=5000
-JWT_SECRET=your_secret_key
+  - GET      `/dashboard/`   Displays user progress and visual analytics
 
-sql
-Copy code
+### **Activity Tracking**
 
-Start backend server:
+  - GET      `/activity/`               View activities
+  - POST     `/activity/add/`           Add a new eco activity
+  - POST     `/activity/delete/<id>/`   Delete a logged activity
 
-npm run dev
+------------------------------------------------------------------------
 
-API should now be running on http://localhost:5000
-yaml
-Copy code
+# 🛠️ Troubleshooting
 
----
+### **⚠️ 1. Static files not loading**
 
-## 10. Database Setup 🗄️
+Make sure: - `collectstatic` is run
+- WhiteNoise is enabled
+- `STATIC_ROOT` is correctly set
 
-Use TiDB or MySQL/PostgreSQL for local development
-Run migrations or seed scripts if available
-yaml
-Copy code
+### **⚠️ 2. "ModuleNotFoundError" on Deploy**
 
----
+Common causes: - Incorrect folder structure
+- Wrong app imports
+- Incorrect WSGI path
 
-## 11. Keep Your Local Repo Updated 🔄
+Start command should be:
 
-git pull origin main
+    gunicorn EcoTrack.wsgi:application
 
-Update dependencies
-cd frontend
-npm install
-cd ../backend
-npm install
+### **⚠️ 3. "CSRF Verification Failed"**
 
-Run any pending database migrations
-yaml
-Copy code
+Check environment variables:
 
----
+    DJANGO_CSRF_TRUSTED_ORIGINS=https://your-app.onrender.com
+    DJANGO_ALLOWED_HOSTS=your-app.onrender.com
 
-## 12. Create a New Branch 🌱
+### **⚠️ 4. Database Connection Issues**
 
-git checkout -b your-feature-name
+-   Verify `DATABASE_URL`
+-   Must include `?sslmode=require`
+-   Ensure Supabase instance is active
 
-Example:
-git checkout -b add-login-page
+### **⚠️ 5. Local server won't start**
 
-yaml
-Copy code
+``` bash
+pip install -r requirements.txt --upgrade
+python manage.py migrate
+```
 
----
+------------------------------------------------------------------------
 
-## 13. Save & Commit Changes ✅
+# 🤝 How to Contribute
 
-git add .
-git commit -m "Added login page feature"
+### **1. Fork the Repository**
 
-yaml
-Copy code
+### **2. Clone Your Fork**
 
----
+``` bash
+git clone https://github.com/<your-username>/CSIT327-G5-EcoTrack.git
+```
 
-## 14. Push Your Branch to GitHub ☁️
+### **3. Create a Branch**
 
-git push origin your-feature-name
+``` bash
+git checkout -b feature/my-feature
+```
 
-yaml
-Copy code
+### **4. Commit Changes**
 
----
+### **5. Push & Submit PR**
 
-## 15. Open a Pull Request (PR) 🔄
+------------------------------------------------------------------------
+# 👥 Team
+Project Management Team:
+- **Product Owner:** Christy Roan Reroma/christyroan.reroma@cit.edu
+- **Business Analyst:** Zilfa Edz Quirante/zilfaedz.quirante@cit.edu
+- **Scrum Master:** Karl Miguel Penida/karlmiguel.penida@cit.edu
 
-1. Go to https://github.com/christyroannreroma/EcoTrack
-2. Click "Compare & Pull Request"
-3. Describe your changes → Create Pull Request
-yaml
-Copy code
+Development Team:
+- **Lead Developer:** Sang'gre Terra/joji.matsuda@cit.edu
+- **Backend Developer:** Dharell Dave H. Melliza/dharelldave.melliza@cit.edu
+- **Frontend Developer/Designer:** Sittie Sharimah M. Macasindel/sittiesharima.macasindel@cit.edu
+------------------------------------------------------------------------
 
----
+# 💬 Acknowledgements & Thank You
 
-## 16. Quick Recap (Windows)
+We thank:
 
-1. Install Node.js → node -v
-2. Install Git → git --version
-3. Clone repo → git clone ...
-4. Open project in VS Code → code .
-5. Install recommended extensions
-6. Frontend → cd frontend → npm install → npm run dev
-7. Backend → cd backend → npm install → .env setup → npm run dev
-8. Database → migrate/init tables
-9. Update repo → git pull, npm install
-10. Branch → git checkout -b feature-name
-11. Commit → git add . → git commit -m "msg"
-12. Push → git push origin feature-name → PR
+-   **CIT University College of Computer Studies (https://www.facebook.com/cit.university.ccs)**
+-   **Filipino Web Development Peers Discord Server (https://discord.gg/FkjV7gk3)**
 
-Commit → git add . → git commit -m "msg"
-
-Push → git push origin feature-name → PR
+Your interest helps make this project better! 🌿💚
