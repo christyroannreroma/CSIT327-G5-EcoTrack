@@ -41,6 +41,19 @@ yarn-error.log*
 # Ignore Python cache files
 __pycache__/
 *.pyc
+*/__pycache__/
+*/migrations/
+EcoTrack/__pycache__/
+Activity_App/__pycache__/
+Dashboard_App/__pycache__/
+Homepage_App/__pycache__/
+Login_App/__pycache__/
+Signup_App/__pycache__/
+Activity_App/migrations/
+Dashboard_App/migrations/
+Homepage_App/migrations/
+Login_App/migrations/
+Signup_App/migrations/
 
 # Ignore Django migrations cache if needed
 db.sqlite3
