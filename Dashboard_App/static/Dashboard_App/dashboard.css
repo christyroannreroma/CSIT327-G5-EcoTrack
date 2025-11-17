@@ -52,7 +52,14 @@ body::before {
   z-index: -1;
 }
 
-/* Sidebar - More playful */
+.welcome-text{
+  font-family: 'Montserrat', sans-serif; 
+  font-weight: 800;  
+  font-size: 2rem;  
+  color: rgb(54, 139, 189);  
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  
+}
+
 .sidebar {
   width: 240px;
   background-color: var(--white);
@@ -140,35 +147,41 @@ body::before {
   padding-top: 1rem;
 }
 
-.dashboard {
-  margin-left: 240px;  
-  padding: 20px;
-  flex: 1;
-  overflow-y: auto;
-  height: 100vh;
-  box-sizing: border-box;
-}
-
-/* Header with more personality */
 header {
+  position: fixed;
+  top: 0;
+  left: 240px;  /* Starts right after the sidebar */
+  width: calc(100vw - 240px);  /* Spans the full width of the dashboard area */
+  z-index: 50;  /* Below sidebar (z-index: 100) */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid var(--light-green);
-  position: relative;
+  margin-bottom: 100px;
+  padding: 20px 20px;
+  border-bottom: 2px solid var(--light-green);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 0;
 }
-
 header::after {
   content: '';
   position: absolute;
   bottom: -2px;
   left: 0;
-  width: 100px;
-  height: 3px;
+  width: 120px;
+  height: 4px;
   background: var(--fun-gradient);
-  border-radius: 3px;
+  border-radius: 4px;
+}
+/* Dashboard - Push content below the fixed header */
+.dashboard {
+  margin-left: 240px;
+  margin-top: 120px;  /* Push content below the header */
+  padding: 20px;
+  flex: 1;
+  margin-bottom: 20px;
+  box-sizing: border-box;
 }
 
 .logo {
@@ -185,11 +198,6 @@ header::after {
   width: 40px;
   height: 40px;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-  transition: transform 0.3s ease;
-}
-
-.logo:hover img {
-  transform: rotate(15deg) scale(1.1);
 }
 
 .user-profile {
@@ -201,13 +209,13 @@ header::after {
   padding: 8px 16px;
   border-radius: 25px;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(181, 233, 248, 0.973);
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
 .user-profile:hover {
-  background: rgba(255, 255, 255, 1);
+  background: rgba(128, 211, 235, 0.973);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.12);
 }
@@ -338,7 +346,7 @@ header::after {
 }
 
 .score-card {
-  background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+  background:linear-gradient(135deg, var(--primary-green), var(--accent-green));
   color: white;
   text-align: center;
   padding: 30px;
@@ -358,6 +366,49 @@ header::after {
 }
 
 .score-value {
+  font-size: 48px;
+  font-weight: 900;
+  margin: 0;
+  color: rgb(28, 126, 28);
+  animation: bounce 2s ease-in-out infinite;
+}
+.score-label {
+  font-size: 18px;
+  opacity: 0.8;
+  margin-top: 4px;
+  font-weight: bold;
+}
+.score-description {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 5px;
+  color:#0f0f0f;
+}
+
+.reset-btn {
+  background: linear-gradient(45deg, #FFD93D, #FF6B6B);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.reset-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255, 217, 61, 0.4);
+}
+.trend-indicator {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: #69F0AE;
+}
+
+
+/* .score-value {
   font-size: 64px;
   font-weight: 700;
   margin: 10px 0;
@@ -382,7 +433,7 @@ header::after {
   gap: 5px;
   margin-top: 10px;
   font-size: 14px;
-}
+} */
 
 .trend-up {
   color: #FF5252;
@@ -515,6 +566,12 @@ header::after {
   flex-wrap: wrap;
 }
 
+.icon-svg {
+  width: 3em;  /* Default to 1em for scalability, adjust per icon if needed */
+  height: 3em;
+  fill: currentColor;  /* If SVG uses fill, inherit color from parent */
+}
+
 .badge {
   width: 70px;
   height: 70px;
@@ -536,6 +593,8 @@ header::after {
 
 .badge.locked {
   background-color: #e0e0e0;
+  fill: #9e9e9e;
+  filter: grayscale(100%);
   color: #9e9e9e;
 }
 
@@ -762,7 +821,8 @@ header::after {
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
 }
 
-a {
+a p {
+  font-family: 'Inter', sans-serif; 
   text-decoration: none;
   color: black;
 }
