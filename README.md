@@ -29,7 +29,7 @@ EcoTrack is a sustainability-focused web application developed in partial fulfil
 
   **CSS3** - Visual design and responsiveness
 
-  **JavaScript (Vanilla JS)** - Interactivity without external frameworks
+  **JavaScript** - Interactivity without external frameworks
                                    
   -----------------------------------------------------------------------
 
