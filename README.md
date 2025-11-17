@@ -184,23 +184,21 @@ python manage.py migrate
 
 # 🤝 How to Contribute
 
-### **1. Fork the Repository**
-
-### **2. Clone Your Fork**
+### **1. Clone Your Fork**
 
 ``` bash
 git clone https://github.com/<your-username>/CSIT327-G5-EcoTrack.git
 ```
 
-### **3. Create a Branch**
+### **2. Create a Branch**
 
 ``` bash
 git checkout -b feature/my-feature
 ```
 
-### **4. Commit Changes**
+### **3. Commit Changes**
 
-### **5. Push & Submit PR**
+### **4. Push & Submit PR**
 
 ------------------------------------------------------------------------
 # 👥 Team
