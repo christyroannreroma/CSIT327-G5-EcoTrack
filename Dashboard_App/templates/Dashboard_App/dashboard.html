@@ -1,0 +1,326 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dashboard — EcoTrack</title>
+  
+  <!-- External Libraries -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Local Styles and Scripts -->
+  <link rel="stylesheet" href="{% static 'Dashboard_App/dashboard.css' %}">
+  <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}">
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <h2 class="sidebar-logo">EcoTrack</h2>
+      <nav class="nav-links">
+        <a href="{% url 'Dashboard_App:dashboard' %}" class="nav-item active">
+          <span class="icon">🏠</span> Home
+        </a>
+        <a href="{% url 'Activity_App:activity' %}" class="nav-item">
+          <span class="icon">➕</span> Add Activity
+        </a>
+        <a href="#" class="nav-item">
+          <span class="icon">📜</span> History
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <a href="#" class="nav-item">
+        <span class="icon">⚙️</span> Settings
+      </a>
+      <a href="{% url 'Login_App:logout' %}" class="nav-item">
+        <i class="fas fa-sign-out-alt"></i> Log out
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Dashboard Content -->
+  <div class="dashboard">
+    <header>
+      <div class="logo">
+        <img src="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}" alt="EcoTrack Logo">
+        <span>EcoTrack</span>
+      </div>
+      <div class="user-profile" id="userProfile">
+        <div class="avatar">
+          {% if user.is_authenticated %}
+            {{ user.username|slice:":2"|upper }}
+          {% else %}
+            Guest
+          {% endif %}
+        </div>
+        <span>
+          {% if user.is_authenticated %}
+            {{ user.get_full_name|default:user.username }}
+          {% else %}
+            Guest
+          {% endif %}
+        </span>
+        <i class="fas fa-chevron-down"></i>
+        <div class="profile-menu" id="profileMenu">
+          <div class="profile-menu-item">
+            <i class="fas fa-user"></i>
+            <span>My Profile</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <h1>Welcome, 
+      {% if user.is_authenticated %}
+          {{ user.get_full_name|default:user.username }}
+      {% else %}
+          Guest
+      {% endif %}
+    </h1>
+    <br/>
+    
+    <div class="dashboard-grid">
+      <div class="left-column">
+        <!-- Carbon Footprint Score -->
+        <div class="card score-card">
+          <h2>Your Carbon Footprint Score</h2>
+          <div class="score-value" id="scoreValue">0.0</div>
+          <div class="score-label" id="scoreLabel">kg CO2</div>
+          <div class="score-description">All analytics reset to 0.</div>
+          <div class="trend-indicator trend-down" id="trendIndicator" style="display:none;">
+            <i class="fas fa-arrow-down"></i>
+            <span id="trendText">Trending down this week</span>
+          </div>
+        </div>
+        
+        <!-- Chart (Doughnut Graph) -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Carbon Breakdown</h3>
+            <i class="fas fa-chart-pie"></i>
+          </div>
+          <div class="chart-container">
+            <canvas id="carbonChart"></canvas>
+          </div>
+        </div>
+        
+        <!-- Chart Details -->
+        <div class="chart-details">
+          <div class="detail-item">
+            <div class="detail-icon">
+              <i class="fas fa-car"></i>
+            </div>
+            <div class="detail-text">
+              <div class="detail-label">Transportation</div>
+            </div>
+            <div class="detail-value" id="transportValue">0%</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <i class="fas fa-utensils"></i>
+            </div>
+            <div class="detail-text">
+              <div class="detail-label">Food</div>
+            </div>
+            <div class="detail-value" id="dietValue">0%</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">
+              <i class="fas fa-bolt"></i>
+            </div>
+            <div class="detail-text">
+              <div class="detail-label">Energy</div>
+            </div>
+            <div class="detail-value" id="energyValue">0%</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Right Column -->
+      <div class="right-column">
+        <!-- Daily Target -->
+        <div class="card-right">
+          <div class="card-header">
+            <h3 class="card-title">Daily Target</h3>
+            <i class="fas fa-bullseye"></i>
+          </div>
+          <div class="target-goal">
+            <div class="progress-ring">
+              <svg width="80" height="80" viewBox="0 0 80 80">
+                <circle cx="40" cy="40" r="35" stroke="#E8F5E9" stroke-width="6" fill="none"></circle>
+                <circle cx="40" cy="40" r="35" stroke="#4CAF50" stroke-width="6" fill="none" 
+                        stroke-dasharray="220" stroke-dashoffset="220" stroke-linecap="round" transform="rotate(-90 40 40)"></circle>
+              </svg>
+            </div>
+            <div>
+              <div class="progress-value" id="progressValue">0%</div>
+              <div class="progress-text">of daily goal achieved</div>
+              <div class="progress-text" id="progressKg">0.0 kg of 3.0 kg target</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Badges -->
+        <div class="card-right">
+          <div class="card-header">
+            <h3 class="card-title">Earned Badges</h3>
+            <i class="fas fa-award"></i>
+          </div>
+          <div class="badges-container">
+            <div class="badge locked" id="badge-eco_commuter" data-badge="eco_commuter" data-prereq="Take 5 bike/walk trips or accumulate 50 km by bike/walk">
+              <i class="fas fa-bicycle"></i>
+              <div class="badge-tooltip">Eco Commuter<br><small class="prereq">Prereq: Take 5 bike/walk trips or 50 km</small></div>
+            </div>
+            <div class="badge locked" id="badge-green_eater" data-badge="green_eater" data-prereq="Log 7 vegetarian/vegan meals">
+              <i class="fas fa-leaf"></i>
+              <div class="badge-tooltip">Green Eater<br><small class="prereq">Prereq: 7 veg/vegan meals</small></div>
+            </div>
+            <!-- <div class="badge locked" id="badge-recycling_champion" data-badge="recycling_champion" data-prereq="Record 5 recycling actions (shopping note includes 'recycle')">
+              <i class="fas fa-recycle"></i>
+              <div class="badge-tooltip">Recycling Champion<br><small class="prereq">Prereq: 5 recycling actions</small></div>
+            </div> -->
+            <div class="badge locked" id="badge-energy_saver" data-badge="energy_saver" data-prereq="Use renewable energy 5 times or log low energy usage">
+              <i class="fas fa-solar-panel"></i>
+              <div class="badge-tooltip">Energy Saver<br><small class="prereq">Prereq: 5 renewable energy uses</small></div>
+            </div>
+            <div class="badge locked" id="badge-carbon_neutral" data-badge="carbon_neutral" data-prereq="Achieve total footprint ≤ 0.5 kg CO2">
+              <i class="fas fa-wind"></i>
+              <div class="badge-tooltip">Carbon Neutral<br><small class="prereq">Prereq: Total ≤ 0.5 kg CO2</small></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Tips & Resources -->
+        <div class="card-right">
+          <div class="card-header">
+            <h3 class="card-title">Tips & Resources</h3>
+            <i class="fas fa-lightbulb"></i>
+          </div>
+          <ul class="activity-list">
+            <li class="activity-item">
+              <div class="activity-category">
+                <i class="fas fa-seedling" style="color: var(--primary-green);"></i>
+                <span>Try meat-free Mondays</span>
+              </div>
+            </li>
+            <li class="activity-item">
+              <div class="activity-category">
+                <i class="fas fa-bus" style="color: var(--primary-green);"></i>
+                <span>Use public transport twice this week</span>
+              </div>
+            </li>
+            <li class="activity-item">
+              <div class="activity-category">
+                <i class="fas fa-plug" style="color: var(--primary-green);"></i>
+                <span>Unplug devices when not in use</span>
+              </div>
+            </li>
+            <li class="activity-item">
+              <div class="activity-category">
+                <i class="fas fa-droplet" style="color: var(--primary-green);"></i>
+                <span>Turn off the taps when not in use</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Recent Activities - Full Width Section -->
+    <div class="card-activities full-width-section">
+      <div class="card-header">
+        <h3 class="card-title">Recent Activities</h3>
+        <i class="fas fa-history"></i>
+      </div>
+      <ul class="activity-list" id="recentActivities">
+        <!-- populated by JS -->
+      </ul>
+    </div>
+    
+    <div class="add-activity-btn" id="openModal">
+      <i class="fas fa-plus"></i>
+    </div>
+  </div>
+  
+  <!-- Tracking Form Modal -->
+  <div class="modal" id="trackingModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Add Activity</h2>
+        <button class="close-modal">&times;</button>
+      </div>
+      <form id="trackingForm">
+        <div class="form-group">
+          <label class="form-label" for="category">Category</label>
+          <select class="form-select" id="category" required>
+            <option value="">Select a category</option>
+            <option value="transport">Transportation</option>
+            <option value="diet">Diet</option>
+            <option value="energy">Energy</option>
+          </select>
+        </div>
+        
+        <div class="form-group" id="transportFields" style="display: none;">
+          <label class="form-label" for="transportType">Transport Type</label>
+          <select class="form-select" id="transportType">
+            <option value="">Select transport type</option>
+            <option value="car">Car</option>
+            <option value="bus">Bus</option>
+            <option value="train">Train</option>
+            <option value="bicycle">Bicycle</option>
+            <option value="walk">Walking</option>
+          </select>
+          
+          <label class="form-label" for="distance">Distance (km)</label>
+          <input type="number" class="form-input" id="distance" min="0" step="0.1" value="0">
+        </div>
+        
+        <div class="form-group" id="dietFields" style="display: none;">
+          <label class="form-label" for="mealType">Meal Type</label>
+          <select class="form-select" id="mealType">
+            <option value="">Select meal type</option>
+            <option value="vegetarian">Vegetarian</option>
+            <option value="vegan">Vegan</option>
+            <option value="meat">Meat-based</option>
+            <option value="fish">Fish-based</option>
+          </select>
+        </div>
+        
+        <div class="form-group" id="energyFields" style="display: none;">
+          <label class="form-label" for="energyType">Energy Type</label>
+          <select class="form-select" id="energyType">
+            <option value="">Select energy type</option>
+            <option value="electricity">Electricity Usage</option>
+            <option value="heating">Heating</option>
+            <option value="renewable">Renewable Energy</option>
+          </select>
+          
+          <label class="form-label" for="energyAmount">Amount (kWh)</label>
+          <input type="number" class="form-input" id="energyAmount" min="0" step="0.1" value="0">
+        </div>
+
+        <!-- <div class="form-group" id="shoppingFields" style="display: none;">
+          <label class="form-label" for="shoppingDesc">Shopping description</label>
+          <input type="text" class="form-input" id="shoppingDesc" placeholder="e.g. New shoes">
+          <label class="form-label" for="shoppingImpact">Estimated impact (kg CO2)</label>
+          <input type="number" class="form-input" id="shoppingImpact" min="0" step="0.1" value="0">
+        </div> -->
+        
+        <button type="submit" class="submit-btn">Add Activity</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="notification" id="notification">
+    <i class="fas fa-check-circle"></i>
+    <span id="notificationText">Activity added successfully!</span>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="{% static 'Dashboard_App/dashboard.js' %}"></script>
+</body>
+</html>
