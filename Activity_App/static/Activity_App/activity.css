@@ -32,6 +32,7 @@ body {
   background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
   color: var(--text-dark);
   line-height: 1.6;
+  overflow: hidden;
   width: 100%;
   max-width: 100%;
   min-height: 100vh;
@@ -141,34 +142,41 @@ body::before {
     padding-top: 1rem;
 }
 
-.dashboard {
-  margin-left: 240px;  
-  padding: 20px;
-  flex: 1;
-  overflow-y: auto;
-  height: 100vh;
-  box-sizing: border-box;
-}
-
-/* Header with more personality */
 header {
+  position: fixed;
+  top: 0;
+  left: 240px;  /* Starts right after the sidebar */
+  width: calc(100vw - 240px);  /* Spans the full width of the dashboard area */
+  z-index: 50;  /* Below sidebar (z-index: 100) */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid var(--light-green);
+  margin-bottom: 100px;
+  padding: 20px 20px;
+  border-bottom: 2px solid var(--light-green);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 0;
 }
-
 header::after {
   content: '';
   position: absolute;
   bottom: -2px;
   left: 0;
-  width: 100px;
-  height: 3px;
+  width: 120px;
+  height: 4px;
   background: var(--fun-gradient);
-  border-radius: 3px;
+  border-radius: 4px;
+}
+/* Dashboard - Push content below the fixed header */
+.dashboard {
+  margin-left: 240px;
+  margin-top: 120px;  /* Push content below the header */
+  padding: 20px;
+  flex: 1;
+  margin-bottom: 20px;
+  box-sizing: border-box;
 }
 
 .logo {
@@ -185,11 +193,6 @@ header::after {
   width: 40px;
   height: 40px;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-  transition: transform 0.3s ease;
-}
-
-.logo:hover img {
-  transform: rotate(15deg) scale(1.1);
 }
 
 .user-profile {
@@ -201,13 +204,13 @@ header::after {
   padding: 8px 16px;
   border-radius: 25px;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(181, 233, 248, 0.973);
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
 .user-profile:hover {
-  background: rgba(255, 255, 255, 1);
+  background: rgba(128, 211, 235, 0.973);
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.12);
 }
@@ -284,23 +287,29 @@ header::after {
 }
 
 .section-title {
-  font-size: 1.8rem;
-  font-weight: 750;
-  color: var(--text-dark);
-  margin-bottom: 12px;
-  background: rgba(0, 0, 0, 0.849);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  font-family: 'Montserrat', sans-serif; 
+  font-weight: 800;  
+  font-size: 2rem;  
+  color: rgb(54, 139, 189);  
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  
+  margin-bottom: 8px;
 }
 
 .section-subtitle {
+  font-family: 'Inter', sans-serif;
   font-size: 1.1rem;
-  color: var(--text-light);
+  color: rgb(58, 56, 56);
   margin-bottom: 40px;
   max-width: 600px;
   line-height: 1.7;
+}
+
+h2 h3 h4{
+  font-family: 'Montserrat', sans-serif; 
+}
+
+p {
+  font-family: 'Inter', sans-serif;
 }
 
 .selection-columns {
@@ -460,8 +469,16 @@ header::after {
   font-weight: 500;
 }
 
+
+.icon-svg {
+  width: 3em;  /* Default to 1em for scalability, adjust per icon if needed */
+  height: 3em;
+  fill: currentColor;  /* If SVG uses fill, inherit color from parent */
+}
+
+
 .select-category-btn {
-  background: rgb(182, 221, 120);
+  background: var(--accent-green);
   color: white;
   border: none;
   padding: 14px 28px;

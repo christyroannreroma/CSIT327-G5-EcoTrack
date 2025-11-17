@@ -8,12 +8,17 @@
   
   <!-- External Libraries -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <!-- Local Styles and Scripts -->
   <link rel="stylesheet" href="{% static 'Dashboard_App/dashboard.css' %}">
   <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}">
 </head>
+
 <body>
   <!-- Sidebar Navigation -->
   <aside class="sidebar">
@@ -46,8 +51,7 @@
   <div class="dashboard">
     <header>
       <div class="logo">
-        <img src="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}" alt="EcoTrack Logo">
-        <span>EcoTrack</span>
+        <img src="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}" alt="EcoTrack" style="height: 60px; width: 120px;">
       </div>
       <div class="user-profile" id="userProfile">
         <div class="avatar">
@@ -74,11 +78,11 @@
       </div>
     </header>
 
-    <h1>Welcome, 
+    <h1 class="welcome-text">🌿Welcome, 
       {% if user.is_authenticated %}
-          {{ user.get_full_name|default:user.username }}
+          {{ user.get_full_name|default:user.username }}!
       {% else %}
-          Guest
+          Guest!
       {% endif %}
     </h1>
     <br/>
@@ -87,7 +91,7 @@
       <div class="left-column">
         <!-- Carbon Footprint Score -->
         <div class="card score-card">
-          <h2>Your Carbon Footprint Score</h2>
+          <h2 style="text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);">⭐ Your Carbon Footprint Score ⭐</h2>
           <div class="score-value" id="scoreValue">0.0</div>
           <div class="score-label" id="scoreLabel">kg CO2</div>
           <div class="score-description">All analytics reset to 0.</div>
@@ -172,11 +176,11 @@
           </div>
           <div class="badges-container">
             <div class="badge locked" id="badge-eco_commuter" data-badge="eco_commuter" data-prereq="Take 5 bike/walk trips or accumulate 50 km by bike/walk">
-              <i class="fas fa-bicycle"></i>
+              <img src="{% static 'Homepage_App/images/Bike_Badge.svg' %}" alt="Eco Commuter Badge" class="icon-svg">
               <div class="badge-tooltip">Eco Commuter<br><small class="prereq">Prereq: Take 5 bike/walk trips or 50 km</small></div>
             </div>
             <div class="badge locked" id="badge-green_eater" data-badge="green_eater" data-prereq="Log 7 vegetarian/vegan meals">
-              <i class="fas fa-leaf"></i>
+              <img src="{% static 'Homepage_App/images/GreenEater_Badge.svg' %}" alt="Green Eater Badge" class="icon-svg">
               <div class="badge-tooltip">Green Eater<br><small class="prereq">Prereq: 7 veg/vegan meals</small></div>
             </div>
             <!-- <div class="badge locked" id="badge-recycling_champion" data-badge="recycling_champion" data-prereq="Record 5 recycling actions (shopping note includes 'recycle')">
@@ -184,11 +188,11 @@
               <div class="badge-tooltip">Recycling Champion<br><small class="prereq">Prereq: 5 recycling actions</small></div>
             </div> -->
             <div class="badge locked" id="badge-energy_saver" data-badge="energy_saver" data-prereq="Use renewable energy 5 times or log low energy usage">
-              <i class="fas fa-solar-panel"></i>
+              <img src="{% static 'Homepage_App/images/EnergySaver_Badge.svg' %}" alt="Energy Saver Badge" class="icon-svg">
               <div class="badge-tooltip">Energy Saver<br><small class="prereq">Prereq: 5 renewable energy uses</small></div>
             </div>
             <div class="badge locked" id="badge-carbon_neutral" data-badge="carbon_neutral" data-prereq="Achieve total footprint ≤ 0.5 kg CO2">
-              <i class="fas fa-wind"></i>
+              <img src="{% static 'Homepage_App/images/CarbonNeutral_Badge.svg' %}" alt="Carbon Neutral Badge" class="icon-svg">
               <div class="badge-tooltip">Carbon Neutral<br><small class="prereq">Prereq: Total ≤ 0.5 kg CO2</small></div>
             </div>
           </div>
