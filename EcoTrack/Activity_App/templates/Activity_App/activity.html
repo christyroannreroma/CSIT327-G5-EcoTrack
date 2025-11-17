@@ -8,7 +8,10 @@
   
   <!-- External Libraries -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <!-- Local Styles -->
   <link rel="stylesheet" href="{% static 'Activity_App/activity.css' %}">
   <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}">
@@ -45,8 +48,7 @@
   <div class="dashboard">
     <header>
       <div class="logo">
-        <img src="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}" alt="EcoTrack Logo">
-        <span>EcoTrack</span>
+        <img src="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}" alt="EcoTrack" style="height: 60px; width: 120px;">
       </div>
       <div class="user-profile" id="userProfile">
         <div class="avatar">
@@ -82,7 +84,7 @@
         <!-- Transportation Column -->
         <div class="selection-column" data-category="transportation">
           <div class="column-icon">
-            <i class="fas fa-car"></i>
+            <img src="{% static 'Homepage_App/images/Car_Logo.svg' %}" alt="Car Logo" class="icon-svg">
           </div>
           <h3>Transportation</h3>
           <p>Track your travel emissions from cars, buses, trains, and more</p>
@@ -96,7 +98,7 @@
         <!-- Diet Column -->
         <div class="selection-column" data-category="diet">
           <div class="column-icon">
-            <i class="fas fa-utensils"></i>
+            <img src="{% static 'Homepage_App/images/Meal_Logo.svg' %}" alt="Meal Logo" class="icon-svg">
           </div>
           <h3>Diet</h3>
           <p>Log your meals and understand their environmental impact</p>
@@ -110,7 +112,7 @@
         <!-- Energy Column -->
         <div class="selection-column" data-category="energy">
           <div class="column-icon">
-            <i class="fas fa-bolt"></i>
+            <img src="{% static 'Homepage_App/images/Energy_Logo.svg' %}" alt="Energy_Logo" class="icon-svg">
           </div>
           <h3>Energy</h3>
           <p>Monitor your electricity, heating, and renewable energy usage</p>

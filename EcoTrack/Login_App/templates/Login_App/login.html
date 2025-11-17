@@ -13,8 +13,7 @@
   <!-- Add the same header from homepage -->
   <header class="login-header">
     <div class="logo">
-      <img src="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}">
-      <span>EcoTrack</span>
+      <img src="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}" alt="EcoTrack" style="height: 60px; width: 120px;">
     </div>
     <nav>
       <ul>
@@ -25,7 +24,7 @@
     </nav>
     <div class="auth-buttons">
       <a href="{% url 'Login_App:login' %}" class="btn login-btn active" style="text-decoration: none; display: inline-block;">Login</a>
-      <a href="/signup/" class="btn signup-btn" style="text-decoration: none; display: inline-block;">Sign Up</a>
+      <a href="{% url 'Signup_App:signup' %}" class="btn signup-btn" style="text-decoration: none; display: inline-block;">Sign Up</a>
     </div>
   </header>
 
@@ -66,9 +65,10 @@
         <button type="submit" class="btn">Sign in</button>
       </div>
 
-      <p class="help-text">Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+      <p class="help-text">Don't have an account? <a href="{% url 'Signup_App:signup' %}">Sign up</a></p>
     </form>
   </main>
+  
 
   <script src="{% static 'Login_App/login.js' %}">
 

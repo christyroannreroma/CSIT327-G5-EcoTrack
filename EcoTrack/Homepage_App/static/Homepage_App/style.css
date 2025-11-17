@@ -18,20 +18,21 @@
   font-style: normal;
 }
 
-p.p-welcome {
-    font-family: 'Sansation-Bold', sans-serif;
+.p-welcome {
+    font-family: 'Inter', sans-serif;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
     font-size: 0.2rem;
     color: rgba(0, 3, 1, 0.9)
     
 }
 
 .h2-welcome {
-    font-family: 'Sansation-Bold', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     color:#95ac7d;
 }
 
 .h1-welcome {
-  font-family: 'NotoSerif_Condensed-Medium', serif;
+  font-family: 'Montserrat', serif;
   color: #e9f7da;
   color: rgba(26, 77, 46, 0.9)
 }
@@ -45,12 +46,25 @@ p.p-welcome {
 }
 
 :root {
+    --bg: #f4f7f6;
+    --card: #ffffff;
+    --accent: #2d8f6f;
+    --muted: #6b7280;
     --dark-green: #1a4d2e;
     --medium-green: #4a7c59;
     --light-green: #9fc088;
     --accent-green: #7dce94;
     --white: #f5f5f5;
     --light-gray: #e8e8e8;
+    --primary-green: #4CAF50;
+    --text-dark: #333333;
+    --text-light: #666666;
+    --background: #FFFFFF;
+    --card-bg: #F9F9F9;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --transition: all 0.3s ease;
+    --white: #FFFFFF;
+    --mid-green: #4CAF50;
 }
 
 body {
@@ -68,10 +82,10 @@ body {
 }
 
 header {
-    background-color: rgba(26, 77, 46, 0.9);
+    background: rgba(242, 245, 242, 0.95);
     backdrop-filter: blur(10px);
     /* background-color: var(--dark-green); */
-    color: white;
+    color: black;
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
@@ -79,7 +93,7 @@ header {
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transition: background-color 0.3s ease;
     min-height: 90px;
     width: 100%;
@@ -106,7 +120,7 @@ nav ul {
 }
 
 nav a {
-    color: white;
+    color: var(--dark-green);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s;
@@ -114,7 +128,7 @@ nav a {
 }
 
 nav a:hover {
-    color: var(--accent-green);
+    color: var(--mid-green);
 }
 
 nav a::after {
@@ -159,7 +173,7 @@ nav a:hover::after {
 
 .login-btn {
     background-color: transparent;
-    color: white;
+    color: black;
     border: 2px solid var(--light-green); 
 }
 
@@ -170,7 +184,7 @@ nav a:hover::after {
 
 .signup-btn {
     background-color: transparent;
-    color: white;
+    color: black;
     border: 2px solid var(--light-green);
 }
 
@@ -246,6 +260,7 @@ nav a:hover::after {
 
 .cta-btn {
     background-color: var(--accent-green);
+    text-decoration: none; 
     color: var(--dark-green);
     padding: 0.8rem 2rem;
     font-size: 1.1rem;
@@ -265,13 +280,13 @@ nav a:hover::after {
 
 .features {
     padding: 5rem 2rem;
-    background-color: white;
+    background-color: rgb(74, 129, 74);
 }
 
 .section-title {
     text-align: center;
     margin-bottom: 3rem;
-    color: var(--dark-green);
+    color: white;
 }
 
 .section-title h2 {
@@ -382,7 +397,7 @@ nav a:hover::after {
 }
 
 footer {
-    background-color: #0d351f;
+    background-color: #104126;
     color: white;
     padding: 3rem 2rem 1rem;
 }

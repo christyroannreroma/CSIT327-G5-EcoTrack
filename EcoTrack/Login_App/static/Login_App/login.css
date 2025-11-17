@@ -1,6 +1,6 @@
 /* login.css - with header integration */
 :root {
-    --bg: #f4f7f6;
+     --bg: #f4f7f6;
     --card: #ffffff;
     --accent: #2d8f6f;
     --muted: #6b7280;
@@ -10,6 +10,16 @@
     --accent-green: #7dce94;
     --white: #f5f5f5;
     --light-gray: #e8e8e8;
+    --primary-green: #4CAF50;
+    --text-dark: #333333;
+    --text-light: #666666;
+    --background: #FFFFFF;
+    --card-bg: #F9F9F9;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --transition: all 0.3s ease;
+    --white: #FFFFFF;
+    --mid-green: #4CAF50;
+    
 }
 
 * {
@@ -20,7 +30,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(180deg, var(--bg), #e9f0ee);
+    background: linear-gradient(180deg, var(--light-green), #7cc7a0ab);
     line-height: 1.4;
     min-height: 100vh;
     display: flex;
@@ -29,7 +39,7 @@ body {
 }
 
 .login-header {
-    background-color: rgba(26, 77, 46, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
     color: white;
     padding: 1rem 2rem;
@@ -39,7 +49,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     min-height: 90px;
     width: 100%;
     transition: background-color 0.3s ease;
@@ -65,7 +75,7 @@ nav ul {
 }
 
 nav a {
-    color: white;
+    color: var(--dark-green);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s;
@@ -109,7 +119,7 @@ nav a:hover::after {
 
 .login-btn {
     background-color: transparent;
-    color: white;
+    color: black;
     border: 2px solid var(--light-green); 
 }
 
@@ -126,7 +136,7 @@ nav a:hover::after {
 
 .signup-btn {
     background-color: transparent;
-    color: white;
+    color: black;
     border: 2px solid var(--light-green);
 }
 
