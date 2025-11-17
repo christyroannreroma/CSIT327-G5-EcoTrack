@@ -187,7 +187,7 @@ python manage.py migrate
 ### **1. Clone Your Fork**
 
 ``` bash
-git clone https://github.com/<your-username>/CSIT327-G5-EcoTrack.git
+git clone https://github.com/christyroannreroma/CSIT327-G5-EcoTrack.git
 ```
 
 ### **2. Create a Branch**
