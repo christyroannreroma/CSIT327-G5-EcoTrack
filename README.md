@@ -83,6 +83,8 @@ EcoTrack is a sustainability-focused web application developed in partial fulfil
 
 ``` bash
 git clone https://github.com/sanggreterra/CSIT327-G5-EcoTrack.git
+```
+``` bash
 cd CSIT327-G5-EcoTrack
 ```
 
@@ -90,15 +92,27 @@ cd CSIT327-G5-EcoTrack
 
 ``` bash
 python -m venv venv
-source venv/bin/activate      # macOS/Linux
+```
+
+``` bash
 venv\Scripts ctivate         # Windows
+```
+
+``` bash
+source venv/bin/activate      # macOS/Linux
 ```
 
 ### **3. Install Dependencies**
 
 ``` bash
 pip install -r requirements.txt
+```
+
+``` bash
 python manage.py makemigrations
+```
+
+``` bash
 python manage.py migrate
 ```
 
@@ -177,6 +191,9 @@ Check environment variables:
 
 ``` bash
 pip install -r requirements.txt --upgrade
+```
+
+``` bash
 python manage.py migrate
 ```
 
@@ -184,7 +201,7 @@ python manage.py migrate
 
 # 🤝 How to Contribute
 
-### **1. Clone Your Fork**
+### **1. Clone this repository**
 
 ``` bash
 git clone https://github.com/christyroannreroma/CSIT327-G5-EcoTrack.git
