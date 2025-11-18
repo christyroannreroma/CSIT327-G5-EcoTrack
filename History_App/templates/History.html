@@ -1,0 +1,111 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>History — EcoTrack</title>
+
+  <!-- External Libraries -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Core dashboard styles for sidebar and layout -->
+  <link rel="stylesheet" href="{% static 'Dashboard_App/dashboard.css' %}">
+  <!-- Page-specific overrides -->
+  <link rel="stylesheet" href="{% static 'History.css' %}">
+  <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}">
+</head>
+<body>
+  <!-- Sidebar Navigation (same as dashboard/activity for consistent navigation) -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <h2 class="sidebar-logo">EcoTrack</h2>
+      <nav class="nav-links">
+        <a href="{% url 'Dashboard_App:dashboard' %}" class="nav-item">
+          <span class="icon">🏠</span> Home
+        </a>
+        <a href="{% url 'Activity_App:activity' %}" class="nav-item">
+          <span class="icon">➕</span> Add Activity
+        </a>
+        <a href="{% url 'History_App:history' %}" class="nav-item active">
+          <span class="icon">📜</span> History
+        </a>
+      </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+      <a href="#" class="nav-item">
+        <span class="icon">⚙️</span> Settings
+      </a>
+      <a href="{% url 'Login_App:logout' %}" class="nav-item">
+        <i class="fas fa-sign-out-alt"></i> Log out
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content area uses .dashboard to keep layout consistent -->
+  <div class="dashboard">
+    <header>
+      <div class="logo">
+        <img src="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}" alt="EcoTrack" style="height: 60px; width: 120px;">
+      </div>
+      <div class="user-profile" id="userProfile">
+        <div class="avatar">
+          {% if user.is_authenticated %}
+            {{ user.username|slice:":2"|upper }}
+          {% else %}
+            Guest
+          {% endif %}
+        </div>
+        <span>
+          {% if user.is_authenticated %}
+            {{ user.get_full_name|default:user.username }}
+          {% else %}
+            Guest
+          {% endif %}
+        </span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+    </header>
+
+    <div class="history-container">
+      <div class="history-header">
+        <div class="history-title">Activity History</div>
+        <div>
+          <button id="export-history-btn" class="btn-export">Export CSV</button>
+        </div>
+      </div>
+
+      {% if history_items %}
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Activity</th>
+              <th>Duration</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in history_items %}
+              <tr>
+                <td>{{ item.date }}</td>
+                <td>{{ item.activity }}</td>
+                <td>{{ item.duration }}</td>
+                <td>{{ item.notes }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="history-empty">No activity history yet.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script src="{% static 'History.js' %}"></script>
+</body>
+</html>

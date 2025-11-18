@@ -21,13 +21,23 @@ if DEBUG and not ALLOWED_HOSTS:
 CSRF_TRUSTED_ORIGINS = [o.strip() for o in os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",") if o.strip()]
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
-DATABASES = {
-    'default': dj_database_url.config(
-        default=DATABASE_URL,
-        conn_max_age=600,
-        # Remove ssl_require for SQLite; only use for Postgres
-    )
-}
+# If a DATABASE_URL is provided (e.g. in production), use dj_database_url to parse it.
+# For local development when no DATABASE_URL is set, fall back to a simple SQLite DB.
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+        )
+    }
+else:
+    # Local development fallback
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -44,6 +54,7 @@ INSTALLED_APPS = [
     'Signup_App',
     'Homepage_App',
     'Dashboard_App',
+    'History_App',
     'Activity_App',
     'EcoTrack',
 ]
