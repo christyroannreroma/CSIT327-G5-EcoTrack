@@ -24,10 +24,27 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 # If a DATABASE_URL is provided (e.g. in production), use dj_database_url to parse it.
 # For local development when no DATABASE_URL is set, fall back to a simple SQLite DB.
 if DATABASE_URL:
+    # When using a managed Postgres pooler (e.g. Supabase pgbouncer),
+    # keep connections short-lived to avoid exhausting the pool. Detect
+    # common pooler hosts heuristically and allow an override via
+    # environment variable `DB_USE_SESSION_POOL` (set to 'true' to opt-in).
+    use_pooler = False
+    try:
+        host_hint = (DATABASE_URL or '').lower()
+        if 'supabase' in host_hint or 'pooler' in host_hint or os.environ.get('DB_USE_SESSION_POOL', '').lower() == 'true':
+            use_pooler = True
+    except Exception:
+        use_pooler = False
+
+    # If using a pooler in session mode, prefer non-persistent connections
+    # (conn_max_age=0). For normal DBs, allow longer-lived connections.
+    conn_max_age = 0 if use_pooler else 600
+
     DATABASES = {
         'default': dj_database_url.config(
             default=DATABASE_URL,
-            conn_max_age=600,
+            conn_max_age=conn_max_age,
+            conn_health_checks=True,
         )
     }
 else:
