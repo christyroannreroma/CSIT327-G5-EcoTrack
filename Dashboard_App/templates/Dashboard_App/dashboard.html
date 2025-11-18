@@ -325,6 +325,10 @@
   </div>
 
   <!-- JavaScript -->
+  <script>
+    // Initial data from server (breakdown totals and recent activities)
+    window.INIT_DATA = {{ init_data_json|safe }};
+  </script>
   <script src="{% static 'Dashboard_App/dashboard.js' %}"></script>
 </body>
 </html>

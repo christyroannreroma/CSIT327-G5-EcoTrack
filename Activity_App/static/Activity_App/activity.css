@@ -32,7 +32,9 @@ body {
   background: linear-gradient(135deg, #f5f7fa 0%, #e4efe9 100%);
   color: var(--text-dark);
   line-height: 1.6;
-  overflow: hidden;
+  /* allow vertical scrolling while preventing horizontal overflow */
+  overflow-x: hidden;
+  overflow-y: auto;
   width: 100%;
   max-width: 100%;
   min-height: 100vh;

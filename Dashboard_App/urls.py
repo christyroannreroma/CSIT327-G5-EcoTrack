@@ -4,5 +4,7 @@ from . import views
 app_name = 'Dashboard_App'
 
 urlpatterns = [
-    path('dashboard/', views.dashboard, name='dashboard'),
+    # included in project as path('dashboard/', include(...))
+    # expose dashboard at /dashboard/ (not /dashboard/dashboard/)
+    path('', views.dashboard, name='dashboard'),
 ]

@@ -47,6 +47,95 @@ document.addEventListener('DOMContentLoaded', function() {
         activities: []
     };
 
+    // If the server provided initial data, use it to populate the state
+    if (window.INIT_DATA) {
+        try {
+            const bd = window.INIT_DATA.breakdown || {};
+            // map server category keys to local keys used by this script
+            state.breakdown.transport = Number(bd.transportation || bd.transport || 0) || 0;
+            state.breakdown.diet = Number(bd.diet || 0) || 0;
+            state.breakdown.energy = Number(bd.energy || 0) || 0;
+            state.breakdown.shopping = Number(bd.shopping || 0) || 0;
+
+            // recent activities list from server
+            const recent = window.INIT_DATA.recent || [];
+            state.activities = recent.map(r => ({ ...r }));
+            // render recent activities into UI
+            if (Array.isArray(recent) && recent.length) {
+                recent.reverse().forEach(r => {
+                    const impact = Number(r.impact) || 0;
+                    // map server category names to expected keys in addActivityToList
+                    let activityForList = {};
+                    if (r.category === 'transportation' || r.category === 'transport') {
+                        activityForList.category = 'transport';
+                        activityForList.transportType = r.subtype || '';
+                        activityForList.distance = r.distance || 0;
+                    } else if (r.category === 'diet') {
+                        activityForList.category = 'diet';
+                        activityForList.mealType = r.subtype || '';
+                    } else if (r.category === 'energy') {
+                        activityForList.category = 'energy';
+                        activityForList.energyAmount = r.amount || r.energyAmount || 0;
+                    } else {
+                        activityForList.category = r.category || 'shopping';
+                        activityForList.shoppingDesc = r.subtype || '';
+                        activityForList.shoppingImpact = r.amount || r.impact || 0;
+                    }
+                    addActivityToList(activityForList, impact);
+                });
+            }
+            // Update UI now that we populated state
+            updateUI();
+            evaluateBadges();
+        } catch (e) {
+            console.warn('Failed to parse INIT_DATA', e);
+        }
+    }
+
+    // Fetch latest persisted data from server to ensure we display up-to-date values
+    function refreshFromServer() {
+        fetch('/activity/api/list/', { credentials: 'same-origin' })
+            .then(r => r.json())
+            .then(json => {
+                if (!json.success) return;
+                const bd = json.breakdown || {};
+                state.breakdown.transport = Number(bd.transportation || bd.transport || 0) || 0;
+                state.breakdown.diet = Number(bd.diet || 0) || 0;
+                state.breakdown.energy = Number(bd.energy || 0) || 0;
+                state.breakdown.shopping = Number(bd.shopping || 0) || 0;
+
+                // rebuild recent list
+                document.getElementById('recentActivities').innerHTML = '';
+                (json.recent || []).slice().reverse().forEach(r => {
+                    const impact = Number(r.impact) || 0;
+                    let activityForList = {};
+                    if (r.category === 'transportation' || r.category === 'transport') {
+                        activityForList.category = 'transport';
+                        activityForList.transportType = r.subtype || '';
+                        activityForList.distance = r.distance || 0;
+                    } else if (r.category === 'diet') {
+                        activityForList.category = 'diet';
+                        activityForList.mealType = r.subtype || '';
+                    } else if (r.category === 'energy') {
+                        activityForList.category = 'energy';
+                        activityForList.energyAmount = r.amount || r.energyAmount || 0;
+                    } else {
+                        activityForList.category = r.category || 'shopping';
+                        activityForList.shoppingDesc = r.subtype || '';
+                        activityForList.shoppingImpact = r.amount || r.impact || 0;
+                    }
+                    addActivityToList(activityForList, impact);
+                });
+
+                updateUI();
+                evaluateBadges();
+            })
+            .catch(err => console.warn('Failed to refresh dashboard data', err));
+    }
+
+    // Try to refresh from server on load (keeps client in sync if server rendering missed anything)
+    try { refreshFromServer(); } catch (e) { console.warn('refreshFromServer failed', e); }
+
     // Emission factors (kg CO2 per unit)
     const EMISSION_FACTORS = {
         transport: {

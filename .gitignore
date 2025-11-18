@@ -76,3 +76,4 @@ ENV/
 *.swo
 *~
 
+staticfiles/
