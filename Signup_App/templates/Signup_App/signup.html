@@ -42,7 +42,12 @@
 
       <div class="form-group">
         <label for="id_username">Username</label>
-        <input type="text" name="username" id="id_username" required>
+        <input type="text" name="username" id="id_username" required value="{{ prefill.username|default:'' }}">
+      </div>
+
+      <div class="form-group">
+        <label for="id_email">Email</label>
+        <input type="email" name="email" id="id_email" required value="{{ prefill.email|default:'' }}">
       </div>
 
       <div class="form-group password-row">

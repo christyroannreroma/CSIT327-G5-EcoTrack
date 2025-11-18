@@ -1,0 +1,51 @@
+/* Basic styling for the History page */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: #f6fbf5;
+  color: #0b3d2e;
+  margin: 0;
+  padding: 0;
+}
+.history-container {
+  max-width: 920px;
+  margin: 40px auto;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(10, 30, 20, 0.08);
+  padding: 24px;
+}
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.history-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+.history-table th,
+.history-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #eef6ee;
+  text-align: left;
+}
+.history-empty {
+  padding: 28px;
+  text-align: center;
+  color: #6b8b7a;
+}
+.btn-export {
+  background: #2f8f61;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-export:active { transform: translateY(1px); }
