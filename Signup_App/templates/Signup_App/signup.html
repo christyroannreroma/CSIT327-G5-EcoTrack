@@ -5,7 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Sign up — EcoTrack</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="{% static 'Signup_App/signup.css' %}">
+  <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}">
 </head>
 <body>
 
@@ -33,12 +35,19 @@
     <form method="post" novalidate>
       {% csrf_token %}
       {% if messages %}
-        <ul class="messages">
-          {% for msg in messages %}
-            <li class="error">{{ msg }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
+    <ul class="messages">
+      {% for msg in messages %}
+        {% if 'success' in msg.tags %}
+          <li class="success">{{ msg }}</li>
+        {% else %}
+          <li class="error">{{ msg }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% endif %}
+      
+      <!-- Client-side warnings will be injected here by signup.js -->
+      <ul class="messages" id="client-messages" style="display:none;"></ul>
 
       <div class="form-group">
         <label for="id_username">Username</label>
@@ -52,14 +61,14 @@
 
       <div class="form-group password-row">
         <label for="id_password">Password</label>
-        <input type="password" name="password" id="id_password" required>
-        <button class="pw-toggle" data-target="id_password" aria-pressed="false" aria-label="Toggle password visibility">Show</button>
+        <input type="password" name="password" id="id_password" required autocomplete="new-password">
+        <button class="pw-toggle" data-target="id_password" aria-pressed="false" aria-label="Toggle password visibility" type="button">Show</button>
       </div>
 
       <div class="form-group password-row">
         <label for="id_confirm_password">Confirm Password</label>
-        <input type="password" name="confirm_password" id="id_confirm_password" required>
-        <button class="pw-toggle" data-target="id_confirm_password" aria-pressed="false" aria-label="Toggle password visibility">Show</button>
+        <input type="password" name="confirm_password" id="id_confirm_password" required autocomplete="new-password">
+        <button class="pw-toggle" data-target="id_confirm_password" aria-pressed="false" aria-label="Toggle password visibility" type="button">Show</button>
       </div>
 
       <div class="form-group">
@@ -73,6 +82,18 @@
       <p class="help-text">Already have an account? <a href="{% url 'Login_App:login' %}">Log in</a></p>
     </form>
   </main>
+
+  {# When server signals success, show message (already rendered) then redirect after delay #}
+  {% if redirect_to_login %}
+  <script>
+    (function(){
+      var delay = parseInt('{{ redirect_delay|default:"1500" }}', 10); // milliseconds
+      setTimeout(function(){
+        window.location.href = "/login/";
+      }, delay);
+    })();
+  </script>
+  {% endif %}
 
   <script src="{% static 'Signup_App/signup.js' %}"></script>
 </body>
