@@ -182,35 +182,74 @@ document.addEventListener('DOMContentLoaded', function() {
       distance.addEventListener('input', updateTransportImpact);
     }
     
-    // Diet impact calculator
+    // Diet impact calculator + visual selection handling
     const mealRadios = document.querySelectorAll('input[name="mealType"]');
-    mealRadios.forEach(radio => {
-      radio.addEventListener('change', function() {
-        if (this.checked) {
-          const impact = calculateDietImpact(this.value);
-          updateImpactPreview('diet', impact);
+    if (mealRadios.length) {
+      const mealOptions = document.querySelectorAll('#diet-form .radio-option.large');
+      mealRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+          // Visual: clear selection from all options in the diet group
+          mealOptions.forEach(opt => opt.classList.remove('selected'));
+          // Add selected class to the parent label when checked
+          if (this.checked) {
+            const parent = this.closest('.radio-option');
+            if (parent) parent.classList.add('selected');
+            const impact = calculateDietImpact(this.value);
+            updateImpactPreview('diet', impact);
+          } else {
+            updateImpactPreview('diet', 0);
+          }
+        });
+        // Also support click on the whole label to toggle selection visually
+        const parentLabel = radio.closest('.radio-option');
+        if (parentLabel) {
+          parentLabel.addEventListener('click', function() {
+            // clicking the label will cause the input to change and fire the change handler
+            // but ensure visual feedback immediately for perceived snappiness
+            mealOptions.forEach(opt => opt.classList.remove('selected'));
+            parentLabel.classList.add('selected');
+          });
         }
       });
-    });
+    }
     
-    // Energy impact calculator
+    // Energy impact calculator + visual selection handling
     const energyRadios = document.querySelectorAll('input[name="energyType"]');
     const energyAmount = document.getElementById('energyAmount');
-    
-    if (energyAmount) {
+    if (energyRadios.length) {
+      const energyOptions = document.querySelectorAll('#energy-form .radio-option.large');
       const updateEnergyImpact = () => {
         const selectedEnergy = document.querySelector('input[name="energyType"]:checked');
         if (selectedEnergy) {
-          const amount = parseFloat(energyAmount.value) || 0;
+          const amount = parseFloat(energyAmount?.value) || 0;
           const impact = calculateEnergyImpact(selectedEnergy.value, amount);
           updateImpactPreview('energy', impact);
+        } else {
+          updateImpactPreview('energy', 0);
         }
       };
-      
+
       energyRadios.forEach(radio => {
-        radio.addEventListener('change', updateEnergyImpact);
+        radio.addEventListener('change', function() {
+          // Visual: clear selection from all energy options
+          energyOptions.forEach(opt => opt.classList.remove('selected'));
+          if (this.checked) {
+            const parent = this.closest('.radio-option');
+            if (parent) parent.classList.add('selected');
+          }
+          updateEnergyImpact();
+        });
+
+        const parentLabel = radio.closest('.radio-option');
+        if (parentLabel) {
+          parentLabel.addEventListener('click', function() {
+            energyOptions.forEach(opt => opt.classList.remove('selected'));
+            parentLabel.classList.add('selected');
+          });
+        }
       });
-      energyAmount.addEventListener('input', updateEnergyImpact);
+
+      if (energyAmount) energyAmount.addEventListener('input', updateEnergyImpact);
     }
   }
   
@@ -393,6 +432,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const mealDate = form.querySelector('#mealDate');
         
         mealRadios.forEach(radio => radio.checked = false);
+        // clear visual selection state on radio-option cards
+        const mealOptionCards = form.querySelectorAll('.radio-option.large');
+        mealOptionCards.forEach(card => card.classList.remove('selected'));
         if (mealDate) mealDate.value = '';
         break;
         
@@ -402,6 +444,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const energyDate = form.querySelector('#energyDate');
         
         energyRadios.forEach(radio => radio.checked = false);
+        // clear visual selection state on energy radio-option cards
+        const energyOptionCards = form.querySelectorAll('.radio-option.large');
+        energyOptionCards.forEach(card => card.classList.remove('selected'));
         if (energyAmount) energyAmount.value = '';
         if (energyDate) energyDate.value = '';
         break;

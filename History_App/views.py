@@ -1,19 +1,48 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
+from Activity_App.models import Activity
+
 
 @login_required
 def history_view(request):
-	"""Render the user's activity history.
+	"""Render the logged-in user's activity history.
 
-	For now this returns placeholder data. If you have a model for activities
-	we can replace the placeholder with a real query (e.g. Activity.objects.filter(user=...)).
+	Returns a list of dicts with fields expected by the `History.html` template:
+	`date`, `activity`, `duration`, `notes`.
 	"""
-	# Placeholder sample data — replace with actual queryset when model exists
-	sample_history = [
-		{'date': '2025-11-17', 'activity': 'Biked to work', 'duration': '30 min', 'notes': 'Nice weather'},
-		{'date': '2025-11-16', 'activity': 'Vegetarian lunch', 'duration': '-', 'notes': 'Salad'},
-		{'date': '2025-11-14', 'activity': 'Used public transport', 'duration': '45 min', 'notes': 'Bus 42'},
-	]
+	user = request.user
 
-	return render(request, 'History.html', {'history_items': sample_history})
+	qs = Activity.objects.filter(user=user).order_by('-created_at')
+
+	history_items = []
+	for a in qs:
+		# Map Activity model fields into the template-friendly shape
+		activity_label = a.category.title() if a.category else 'Activity'
+		subtype = a.subtype or ''
+		# Compose a short description depending on category
+		if a.category == 'transportation' or a.category == 'transport':
+			desc = f"{subtype or a.subtype or ''}"
+			duration = f"{a.distance or ''} km"
+			notes = ''
+		elif a.category == 'diet':
+			desc = f"{subtype or 'Meal'}"
+			duration = '-'
+			notes = ''
+		elif a.category == 'energy':
+			desc = f"{subtype or 'Energy'}"
+			duration = f"{a.amount or ''} kWh"
+			notes = ''
+		else:
+			desc = subtype or activity_label
+			duration = '-'
+			notes = ''
+
+		history_items.append({
+			'date': a.date.isoformat() if a.date else a.created_at.date().isoformat(),
+			'activity': desc,
+			'duration': duration,
+			'notes': notes,
+		})
+
+	return render(request, 'History.html', {'history_items': history_items})

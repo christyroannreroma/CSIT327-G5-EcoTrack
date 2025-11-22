@@ -23,8 +23,8 @@ def dashboard(request):
         except Exception:
             breakdown[cat] = 0.0
 
-    # recent activities (limit 20)
-    recent_qs = Activity.objects.filter(user=user).order_by('-created_at')[:20]
+    # recent activities (limit 5 for dashboard)
+    recent_qs = Activity.objects.filter(user=user).order_by('-created_at')[:5]
     recent = []
     for a in recent_qs:
         recent.append({

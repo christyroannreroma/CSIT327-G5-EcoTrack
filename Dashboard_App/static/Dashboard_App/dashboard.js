@@ -59,10 +59,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // recent activities list from server
             const recent = window.INIT_DATA.recent || [];
+            // keep a copy in state (full objects) but only display up to 5
             state.activities = recent.map(r => ({ ...r }));
-            // render recent activities into UI
+            // render recent activities into UI (limit to 5)
             if (Array.isArray(recent) && recent.length) {
-                recent.reverse().forEach(r => {
+                recent.slice(0, 5).reverse().forEach(r => {
                     const impact = Number(r.impact) || 0;
                     // map server category names to expected keys in addActivityToList
                     let activityForList = {};
@@ -106,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // rebuild recent list
                 document.getElementById('recentActivities').innerHTML = '';
-                (json.recent || []).slice().reverse().forEach(r => {
+                (json.recent || []).slice(0, 5).reverse().forEach(r => {
                     const impact = Number(r.impact) || 0;
                     let activityForList = {};
                     if (r.category === 'transportation' || r.category === 'transport') {
@@ -313,6 +314,10 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         // prepend so newest appears first
         recentActivities.prepend(li);
+        // keep only the 5 most recent items in the UI
+        while (recentActivities.children.length > 5) {
+            recentActivities.removeChild(recentActivities.lastChild);
+        }
     }
 
     // form submission: calculate emissions and update analytics

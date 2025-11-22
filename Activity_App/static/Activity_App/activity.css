@@ -764,6 +764,27 @@ p {
   transform: scale(1.2);
 }
 
+/* Selected state for radio-option cards (visible until activity is added) */
+.radio-option.large.selected {
+  border-color: var(--primary-green);
+  background: linear-gradient(135deg, rgba(76,175,80,0.06), rgba(74,144,226,0.03));
+  transform: translateY(-6px);
+  box-shadow: 0 14px 35px rgba(76,175,80,0.16);
+}
+
+.radio-option.large.selected::before {
+  opacity: 0.12;
+}
+
+.radio-option.large.selected .radio-content {
+  color: var(--primary-green);
+}
+
+.radio-option.large.selected .radio-icon {
+  transform: scale(1.25);
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.12));
+}
+
 .radio-option.large input:checked + .radio-content {
   color: var(--primary-green);
 }
