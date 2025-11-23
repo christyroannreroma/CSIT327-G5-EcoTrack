@@ -14,7 +14,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <!-- Local Styles -->
   <link rel="stylesheet" href="{% static 'Activity_App/activity.css' %}">
-  <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}">
+  <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}">
   <meta name="csrf-token" content="{{ csrf_token }}">
   <script>
     // Expose a small user object for client-side logic (no secrets)
@@ -46,7 +46,7 @@
       <a href="#" class="nav-item">
         <span class="icon">⚙️</span> Settings
       </a>
-      <a href="{% url 'Login_App:logout' %}" class="nav-item">
+      <a href="#" class="nav-item" id="logoutBtn">
         <i class="fas fa-sign-out-alt"></i> Log out
       </a>
     </div>
@@ -91,42 +91,48 @@
       <div class="selection-columns">
         <!-- Transportation Column -->
         <div class="selection-column" data-category="transportation">
-          <div class="column-icon">
-            <img src="{% static 'Homepage_App/images/Car_Logo.svg' %}" alt="Car Logo" class="icon-svg">
-          </div>
-          <h3>Transportation</h3>
-          <p>Track your travel emissions from cars, buses, trains, and more</p>
-          <div class="activity-stats">
-            <span class="stat-count">0</span>
-            <span class="stat-label">activities this week</span>
+          <div class="column-content">
+            <div class="column-icon">
+              <img src="{% static 'Homepage_App/images/Car_Logo.svg' %}" alt="Car Logo" class="icon-svg">
+            </div>
+            <h3>Transportation</h3>
+            <p>Track your travel emissions from cars, buses, trains, and more</p>
+            <div class="activity-stats">
+              <span class="stat-count">0</span>
+              <span class="stat-label">activities this week</span>
+            </div>
           </div>
           <button class="select-category-btn">Select Transportation</button>
         </div>
         
         <!-- Diet Column -->
         <div class="selection-column" data-category="diet">
-          <div class="column-icon">
-            <img src="{% static 'Homepage_App/images/Meal_Logo.svg' %}" alt="Meal Logo" class="icon-svg">
-          </div>
-          <h3>Diet</h3>
-          <p>Log your meals and understand their environmental impact</p>
-          <div class="activity-stats">
-            <span class="stat-count">0</span>
-            <span class="stat-label">meals this week</span>
+          <div class="column-content">
+            <div class="column-icon">
+              <img src="{% static 'Homepage_App/images/Meal_Logo.svg' %}" alt="Meal Logo" class="icon-svg">
+            </div>
+            <h3>Diet</h3>
+            <p>Log your meals from meat, dairy, fish, and plant-based options</p>
+            <div class="activity-stats">
+              <span class="stat-count">0</span>
+              <span class="stat-label">meals this week</span>
+            </div>
           </div>
           <button class="select-category-btn">Select Diet</button>
         </div>
         
         <!-- Energy Column -->
         <div class="selection-column" data-category="energy">
-          <div class="column-icon">
-            <img src="{% static 'Homepage_App/images/Energy_Logo.svg' %}" alt="Energy_Logo" class="icon-svg">
-          </div>
-          <h3>Energy</h3>
-          <p>Monitor your electricity, heating, and renewable energy usage</p>
-          <div class="activity-stats">
-            <span class="stat-count">0</span>
-            <span class="stat-label">activities this week</span>
+          <div class="column-content">
+            <div class="column-icon">
+              <img src="{% static 'Homepage_App/images/Energy_Logo.svg' %}" alt="Energy_Logo" class="icon-svg">
+            </div>
+            <h3>Energy</h3>
+            <p>Monitor your electricity, heating, and renewable energy usage</p>
+            <div class="activity-stats">
+              <span class="stat-count">0</span>
+              <span class="stat-label">activities this week</span>
+            </div>
           </div>
           <button class="select-category-btn">Select Energy</button>
         </div>
@@ -144,7 +150,7 @@
           </button>
           <div class="form-title">
             <div class="form-icon">
-              <i class="fas fa-car"></i>
+              <img src="{% static 'Homepage_App/images/Car_Logo.svg' %}" alt="Car Logo" class="icon-svg">
             </div>
             <div>
               <h2>Transportation Activity</h2>
@@ -214,7 +220,7 @@
           </button>
           <div class="form-title">
             <div class="form-icon">
-              <i class="fas fa-utensils"></i>
+              <img src="{% static 'Homepage_App/images/Meal_Logo.svg' %}" alt="Meal Logo" class="icon-svg">
             </div>
             <div>
               <h2>Diet Activity</h2>
@@ -313,7 +319,7 @@
           </button>
           <div class="form-title">
             <div class="form-icon">
-              <i class="fas fa-bolt"></i>
+              <img src="{% static 'Homepage_App/images/Energy_Logo.svg' %}" alt="Energy_Logo" class="icon-svg">
             </div>
             <div>
               <h2>Energy Activity</h2>
@@ -409,6 +415,24 @@
     <span id="notificationText">Activity added successfully!</span>
   </div>
 
+  <!-- Logout Confirmation Modal -->
+  <div class="modal" id="logoutModal" style="display: none;">
+    <div class="modal-content logout-modal">
+      <div class="logout-icon">
+        <i class="fas fa-sign-out-alt"></i>
+      </div>
+      <h3>Ready to leave?</h3>
+      <p>You'll need to sign in again to access your dashboard.</p>
+      <div class="logout-actions">
+        <button class="btn-logout-cancel">Stay Signed In</button>
+        <a href="{% url 'Login_App:logout' %}" class="btn-logout-confirm">
+          <i class="fas fa-sign-out-alt"></i>
+          Yes, Log Out
+        </a>
+      </div>
+    </div>
+  </div>
+  
   <!-- JavaScript -->
   <script src="{% static 'Activity_App/activity.js' %}"></script>
 </body>
