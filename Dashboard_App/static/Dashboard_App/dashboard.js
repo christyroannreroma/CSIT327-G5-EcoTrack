@@ -1,13 +1,42 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const openModalBtn = document.getElementById('openModal');
-    const modal = document.getElementById('trackingModal');
-    const closeModalBtn = document.querySelector('.close-modal');
+    
     const categorySelect = document.getElementById('category');
     const userProfile = document.getElementById('userProfile');
     const profileMenu = document.getElementById('profileMenu');
     const notification = document.getElementById('notification');
     const notificationText = document.getElementById('notificationText');
     const recentActivities = document.getElementById('recentActivities');
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    const logoutModal = document.getElementById('logoutModal');
+    const cancelLogout = logoutModal.querySelector('.btn-logout-cancel');
+    
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            logoutModal.style.display = 'flex';
+        });
+    }
+    
+    if (cancelLogout) {
+        cancelLogout.addEventListener('click', function() {
+            logoutModal.style.display = 'none';
+        });
+    }
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', function(e) {
+        if (e.target === logoutModal) {
+            logoutModal.style.display = 'none';
+        }
+    });
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', function(e) {
+        if (e.target === logoutModal) {
+            logoutModal.style.display = 'none';
+        }
+    });
 
     // UI elements for analytics
     const scoreValueEl = document.getElementById('scoreValue');

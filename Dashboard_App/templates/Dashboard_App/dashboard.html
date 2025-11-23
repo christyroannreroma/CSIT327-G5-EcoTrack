@@ -16,7 +16,7 @@
   
   <!-- Local Styles and Scripts -->
   <link rel="stylesheet" href="{% static 'Dashboard_App/dashboard.css' %}">
-  <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo.svg' %}">
+  <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}">
 </head>
 
 <body>
@@ -41,7 +41,7 @@
       <a href="#" class="nav-item">
         <span class="icon">⚙️</span> Settings
       </a>
-      <a href="{% url 'Login_App:logout' %}" class="nav-item">
+      <a href="#" class="nav-item" id="logoutBtn">
         <i class="fas fa-sign-out-alt"></i> Log out
       </a>
     </div>
@@ -247,84 +247,29 @@
         <a href="{% url 'History_App:history' %}" class="btn-history" style="display:inline-block; padding:10px 16px; background:var(--primary-green); color:white; border-radius:10px; text-decoration:none; font-weight:600;">View full history</a>
       </div>
     </div>
-    
-    <div class="add-activity-btn" id="openModal">
-      <i class="fas fa-plus"></i>
-    </div>
-  </div>
-  
-  <!-- Tracking Form Modal -->
-  <div class="modal" id="trackingModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Add Activity</h2>
-        <button class="close-modal">&times;</button>
-      </div>
-      <form id="trackingForm">
-        <div class="form-group">
-          <label class="form-label" for="category">Category</label>
-          <select class="form-select" id="category" required>
-            <option value="">Select a category</option>
-            <option value="transport">Transportation</option>
-            <option value="diet">Diet</option>
-            <option value="energy">Energy</option>
-          </select>
-        </div>
-        
-        <div class="form-group" id="transportFields" style="display: none;">
-          <label class="form-label" for="transportType">Transport Type</label>
-          <select class="form-select" id="transportType">
-            <option value="">Select transport type</option>
-            <option value="car">Car</option>
-            <option value="bus">Bus</option>
-            <option value="train">Train</option>
-            <option value="bicycle">Bicycle</option>
-            <option value="walk">Walking</option>
-          </select>
-          
-          <label class="form-label" for="distance">Distance (km)</label>
-          <input type="number" class="form-input" id="distance" min="0" step="0.1" value="0">
-        </div>
-        
-        <div class="form-group" id="dietFields" style="display: none;">
-          <label class="form-label" for="mealType">Meal Type</label>
-          <select class="form-select" id="mealType">
-            <option value="">Select meal type</option>
-            <option value="vegetarian">Vegetarian</option>
-            <option value="vegan">Vegan</option>
-            <option value="meat">Meat-based</option>
-            <option value="fish">Fish-based</option>
-          </select>
-        </div>
-        
-        <div class="form-group" id="energyFields" style="display: none;">
-          <label class="form-label" for="energyType">Energy Type</label>
-          <select class="form-select" id="energyType">
-            <option value="">Select energy type</option>
-            <option value="electricity">Electricity Usage</option>
-            <option value="heating">Heating</option>
-            <option value="renewable">Renewable Energy</option>
-          </select>
-          
-          <label class="form-label" for="energyAmount">Amount (kWh)</label>
-          <input type="number" class="form-input" id="energyAmount" min="0" step="0.1" value="0">
-        </div>
-
-        <!-- <div class="form-group" id="shoppingFields" style="display: none;">
-          <label class="form-label" for="shoppingDesc">Shopping description</label>
-          <input type="text" class="form-input" id="shoppingDesc" placeholder="e.g. New shoes">
-          <label class="form-label" for="shoppingImpact">Estimated impact (kg CO2)</label>
-          <input type="number" class="form-input" id="shoppingImpact" min="0" step="0.1" value="0">
-        </div> -->
-        
-        <button type="submit" class="submit-btn">Add Activity</button>
-      </form>
-    </div>
   </div>
 
   <div class="notification" id="notification">
     <i class="fas fa-check-circle"></i>
     <span id="notificationText">Activity added successfully!</span>
+  </div>
+
+  <!-- Logout Confirmation Modal -->
+  <div class="modal" id="logoutModal" style="display: none;">
+    <div class="modal-content logout-modal">
+      <div class="logout-icon">
+        <i class="fas fa-sign-out-alt"></i>
+      </div>
+      <h3>Ready to leave?</h3>
+      <p>You'll need to sign in again to access your dashboard.</p>
+      <div class="logout-actions">
+        <button class="btn-logout-cancel">Stay Signed In</button>
+        <a href="{% url 'Login_App:logout' %}" class="btn-logout-confirm">
+          <i class="fas fa-sign-out-alt"></i>
+          Yes, Log Out
+        </a>
+      </div>
+    </div>
   </div>
 
   <!-- JavaScript -->
