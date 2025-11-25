@@ -61,6 +61,62 @@ def add_activity(request):
             impact=impact,
             date=date_obj if date_obj else None,
         )
+        # Evaluate challenges against this newly created activity and mark any matched ones as completed
+        try:
+            from Challenges_App.models import Challenge, UserChallenge
+            from django.utils import timezone
+            from zoneinfo import ZoneInfo
+            import datetime
+
+            def _matches_challenge(activity, challenge):
+                # Simple heuristic rules to match activity to challenge keywords
+                title = (challenge.title or '').lower()
+                cat = (activity.category or '').lower()
+                subtype = (activity.subtype or '').lower() if activity.subtype else ''
+
+                # Transport-related: if challenge mentions 'bike' or 'walk' and activity is transportation with bicycle/walk
+                if 'bike' in title or 'bicycle' in title or 'walk' in title:
+                    return (cat.startswith('transport') or cat == 'transportation') and subtype in ('bicycle', 'bike', 'walk')
+
+                # Diet: vegetarian/vegan/meat/fish keywords
+                if 'vegetarian' in title or 'vegan' in title or 'meat' in title or 'fish' in title:
+                    return cat == 'diet' and (( 'vegetarian' in title and 'vegetarian' in subtype) or ('vegan' in title and 'vegan' in subtype) or ('meat' in title and 'meat' in subtype) or ('fish' in title and 'fish' in subtype))
+
+                # Energy: renewable keyword
+                if 'renewable' in title:
+                    return cat == 'energy' and subtype == 'renewable'
+
+                # fallback: if challenge title words appear in subtype or category
+                for word in title.split():
+                    if word and (word in subtype or word in cat):
+                        return True
+                return False
+
+            newly_completed = []
+            # find active challenges and mark if matched and not already completed today (GMT+8)
+            challenges = Challenge.objects.filter(is_active=True).order_by('-created_at')[:50]
+            # determine today's cutoff at GMT+8 midnight
+            try:
+                tz = ZoneInfo('Asia/Manila')
+            except Exception:
+                tz = ZoneInfo('UTC')
+            now = timezone.now()
+            now_tz = now.astimezone(tz)
+            cutoff_tz = now_tz.replace(hour=0, minute=0, second=0, microsecond=0)
+            cutoff_utc = cutoff_tz.astimezone(datetime.timezone.utc)
+
+            for ch in challenges:
+                if _matches_challenge(activity_obj, ch):
+                    uc, created = UserChallenge.objects.get_or_create(user=request.user, challenge=ch)
+                    # if already completed today, skip
+                    if uc.completed and uc.completed_at and uc.completed_at >= cutoff_utc:
+                        continue
+                    uc.completed = True
+                    uc.completed_at = timezone.now()
+                    uc.save()
+                    newly_completed.append(ch.id)
+        except Exception:
+            newly_completed = []
 
         return JsonResponse({
             'success': True,
@@ -73,7 +129,8 @@ def add_activity(request):
                 'impact': str(activity_obj.impact),
                 'date': (activity_obj.date.isoformat() if hasattr(activity_obj.date, 'isoformat') else (str(activity_obj.date) if activity_obj.date else None)),
                 'created_at': activity_obj.created_at.isoformat(),
-            }
+            },
+            'challenges_completed': newly_completed,
         })
     except Exception as e:
         # log full traceback and return JSON error to caller to avoid 500

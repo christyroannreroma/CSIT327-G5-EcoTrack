@@ -4,22 +4,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>History — EcoTrack</title>
-
-  <!-- External Libraries -->
+  <title>Challenges — EcoTrack</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-
-  <!-- Core dashboard styles for sidebar and layout -->
   <link rel="stylesheet" href="{% static 'Dashboard_App/dashboard.css' %}">
-  <!-- Page-specific overrides -->
-  <link rel="stylesheet" href="{% static 'History.css' %}">
+  <link rel="stylesheet" href="{% static 'Challenges_App/challenges.css' %}">
+  <meta name="csrf-token" content="{{ csrf_token }}">
   <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}">
 </head>
 <body>
-  <!-- Sidebar Navigation (same as dashboard/activity for consistent navigation) -->
   <aside class="sidebar">
     <div class="sidebar-top">
       <h2 class="sidebar-logo">EcoTrack</h2>
@@ -30,10 +22,10 @@
         <a href="{% url 'Activity_App:activity' %}" class="nav-item">
           <span class="icon">➕</span> Add Activity
         </a>
-        <a href="{% url 'Challenges_App:challenges' %}" class="nav-item">
+        <a href="{% url 'Challenges_App:challenges' %}" class="nav-item active">
           <span class="icon">🏆</span> Challenges
         </a>
-        <a href="{% url 'History_App:history' %}" class="nav-item active">
+        <a href="{% url 'History_App:history' %}" class="nav-item">
           <span class="icon">📜</span> History
         </a>
       </nav>
@@ -49,12 +41,11 @@
     </div>
   </aside>
 
-  <!-- Main Content area uses .dashboard to keep layout consistent -->
   <div class="dashboard">
     <header>
       <div class="logo">
-        <img src="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}" alt="EcoTrack" style="height: 60px; width: 120px;">
-      </div>
+        <img src="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}" alt="EcoTrack" style="height:60px;width:120px">
+    </div>
       <div class="user-profile" id="userProfile">
         <div class="avatar">
           {% if user.is_authenticated %}
@@ -73,39 +64,13 @@
         <i class="fas fa-chevron-down"></i>
       </div>
     </header>
+    <div class="content">
+      <h1>Challenges</h1>
+      <p>Complete challenges to earn points and badges.</p>
 
-    <div class="history-container">
-      <div class="history-header">
-        <div class="history-title">Activity History</div>
-        <div>
-          <button id="export-history-btn" class="btn-export">Export to CSV</button>
-        </div>
+      <div id="challengesList" class="challenges-list">
+        <!-- populated by JS -->
       </div>
-
-      {% if history_items %}
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Activity</th>
-              <th>Consumption/Distance</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in history_items %}
-              <tr>
-                <td>{{ item.date }}</td>
-                <td>{{ item.activity }}</td>
-                <td>{{ item.duration }}</td>
-                <td>{{ item.notes }}</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      {% else %}
-        <div class="history-empty">No activity history yet.</div>
-      {% endif %}
     </div>
   </div>
 
@@ -127,7 +92,7 @@
     </div>
   </div>
 
-  <script src="{% static 'History.js' %}"></script>
+  <script src="{% static 'Challenges_App/challenges.js' %}"></script>
   <script>
     (function() {
       // Show logout confirmation modal when sidebar logout is clicked
@@ -136,6 +101,7 @@
         var href = this.getAttribute('href');
         var modal = document.getElementById('logoutModal');
         if (!modal) {
+          // fallback: navigate if modal not present
           window.location = href;
           return;
         }
@@ -144,17 +110,23 @@
         var cancelBtn = modal.querySelector('.btn-logout-cancel');
         var confirmBtn = modal.querySelector('.btn-logout-confirm');
 
+        // Cancel hides the modal
         if (cancelBtn) {
           cancelBtn.addEventListener('click', function () {
             modal.style.display = 'none';
           });
         }
 
+        // Clicking outside modal content hides it
         modal.addEventListener('click', function(ev) {
           if (ev.target === modal) modal.style.display = 'none';
         });
+
+        // Confirm button is an anchor pointing to logout; let it navigate normally.
+        // Prevent double-binding by not intercepting elements that are modal confirm.
       }
 
+      // Add listeners to any logout links but skip the modal's confirm anchor
       document.querySelectorAll('a[href*="logout"]').forEach(function(a){
         if (a.classList && a.classList.contains('btn-logout-confirm')) return;
         a.addEventListener('click', showLogoutModal);

@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'Dashboard_App',
     'History_App',
     'Activity_App',
+    'Challenges_App',
     'EcoTrack',
 ]
 

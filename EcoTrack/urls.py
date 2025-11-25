@@ -25,4 +25,5 @@ urlpatterns = [
     path('dashboard/', include('Dashboard_App.urls')),
     path('activity/', include('Activity_App.urls')),
     path('history/', include('History_App.urls')),
+    path('challenges/', include('Challenges_App.urls')),
 ]
