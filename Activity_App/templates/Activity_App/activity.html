@@ -438,5 +438,39 @@
   
   <!-- JavaScript -->
   <script src="{% static 'Activity_App/activity.js' %}"></script>
+  <script>
+    (function() {
+      // Bind logout modal handlers once for the Activity page
+      var logoutLinks = Array.from(document.querySelectorAll('a[href*="logout"]'));
+      var modal = document.getElementById('logoutModal');
+
+      if (!modal) {
+        logoutLinks.forEach(function(a){
+          if (a.classList && a.classList.contains('btn-logout-confirm')) return;
+          a.addEventListener('click', function(e){ e.preventDefault(); window.location = a.getAttribute('href'); });
+        });
+        return;
+      }
+
+      var cancelBtn = modal.querySelector('.btn-logout-cancel');
+      var confirmBtn = modal.querySelector('.btn-logout-confirm');
+
+      function openModalFor(href) {
+        if (confirmBtn && href) confirmBtn.setAttribute('href', href);
+        modal.style.display = 'flex';
+      }
+
+      function closeModal() { modal.style.display = 'none'; }
+
+      if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', function(ev){ if (ev.target === modal) closeModal(); });
+      window.addEventListener('keydown', function(ev){ if (ev.key === 'Escape') closeModal(); });
+
+      logoutLinks.forEach(function(a){
+        if (a.classList && a.classList.contains('btn-logout-confirm')) return;
+        a.addEventListener('click', function(e){ e.preventDefault(); openModalFor(a.getAttribute('href')); });
+      });
+    })();
+  </script>
 </body>
 </html>

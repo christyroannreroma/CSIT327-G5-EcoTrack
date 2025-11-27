@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Core dashboard styles for sidebar and layout -->
   <link rel="stylesheet" href="{% static 'Dashboard_App/dashboard.css' %}">
@@ -130,34 +131,42 @@
   <script src="{% static 'History.js' %}"></script>
   <script>
     (function() {
-      // Show logout confirmation modal when sidebar logout is clicked
-      function showLogoutModal(e) {
-        e.preventDefault();
-        var href = this.getAttribute('href');
-        var modal = document.getElementById('logoutModal');
-        if (!modal) {
-          window.location = href;
-          return;
-        }
-        modal.style.display = 'flex';
+      // Bind modal handlers once and open modal for any logout link click.
+      var logoutLinks = Array.from(document.querySelectorAll('a[href*="logout"]').values ? document.querySelectorAll('a[href*="logout"]') : document.querySelectorAll('a[href*="logout"]'));
+      var modal = document.getElementById('logoutModal');
 
-        var cancelBtn = modal.querySelector('.btn-logout-cancel');
-        var confirmBtn = modal.querySelector('.btn-logout-confirm');
-
-        if (cancelBtn) {
-          cancelBtn.addEventListener('click', function () {
-            modal.style.display = 'none';
-          });
-        }
-
-        modal.addEventListener('click', function(ev) {
-          if (ev.target === modal) modal.style.display = 'none';
+      if (!modal) {
+        logoutLinks.forEach(function(a){
+          if (a.classList && a.classList.contains('btn-logout-confirm')) return;
+          a.addEventListener('click', function(e){ e.preventDefault(); window.location = a.getAttribute('href'); });
         });
+        return;
       }
 
-      document.querySelectorAll('a[href*="logout"]').forEach(function(a){
+      var cancelBtn = modal.querySelector('.btn-logout-cancel');
+      var confirmBtn = modal.querySelector('.btn-logout-confirm');
+
+      function openModalFor(href) {
+        if (confirmBtn && href) confirmBtn.setAttribute('href', href);
+        modal.style.display = 'flex';
+      }
+
+      function closeModal() {
+        modal.style.display = 'none';
+      }
+
+      // Bind these once
+      if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', function(ev){ if (ev.target === modal) closeModal(); });
+      window.addEventListener('keydown', function(ev){ if (ev.key === 'Escape') closeModal(); });
+
+      logoutLinks.forEach(function(a){
         if (a.classList && a.classList.contains('btn-logout-confirm')) return;
-        a.addEventListener('click', showLogoutModal);
+        a.addEventListener('click', function(e){
+          e.preventDefault();
+          var href = a.getAttribute('href');
+          openModalFor(href);
+        });
       });
     })();
   </script>

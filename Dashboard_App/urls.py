@@ -7,4 +7,5 @@ urlpatterns = [
     # included in project as path('dashboard/', include(...))
     # expose dashboard at /dashboard/ (not /dashboard/dashboard/)
     path('', views.dashboard, name='dashboard'),
+    path('api/status/', views.dashboard_status, name='dashboard_status'),
 ]

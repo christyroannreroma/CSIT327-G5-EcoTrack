@@ -4,9 +4,9 @@ from .models import Challenge, UserChallenge
 
 @admin.register(Challenge)
 class ChallengeAdmin(admin.ModelAdmin):
-	list_display = ('title', 'points', 'is_active', 'created_at')
+	list_display = ('title', 'key', 'points', 'is_active', 'created_at')
 	list_filter = ('is_active',)
-	search_fields = ('title', 'description')
+	search_fields = ('title', 'description', 'key')
 
 
 @admin.register(UserChallenge)

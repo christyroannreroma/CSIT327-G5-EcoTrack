@@ -116,6 +116,43 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             // Update UI now that we populated state
             updateUI();
+            // If the server included badge counters/earned flags, initialize them
+            if (window.INIT_DATA.badges) {
+                try {
+                    const b = window.INIT_DATA.badges;
+                    // copy counters and earned flags into state.badges
+                    if (b.eco_commuter) {
+                        state.badges.eco_commuter.bike_walk_trips = Number(b.eco_commuter.bike_walk_trips || 0);
+                        state.badges.eco_commuter.bike_walk_km = Number(b.eco_commuter.bike_walk_km || 0);
+                        state.badges.eco_commuter.earned = Boolean(b.eco_commuter.earned);
+                    }
+                    if (b.green_eater) {
+                        state.badges.green_eater.veg_meals = Number(b.green_eater.veg_meals || 0);
+                        state.badges.green_eater.earned = Boolean(b.green_eater.earned);
+                    }
+                    if (b.recycling_champion) {
+                        state.badges.recycling_champion.recycle_actions = Number(b.recycling_champion.recycle_actions || 0);
+                        state.badges.recycling_champion.earned = Boolean(b.recycling_champion.earned);
+                    }
+                    if (b.energy_saver) {
+                        state.badges.energy_saver.renewable_uses = Number(b.energy_saver.renewable_uses || 0);
+                        state.badges.energy_saver.earned = Boolean(b.energy_saver.earned);
+                    }
+                    if (b.carbon_neutral) {
+                        state.badges.carbon_neutral.earned = Boolean(b.carbon_neutral.earned);
+                    }
+                } catch (e) {
+                    console.warn('Failed to initialize badges from INIT_DATA', e);
+                }
+            }
+            // Initialize points from server if provided
+            try {
+                const pts = Number(window.INIT_DATA.points || 0);
+                const ptsEl = document.getElementById('userPoints');
+                if (ptsEl) ptsEl.textContent = pts;
+            } catch (e) {
+                /* ignore */
+            }
             evaluateBadges();
         } catch (e) {
             console.warn('Failed to parse INIT_DATA', e);
@@ -159,6 +196,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 updateUI();
                 evaluateBadges();
+
+                // Also refresh points and authoritative badge earned flags from dashboard API
+                fetch('/dashboard/api/status/', { credentials: 'same-origin' })
+                    .then(r2 => r2.json())
+                    .then(js2 => {
+                        if (!js2.success) return;
+                        try {
+                            const pts = Number(js2.points || 0);
+                            const ptsEl = document.getElementById('userPoints');
+                            if (ptsEl) ptsEl.textContent = pts;
+
+                            // Merge server badges into client state and update UI
+                            if (js2.badges) {
+                                const b = js2.badges;
+                                if (b.eco_commuter) {
+                                    state.badges.eco_commuter.bike_walk_trips = Number(b.eco_commuter.bike_walk_trips || 0);
+                                    state.badges.eco_commuter.bike_walk_km = Number(b.eco_commuter.bike_walk_km || 0);
+                                    state.badges.eco_commuter.earned = Boolean(b.eco_commuter.earned);
+                                }
+                                if (b.green_eater) {
+                                    state.badges.green_eater.veg_meals = Number(b.green_eater.veg_meals || 0);
+                                    state.badges.green_eater.earned = Boolean(b.green_eater.earned);
+                                }
+                                if (b.recycling_champion) {
+                                    state.badges.recycling_champion.recycle_actions = Number(b.recycling_champion.recycle_actions || 0);
+                                    state.badges.recycling_champion.earned = Boolean(b.recycling_champion.earned);
+                                }
+                                if (b.energy_saver) {
+                                    state.badges.energy_saver.renewable_uses = Number(b.energy_saver.renewable_uses || 0);
+                                    state.badges.energy_saver.earned = Boolean(b.energy_saver.earned);
+                                }
+                                if (b.carbon_neutral) {
+                                    state.badges.carbon_neutral.earned = Boolean(b.carbon_neutral.earned);
+                                }
+                                // Update badge UI now that we pulled authoritative earned flags
+                                Object.keys(state.badges).forEach(updateBadgeUI);
+                            }
+                        } catch (e) { /* ignore */ }
+                    })
+                    .catch(() => {});
             })
             .catch(err => console.warn('Failed to refresh dashboard data', err));
     }

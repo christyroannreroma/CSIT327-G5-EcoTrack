@@ -1,13 +1,68 @@
+.challenges-root-fonts {
+  /* Ensure Challenges page uses the same fonts as Activity page */
+}
+/* Match Activity page title/subtitle appearance */
+.section-title {
+  font-family: 'Montserrat', sans-serif; 
+  font-weight: 800;  
+  font-size: 2rem;  
+  color: rgb(54, 139, 189);  
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  
+  margin-bottom: 8px;
+}
+
+.section-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  color: rgb(58, 56, 56);
+  margin-bottom: 40px;
+  max-width: 600px;
+  line-height: 1.7;
+}
 /* Minimal styles for Challenges page */
+/* Use Inter for body text and Montserrat for headings to match Activity page */
+body {
+  font-family: 'Inter', sans-serif;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+}
 .challenges-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 16px;
   margin-top: 20px;
 }
-.challenge-row { background: rgba(255,255,255,0.95); padding: 12px; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+
+.challenge-card {
+  background: rgba(255,255,255,0.98);
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 120px;
+}
+
+.challenge-top {
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
 .challenge-item { display:flex; align-items:center; gap:12px; width:100%; }
 .challenge-meta { flex:1; }
-.challenge-title { font-weight:700; color: #2f6f3f; }
-.challenge-desc { font-size:0.95rem; color:#666; }
+.challenge-title { font-weight:700; color: #2f6f3f; font-size:1.05rem; }
+.challenge-desc { font-size:0.95rem; color:#666; margin-top:6px; }
 .challenge-points { font-weight:700; color:#4CAF50; }
+
+.challenge-note { color:#6b6b6b; font-size:0.9rem; margin-top:8px; font-style:italic; }
+.challenge-status { font-size:0.95rem; color:#666; }
+
+.challenge-footer { display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
+.challenge-placeholder { color:#999; font-style:italic; }
+
+@media (min-width: 760px) {
+  .challenges-list { grid-template-columns: repeat(3, 1fr); }
+}

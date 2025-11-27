@@ -29,7 +29,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(180deg, var(--light-green), #7cc7a0ab);
     line-height: 1.4;
     min-height: 100vh;

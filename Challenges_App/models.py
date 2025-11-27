@@ -3,6 +3,8 @@ from django.db import models
 
 
 class Challenge(models.Model):
+	# Optional machine-friendly key to map badges to challenges (e.g. 'eco_commuter')
+	key = models.CharField(max_length=64, blank=True, null=True, db_index=True)
 	title = models.CharField(max_length=200)
 	description = models.TextField(blank=True)
 	points = models.IntegerField(default=0)

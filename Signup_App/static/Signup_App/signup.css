@@ -28,7 +28,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(180deg, var(--light-green), #7cc7a0ab);
     line-height: 1.4;
     min-height: 100vh;
@@ -294,7 +294,7 @@ input[type="email"] {
 
 *{box-sizing:border-box}
 body{
-    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    font-family: Inter, system-ui, -apple-system, Roboto, "Helvetica Neue", Arial;
     background:linear-gradient(180deg, var(--bg), #e9f0ee);
     margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
 }

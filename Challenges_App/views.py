@@ -5,6 +5,8 @@ from django.views.decorators.http import require_POST, require_GET
 from django.utils import timezone
 
 from .models import Challenge, UserChallenge
+import random
+from hashlib import sha256
 
 
 @login_required
@@ -19,35 +21,9 @@ def challenges_view(request):
 def list_challenges_api(request):
 	"""Return JSON list of active challenges and user's completion status."""
 	user = request.user
-	# return up to 3 randomized challenges per user per GMT+8 day
-	# Selection is deterministic for a given user and GMT+8 date (resets at GMT+8 midnight)
-	all_active = list(Challenge.objects.filter(is_active=True))
-	if len(all_active) <= 3:
-		challenges = all_active
-	else:
-		# compute GMT+8 current date for seeding
-		from zoneinfo import ZoneInfo
-		import datetime
-		import hashlib
-		import random
-		try:
-			tz = ZoneInfo('Asia/Manila')
-		except Exception:
-			# fallback to fixed-offset +8
-			tz = datetime.timezone(datetime.timedelta(hours=8))
-		now = timezone.now()
-		now_tz = now.astimezone(tz)
-		seed_date = now_tz.date().isoformat()
-		# deterministic seed using user id + date
-		seed_raw = f"{user.pk}:{seed_date}"
-		seed_int = int(hashlib.sha256(seed_raw.encode('utf-8')).hexdigest(), 16)
-		rnd = random.Random(seed_int)
-		# sample 3 challenges deterministically
-		challenges = rnd.sample(all_active, 3)
-	data = []
-	# preload userchallenge mapping
-	uc_qs = UserChallenge.objects.filter(user=user, challenge__in=challenges)
-	uc_map = {uc.challenge_id: uc for uc in uc_qs}
+	# return exactly 3 challenges per user, randomized per-user per-day (GMT+8)
+	all_challenges = list(Challenge.objects.filter(is_active=True))
+
 	# determine daily cutoff (GMT+8 midnight) — treat completions before cutoff as expired
 	from django.utils import timezone
 	from zoneinfo import ZoneInfo
@@ -58,6 +34,19 @@ def list_challenges_api(request):
 		tz = ZoneInfo('UTC')
 	now = timezone.now()
 	now_tz = now.astimezone(tz)
+	# use the date in GMT+8 as the seed element so selection is stable per user per day
+	seed_date = now_tz.date().isoformat()
+
+	# deterministic per-user-per-day randomization
+	seed_input = f"{user.id}:{seed_date}"
+	seed = int(sha256(seed_input.encode('utf-8')).hexdigest(), 16) & 0xffffffff
+	rnd = random.Random(seed)
+	rnd.shuffle(all_challenges)
+	challenges = all_challenges[:3]
+	data = []
+	# preload userchallenge mapping
+	uc_qs = UserChallenge.objects.filter(user=user, challenge__in=challenges)
+	uc_map = {uc.challenge_id: uc for uc in uc_qs}
 	cutoff_tz = now_tz.replace(hour=0, minute=0, second=0, microsecond=0)
 	cutoff_utc = cutoff_tz.astimezone(datetime.timezone.utc)
 	for c in challenges:
