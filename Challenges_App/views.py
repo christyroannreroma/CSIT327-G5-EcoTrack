@@ -21,8 +21,10 @@ def challenges_view(request):
 def list_challenges_api(request):
 	"""Return JSON list of active challenges and user's completion status."""
 	user = request.user
-	# return exactly 3 challenges per user, randomized per-user per-day (GMT+8)
-	all_challenges = list(Challenge.objects.filter(is_active=True))
+	# return exactly 3 challenges per user, randomized per-user-per-day (GMT+8)
+	# start with active challenges; we'll duplicate them if needed to reach 3 slots
+	active_challenges = list(Challenge.objects.filter(is_active=True))
+	all_challenges = list(active_challenges)
 
 	# determine daily cutoff (GMT+8 midnight) — treat completions before cutoff as expired
 	from django.utils import timezone
@@ -41,7 +43,35 @@ def list_challenges_api(request):
 	seed_input = f"{user.id}:{seed_date}"
 	seed = int(sha256(seed_input.encode('utf-8')).hexdigest(), 16) & 0xffffffff
 	rnd = random.Random(seed)
-	rnd.shuffle(all_challenges)
+	# Determine a stable, unique set of up to 3 challenges.
+	# Strategy: prefer active challenges (shuffled deterministically), then add inactive fillers
+	# to reach 3 unique items. Only allow duplicates if no other challenges exist.
+	selected = []
+	shuffled_active = list(active_challenges)
+	rnd.shuffle(shuffled_active)
+	# pick active challenges first (unique)
+	for c in shuffled_active:
+		if len(selected) >= 3:
+			break
+		selected.append(c)
+	# if still short, try inactive fillers (newest first) without duplicating
+	if len(selected) < 3:
+		fillers = list(Challenge.objects.filter(is_active=False).order_by('-created_at'))
+		for f in fillers:
+			if len(selected) >= 3:
+				break
+			if f.id in {ch.id for ch in selected}:
+				continue
+			selected.append(f)
+	# As a last resort (no active or inactive others), allow deterministic duplication of the available active
+	if len(selected) < 3:
+		if shuffled_active:
+			idx = 0
+			while len(selected) < 3:
+				selected.append(shuffled_active[idx % len(shuffled_active)])
+				idx += 1
+	# Final list to use
+	all_challenges = selected[:3]
 	# Prefer challenges that can be achieved via activities (badge-related)
 	ACHIEVABLE_KEYS = {'eco_commuter', 'green_eater', 'recycling_champion', 'energy_saver', 'carbon_neutral'}
 	def is_activity_achievable(ch):

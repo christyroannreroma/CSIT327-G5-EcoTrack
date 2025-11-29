@@ -42,28 +42,20 @@ document.addEventListener('DOMContentLoaded', function() {
       const card = document.createElement('div');
       card.className = 'challenge-card';
       if (item) {
-        const hint = getActivityHint(item);
-        const icon = getActivityIcon(item);
         card.innerHTML = `
           <div class="challenge-top">
             <label class="challenge-item">
               <input type="checkbox" data-id="${item.id}" ${item.completed ? 'checked' : ''}>
               <div class="challenge-meta">
                 <div class="challenge-title">${escapeHtml(item.title)}</div>
-                <div class="challenge-desc">${escapeHtml(item.description || '')}</div>
-                <div class="challenge-note">Checkbox is informational — auto-completed via activity.</div>
+                  <div class="challenge-desc">${escapeHtml(item.description || '')}</div>
               </div>
             </label>
-          </div>
-          <div class="challenge-hint-row">
-            <div class="challenge-hint-icon">${icon}</div>
-            <div class="challenge-hint-text">${escapeHtml(hint)}</div>
           </div>
           <div class="challenge-footer">
             <div class="challenge-points">${item.points} pts</div>
             <div class="challenge-actions">
-              <a class="btn-add-activity" href="/activity/" title="Add activity to work towards this challenge">Add Activity</a>
-              <div class="challenge-status">${item.completed ? 'Completed' : 'Incomplete'}</div>
+              <div class="${item.completed ? 'challenge-status' : 'challenge-status incomplete'}">${item.completed ? 'Completed' : 'Incomplete'}</div>
             </div>
           </div>
         `;
@@ -102,29 +94,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // initial points fetch in case the challenges list fetch doesn't run or is slow
   try { fetchPoints(); } catch (e) {}
 });
-
-
-// Return a short activity hint based on challenge key or title
-function getActivityHint(item) {
-  const key = (item.key || '').toLowerCase();
-  const title = (item.title || '').toLowerCase();
-  if (key.includes('eco') || title.includes('bike') || title.includes('walk') || key.includes('eco_commuter')) {
-    return 'Take a bike or walk trip and log it on the Activity page.';
-  }
-  if (key.includes('green') || title.includes('vegetarian') || title.includes('vegan') || key.includes('green_eater')) {
-    return 'Log vegetarian or vegan meals on the Activity page.';
-  }
-  if (key.includes('recycle') || title.includes('recycle') || key.includes('recycling_champion')) {
-    return 'Record recycling actions (mention "recycle" in the notes).';
-  }
-  if (key.includes('energy') || title.includes('renew') || key.includes('energy_saver')) {
-    return 'Log renewable energy use or low energy activities.';
-  }
-  if (key.includes('carbon') || title.includes('neutral')) {
-    return 'Aim for a low total footprint; log low-impact activities.';
-  }
-  return 'Complete relevant activities in the Activity page to earn this challenge.';
-}
 
 function getActivityIcon(item) {
   const key = (item.key || '').toLowerCase();

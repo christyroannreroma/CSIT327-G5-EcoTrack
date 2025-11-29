@@ -58,7 +58,8 @@ h1, h2, h3, h4, h5, h6 {
 .challenge-points { font-weight:700; color:#4CAF50; }
 
 .challenge-note { color:#6b6b6b; font-size:0.9rem; margin-top:8px; font-style:italic; }
-.challenge-status { font-size:0.95rem; color:#666; }
+.challenge-status { font-weight:700; color:#4CAF50; }
+.challenge-status.incomplete { color: #e53935; }
 
 .challenge-footer { display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
 .challenge-placeholder { color:#999; font-style:italic; }
