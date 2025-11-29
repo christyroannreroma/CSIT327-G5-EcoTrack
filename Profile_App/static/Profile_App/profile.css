@@ -1,11 +1,10 @@
-/* Profile-specific additions */
 .profile-card {
   background-color: var(--card-bg);
   border-radius: 12px;
   padding: 20px;
   box-shadow: var(--shadow);
   margin-bottom: 20px;
-  max-width: 600px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -34,6 +33,7 @@ label {
   font-weight: 600;
   color: var(--text-dark);
 }
+
 
 input[type="text"], input[type="email"], input[type="password"] {
   width: 100%;
@@ -78,7 +78,9 @@ input[type="text"], input[type="email"], input[type="password"] {
   border: 1px solid #c3e6cb;
   padding: 8px;
   border-radius: 6px;
-}
+}  */
+
+
 
 .profile-avatar-section {
   text-align: center;
