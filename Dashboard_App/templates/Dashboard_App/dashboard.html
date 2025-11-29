@@ -18,6 +18,13 @@
   <!-- Local Styles and Scripts -->
   <link rel="stylesheet" href="{% static 'Dashboard_App/dashboard.css' %}">
   <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}">
+  <script>
+    // Expose a small user object for client-side logic (no secrets)
+    window.USER = {
+      isAuthenticated: {% if user.is_authenticated %}true{% else %}false{% endif %},
+      username: {% if user.is_authenticated %}"{{ user.username|escapejs }}"{% else %}null{% endif %}
+    };
+  </script>
 </head>
 
 <body>
@@ -75,8 +82,10 @@
         <i class="fas fa-chevron-down"></i>
         <div class="profile-menu" id="profileMenu">
           <div class="profile-menu-item">
+            <a href="{% url 'Profile_App:profile' %}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px;">
             <i class="fas fa-user"></i>
             <span>My Profile</span>
+            </a>
           </div>
         </div>
       </div>

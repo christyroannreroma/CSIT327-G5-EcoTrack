@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     
     const categorySelect = document.getElementById('category');
-    const userProfile = document.getElementById('userProfile');
-    const profileMenu = document.getElementById('profileMenu');
     const notification = document.getElementById('notification');
     const notificationText = document.getElementById('notificationText');
     const recentActivities = document.getElementById('recentActivities');
@@ -70,6 +68,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const shoppingDesc = document.getElementById('shoppingDesc');
     const shoppingImpact = document.getElementById('shoppingImpact');
 
+    // User profile dropdown
+    const userProfile = document.getElementById('userProfile');
+    const profileMenu = document.getElementById('profileMenu');
+    if (userProfile && profileMenu) {
+        userProfile.addEventListener('click', function(e) {
+            // Prevent toggle if clicking directly on the link (to avoid two-click issue)
+            if (e.target.closest('a')) {
+                return; // Let the link handle the click (redirect)
+            }
+            profileMenu.classList.toggle('active');
+        });
+        
+        // Close dropdown when clicking elsewhere
+        document.addEventListener('click', function(e) {
+            if (!userProfile.contains(e.target)) {
+                profileMenu.classList.remove('active');
+            }
+        });
+    }
+    
     // state
     const state = {
         breakdown: { transport: 0, diet: 0, energy: 0, shopping: 0 },

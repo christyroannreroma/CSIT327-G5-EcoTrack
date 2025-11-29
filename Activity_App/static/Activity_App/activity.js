@@ -82,9 +82,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // User profile dropdown
     const userProfile = document.getElementById('userProfile');
     const profileMenu = document.getElementById('profileMenu');
-    
     if (userProfile && profileMenu) {
-        userProfile.addEventListener('click', function() {
+        userProfile.addEventListener('click', function(e) {
+            // Prevent toggle if clicking directly on the link (to avoid two-click issue)
+            if (e.target.closest('a')) {
+                return; // Let the link handle the click (redirect)
+            }
             profileMenu.classList.toggle('active');
         });
         

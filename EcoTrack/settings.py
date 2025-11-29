@@ -27,7 +27,7 @@ if DATABASE_URL:
     # When using a managed Postgres pooler (e.g. Supabase pgbouncer),
     # keep connections short-lived to avoid exhausting the pool. Detect
     # common pooler hosts heuristically and allow an override via
-    # environment variable `DB_USE_SESSION_POOL` (set to 'true' to opt-in).
+    # environment variable DB_USE_SESSION_POOL (set to 'true' to opt-in).
     use_pooler = False
     try:
         host_hint = (DATABASE_URL or '').lower()
@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'Activity_App',
     'Challenges_App',
     'EcoTrack',
+    'Profile_App',
 ]
 
 MIDDLEWARE = [
