@@ -1,0 +1,110 @@
+/* Profile-specific additions */
+.profile-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.profile-card h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--dark-green);
+  margin-bottom: 20px;
+}
+
+.profile-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d6e6df;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.btn {
+  background: var(--primary-green);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn:hover {
+  background: var(--dark-green);
+}
+
+.messages {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.messages .error {
+  background: #ffecec;
+  color: #a94442;
+  border: 1px solid #f5c6cb;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.messages .success {
+  background: #e6ffed;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.profile-avatar-section {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 2.5rem;
+  background: var(--fun-gradient);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  margin: 0 auto 15px;
+  transition: var(--transition);
+}
+
+.profile-username {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--text-dark);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}

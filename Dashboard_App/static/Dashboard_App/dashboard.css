@@ -282,7 +282,10 @@ header::after {
 }
 
 .profile-menu-item:hover {
-  background: var(--light-green);
+  background: rgba(211, 211, 211, 0.781);
+  height: fit-content;
+  width: fit-content;
+  border-radius: 16px;
   transform: translateX(5px);
 }
 

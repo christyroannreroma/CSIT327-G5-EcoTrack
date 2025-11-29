@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>History — EcoTrack</title>
-
+  <title>Profile — EcoTrack</title>
+  
   <!-- External Libraries -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,14 +13,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- Core dashboard styles for sidebar and layout -->
+  <!-- Local Styles and Scripts -->
+  <link rel="stylesheet" href="{% static 'Profile_App/profile.css' %}">
   <link rel="stylesheet" href="{% static 'Dashboard_App/dashboard.css' %}">
-  <!-- Page-specific overrides -->
-  <link rel="stylesheet" href="{% static 'History.css' %}">
   <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}">
+  <script>
+    // Expose a small user object for client-side logic (no secrets)
+    window.USER = {
+      isAuthenticated: {% if user.is_authenticated %}true{% else %}false{% endif %},
+      username: {% if user.is_authenticated %}"{{ user.username|escapejs }}"{% else %}null{% endif %}
+    };
+  </script>
 </head>
+
 <body>
-  <!-- Sidebar Navigation (same as dashboard/activity for consistent navigation) -->
+  <!-- Sidebar Navigation -->
   <aside class="sidebar">
     <div class="sidebar-top">
       <h2 class="sidebar-logo">EcoTrack</h2>
@@ -34,7 +41,7 @@
         <a href="{% url 'Challenges_App:challenges' %}" class="nav-item">
           <span class="icon">🏆</span> Challenges
         </a>
-        <a href="{% url 'History_App:history' %}" class="nav-item active">
+        <a href="{% url 'History_App:history' %}" class="nav-item">
           <span class="icon">📜</span> History
         </a>
       </nav>
@@ -44,13 +51,13 @@
       <a href="#" class="nav-item">
         <span class="icon">⚙️</span> Settings
       </a>
-      <a href="{% url 'Login_App:logout' %}" class="nav-item">
+      <a href="#" class="nav-item" id="logoutBtn">
         <i class="fas fa-sign-out-alt"></i> Log out
       </a>
     </div>
   </aside>
 
-  <!-- Main Content area uses .dashboard to keep layout consistent -->
+  <!-- Main Profile Content -->
   <div class="dashboard">
     <header>
       <div class="logo">
@@ -74,51 +81,93 @@
         <i class="fas fa-chevron-down"></i>
         <div class="profile-menu" id="profileMenu">
           <div class="profile-menu-item">
-            <a href="{% url 'Profile_App:profile' %}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px;"></a>
-            <i class="fas fa-user"></i>
-            <span>My Profile</span>
+            <a href="{% url 'Profile_App:profile' %}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px;">
+              <i class="fas fa-user"></i>
+              <span>My Profile</span>
             </a>
           </div>
         </div>
       </div>
     </header>
 
-    <div class="history-container">
-      <div class="history-header">
-        <div class="history-title">Activity History</div>
-        <div>
-          <button id="export-history-btn" class="btn-export">Export to CSV</button>
-        </div>
+    <h1 class="welcome-text"> Profile</h1>
+    <br/>
+    
+    <div class="profile-avatar-section">
+      <div class="profile-avatar">
+        {% if user.is_authenticated %}
+          {{ user.username|slice:":2"|upper }}
+        {% else %}
+          GU
+        {% endif %}
       </div>
-
-      {% if history_items %}
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Activity</th>
-              <th>Consumption/Distance</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in history_items %}
-              <tr>
-                <td>{{ item.date }}</td>
-                <td>{{ item.activity }}</td>
-                <td>{{ item.duration }}</td>
-                <td>{{ item.notes }}</td>
-              </tr>
+      <div class="profile-username">
+        {% if user.is_authenticated %}
+          {{ user.username }}
+        {% else %}
+          Guest
+        {% endif %}
+      </div>
+    </div>
+    
+    <div class="profile-card">
+      <h2>Account Details</h2>
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {% if messages %}
+          <ul class="messages">
+            {% for msg in messages %}
+              {% if 'success' in msg.tags %}
+                <li class="success">{{ msg }}</li>
+              {% else %}
+                <li class="error">{{ msg }}</li>
+              {% endif %}
             {% endfor %}
-          </tbody>
-        </table>
-      {% else %}
-        <div class="history-empty">No activity history yet.</div>
-      {% endif %}
+          </ul>
+        {% endif %}
+        
+        <div class="form-group">
+          <label for="id_username">Username</label>
+          <input type="text" name="username" id="id_username" value="{{ user.username }}" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="id_email">Email</label>
+          <input type="email" name="email" id="id_email" value="{{ user.email }}" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="id_first_name">First Name</label>
+          <input type="text" name="first_name" id="id_first_name" value="{{ user.first_name }}">
+        </div>
+        
+        <div class="form-group">
+          <label for="id_last_name">Last Name</label>
+          <input type="text" name="last_name" id="id_last_name" value="{{ user.last_name }}">
+        </div>
+        
+        <h3>Change Password (Optional)</h3>
+        <div class="form-group">
+          <label for="id_current_password">Current Password</label>
+          <input type="password" name="current_password" id="id_current_password">
+        </div>
+        
+        <div class="form-group">
+          <label for="id_new_password">New Password</label>
+          <input type="password" name="new_password" id="id_new_password">
+        </div>
+        
+        <div class="form-group">
+          <label for="id_confirm_new_password">Confirm New Password</label>
+          <input type="password" name="confirm_new_password" id="id_confirm_new_password">
+        </div>
+        
+        <button type="submit" class="btn">Update Profile</button>
+      </form>
     </div>
   </div>
 
-  <!-- Logout Confirmation Modal -->
+  <!-- Logout Confirmation Modal (Same as Dashboard) -->
   <div class="modal" id="logoutModal" style="display: none;">
     <div class="modal-content logout-modal">
       <div class="logout-icon">
@@ -136,11 +185,12 @@
     </div>
   </div>
 
-  <script src="{% static 'History.js' %}"></script>
+  <!-- JavaScript (Same as Dashboard, with Profile JS) -->
+  <script src="{% static 'Profile_App/profile.js' %}"></script>
   <script>
     (function() {
-      // Bind modal handlers once and open modal for any logout link click.
-      var logoutLinks = Array.from(document.querySelectorAll('a[href*="logout"]').values ? document.querySelectorAll('a[href*="logout"]') : document.querySelectorAll('a[href*="logout"]'));
+      // Bind logout modal handlers
+      var logoutLinks = Array.from(document.querySelectorAll('a[href*="logout"]'));
       var modal = document.getElementById('logoutModal');
 
       if (!modal) {
@@ -159,22 +209,15 @@
         modal.style.display = 'flex';
       }
 
-      function closeModal() {
-        modal.style.display = 'none';
-      }
+      function closeModal() { modal.style.display = 'none'; }
 
-      // Bind these once
       if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
       modal.addEventListener('click', function(ev){ if (ev.target === modal) closeModal(); });
       window.addEventListener('keydown', function(ev){ if (ev.key === 'Escape') closeModal(); });
 
       logoutLinks.forEach(function(a){
         if (a.classList && a.classList.contains('btn-logout-confirm')) return;
-        a.addEventListener('click', function(e){
-          e.preventDefault();
-          var href = a.getAttribute('href');
-          openModalFor(href);
-        });
+        a.addEventListener('click', function(e){ e.preventDefault(); openModalFor(a.getAttribute('href')); });
       });
     })();
   </script>

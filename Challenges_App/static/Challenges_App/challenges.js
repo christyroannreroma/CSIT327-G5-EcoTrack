@@ -2,6 +2,26 @@ document.addEventListener('DOMContentLoaded', function() {
   const listEl = document.getElementById('challengesList');
   const csrftoken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
+  // User profile dropdown
+  const userProfile = document.getElementById('userProfile');
+  const profileMenu = document.getElementById('profileMenu');
+  if (userProfile && profileMenu) {
+      userProfile.addEventListener('click', function(e) {
+          // Prevent toggle if clicking directly on the link (to avoid two-click issue)
+          if (e.target.closest('a')) {
+              return; // Let the link handle the click (redirect)
+          }
+          profileMenu.classList.toggle('active');
+      });
+      
+      // Close dropdown when clicking elsewhere
+      document.addEventListener('click', function(e) {
+          if (!userProfile.contains(e.target)) {
+              profileMenu.classList.remove('active');
+          }
+      });
+  }
+
   // Populate points from dashboard status API and update the points box
   function fetchPoints() {
     fetch('/dashboard/api/status/', { credentials: 'same-origin' })
@@ -105,3 +125,5 @@ function getActivityIcon(item) {
   if (key.includes('carbon') || title.includes('neutral')) return '<i class="fas fa-globe"></i>';
   return '<i class="fas fa-trophy"></i>';
 }
+
+

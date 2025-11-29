@@ -51,6 +51,8 @@ h1, h2, h3, h4, h5, h6 {
   gap:12px;
 }
 
+
+
 .challenge-item { display:flex; align-items:center; gap:12px; width:100%; }
 .challenge-meta { flex:1; }
 .challenge-title { font-weight:700; color: #2f6f3f; font-size:1.05rem; }
