@@ -15,3 +15,20 @@ class UserBadge(models.Model):
 
 	def __str__(self):
 		return f"{self.user} - {self.key}"
+
+
+class UserPoints(models.Model):
+	"""Store an authoritative, persisted points total for a user.
+
+	Kept in sync with completed `UserChallenge` rows via signals so the
+	application can read a single field instead of aggregating frequently.
+	"""
+	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='points')
+	total_points = models.IntegerField(default=0)
+	updated_at = models.DateTimeField(auto_now=True)
+
+	class Meta:
+		ordering = ['-updated_at']
+
+	def __str__(self):
+		return f"{self.user} - {self.total_points} pts"

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.db.models import Sum
 
 
 class Challenge(models.Model):
@@ -26,3 +27,6 @@ class UserChallenge(models.Model):
 
 	def __str__(self):
 		return f"{self.user} - {self.challenge} - {'done' if self.completed else 'open'}"
+
+
+

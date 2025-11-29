@@ -84,6 +84,15 @@ def dashboard(request):
     except Exception:
         points_total = 0
 
+    # Prefer persisted UserPoints if available (kept in sync by signals)
+    try:
+        from Dashboard_App.models import UserPoints
+        up = UserPoints.objects.filter(user=user).first()
+        if up is not None:
+            points_total = int(up.total_points or 0)
+    except Exception:
+        pass
+
     # Fallback: include points for badges that may not have a matching UserChallenge
     try:
         user_badge_keys = list(UserBadge.objects.filter(user=user).values_list('key', flat=True))
@@ -188,6 +197,47 @@ def dashboard_status(request):
         points_total = int(UserChallenge.objects.filter(user=user, completed=True).aggregate(total=Sum('challenge__points'))['total'] or 0)
     except Exception:
         points_total = 0
+
+    # Prefer persisted UserPoints if available for status endpoint as well
+    try:
+        from Dashboard_App.models import UserPoints
+        up = UserPoints.objects.filter(user=user).first()
+        if up is not None:
+            points_total = int(up.total_points or 0)
+    except Exception:
+        pass
+
+    # If the user has persisted badges but no matching completed UserChallenge rows (legacy data),
+    # try to find corresponding Challenge entries and include their points so the API remains
+    # authoritative for the client. This mirrors the fallback logic used by the main `dashboard` view.
+    try:
+        user_badge_keys = list(UserBadge.objects.filter(user=user).values_list('key', flat=True))
+        if user_badge_keys:
+            badge_to_tokens = {
+                'eco_commuter': ['eco commuter', 'eco-commuter', 'bike', 'commuter'],
+                'green_eater': ['green eater', 'green-eater', 'vegetarian', 'vegan'],
+                'recycling_champion': ['recycle', 'recycling'],
+                'energy_saver': ['energy saver', 'energy-saver', 'renewable'],
+                'carbon_neutral': ['carbon neutral', 'carbon-neutral', 'carbon']
+            }
+            from Challenges_App.models import Challenge
+            for key in user_badge_keys:
+                ch = Challenge.objects.filter(key__iexact=key).first()
+                # skip if user already has this challenge completed
+                if ch and UserChallenge.objects.filter(user=user, challenge=ch, completed=True).exists():
+                    continue
+                if not ch:
+                    tokens = badge_to_tokens.get(key, [key.replace('_', ' ')])
+                    for t in tokens:
+                        ch = Challenge.objects.filter(title__icontains=t).first()
+                        if ch:
+                            break
+                if ch:
+                    if not UserChallenge.objects.filter(user=user, challenge=ch, completed=True).exists():
+                        points_total += int(ch.points or 0)
+    except Exception:
+        # Do not let fallback logic break the status response
+        pass
 
     # Recompute progress counters for display (not authoritative for earned flags)
     eco_qs = Activity.objects.filter(user=user).filter(

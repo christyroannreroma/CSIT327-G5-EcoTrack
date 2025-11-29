@@ -2,6 +2,22 @@ document.addEventListener('DOMContentLoaded', function() {
   const listEl = document.getElementById('challengesList');
   const csrftoken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
+  // Populate points from dashboard status API and update the points box
+  function fetchPoints() {
+    fetch('/dashboard/api/status/', { credentials: 'same-origin' })
+      .then(r => r.json())
+      .then(js => {
+        if (!js || !js.success) return;
+        const pts = Number(js.points || 0);
+        const pEl = document.getElementById('userPointsChallenges');
+        if (pEl) pEl.textContent = pts;
+      })
+      .catch(err => {
+        // silently ignore; optional to log
+        // console.warn('Failed to load points', err);
+      });
+  }
+
   function fetchList() {
     fetch('/challenges/api/list/', {
       method: 'GET',
@@ -11,6 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(json => {
       if (!json.success) return;
       renderList(json.challenges || []);
+      // refresh points after list render to ensure UI shows authoritative value
+      try { fetchPoints(); } catch (e) {}
     })
     .catch(e => console.warn('Failed to load challenges', e));
   }
@@ -24,6 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const card = document.createElement('div');
       card.className = 'challenge-card';
       if (item) {
+        const hint = getActivityHint(item);
+        const icon = getActivityIcon(item);
         card.innerHTML = `
           <div class="challenge-top">
             <label class="challenge-item">
@@ -35,9 +55,16 @@ document.addEventListener('DOMContentLoaded', function() {
               </div>
             </label>
           </div>
+          <div class="challenge-hint-row">
+            <div class="challenge-hint-icon">${icon}</div>
+            <div class="challenge-hint-text">${escapeHtml(hint)}</div>
+          </div>
           <div class="challenge-footer">
             <div class="challenge-points">${item.points} pts</div>
-            <div class="challenge-status">${item.completed ? 'Completed' : 'Incomplete'}</div>
+            <div class="challenge-actions">
+              <a class="btn-add-activity" href="/activity/" title="Add activity to work towards this challenge">Add Activity</a>
+              <div class="challenge-status">${item.completed ? 'Completed' : 'Incomplete'}</div>
+            </div>
           </div>
         `;
       } else {
@@ -72,4 +99,40 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   fetchList();
+  // initial points fetch in case the challenges list fetch doesn't run or is slow
+  try { fetchPoints(); } catch (e) {}
 });
+
+
+// Return a short activity hint based on challenge key or title
+function getActivityHint(item) {
+  const key = (item.key || '').toLowerCase();
+  const title = (item.title || '').toLowerCase();
+  if (key.includes('eco') || title.includes('bike') || title.includes('walk') || key.includes('eco_commuter')) {
+    return 'Take a bike or walk trip and log it on the Activity page.';
+  }
+  if (key.includes('green') || title.includes('vegetarian') || title.includes('vegan') || key.includes('green_eater')) {
+    return 'Log vegetarian or vegan meals on the Activity page.';
+  }
+  if (key.includes('recycle') || title.includes('recycle') || key.includes('recycling_champion')) {
+    return 'Record recycling actions (mention "recycle" in the notes).';
+  }
+  if (key.includes('energy') || title.includes('renew') || key.includes('energy_saver')) {
+    return 'Log renewable energy use or low energy activities.';
+  }
+  if (key.includes('carbon') || title.includes('neutral')) {
+    return 'Aim for a low total footprint; log low-impact activities.';
+  }
+  return 'Complete relevant activities in the Activity page to earn this challenge.';
+}
+
+function getActivityIcon(item) {
+  const key = (item.key || '').toLowerCase();
+  const title = (item.title || '').toLowerCase();
+  if (key.includes('eco') || title.includes('bike') || title.includes('walk')) return '<i class="fas fa-bicycle"></i>';
+  if (key.includes('green') || title.includes('vegetarian') || title.includes('vegan')) return '<i class="fas fa-leaf"></i>';
+  if (key.includes('recycle') || title.includes('recycle')) return '<i class="fas fa-recycle"></i>';
+  if (key.includes('energy') || title.includes('renew')) return '<i class="fas fa-bolt"></i>';
+  if (key.includes('carbon') || title.includes('neutral')) return '<i class="fas fa-globe"></i>';
+  return '<i class="fas fa-trophy"></i>';
+}

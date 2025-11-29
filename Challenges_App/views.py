@@ -42,7 +42,34 @@ def list_challenges_api(request):
 	seed = int(sha256(seed_input.encode('utf-8')).hexdigest(), 16) & 0xffffffff
 	rnd = random.Random(seed)
 	rnd.shuffle(all_challenges)
-	challenges = all_challenges[:3]
+	# Prefer challenges that can be achieved via activities (badge-related)
+	ACHIEVABLE_KEYS = {'eco_commuter', 'green_eater', 'recycling_champion', 'energy_saver', 'carbon_neutral'}
+	def is_activity_achievable(ch):
+		if getattr(ch, 'key', None):
+			if ch.key.lower() in ACHIEVABLE_KEYS:
+				return True
+		# fallback: check title tokens
+		title = (ch.title or '').lower()
+		for tok in ('eco commuter','bike','commuter','vegetarian','vegan','recycle','recycling','renewable','carbon'):
+			if tok in title:
+				return True
+		return False
+
+	# ensure we always return 3 slots: keep the first seeded choice as primary, then prefer activity-achievable challenges
+	primary = all_challenges[0] if all_challenges else None
+	activity_pool = [c for c in all_challenges if is_activity_achievable(c) and c != primary]
+	other_pool = [c for c in all_challenges if c not in activity_pool and c != primary]
+	challenges = []
+	if primary:
+		challenges.append(primary)
+	# fill remaining slots from activity_pool, then other_pool
+	for pool in (activity_pool, other_pool):
+		for c in pool:
+			if len(challenges) >= 3:
+				break
+			challenges.append(c)
+		if len(challenges) >= 3:
+			break
 	data = []
 	# preload userchallenge mapping
 	uc_qs = UserChallenge.objects.filter(user=user, challenge__in=challenges)
