@@ -99,15 +99,19 @@
               <th>Activity</th>
               <th>Consumption/Distance</th>
               <th>Notes</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {% for item in history_items %}
-              <tr>
+              <tr data-activity-id="{{ item.id }}">
                 <td>{{ item.date }}</td>
                 <td>{{ item.activity }}</td>
                 <td>{{ item.duration }}</td>
                 <td>{{ item.notes }}</td>
+                <td>
+                  <span class="btn-delete-activity" data-activity-id="{{ item.id }}" title="Delete this activity" style="color: red; cursor: pointer;">Delete</span>
+                </td>
               </tr>
             {% endfor %}
           </tbody>
@@ -174,6 +178,91 @@
           e.preventDefault();
           var href = a.getAttribute('href');
           openModalFor(href);
+        });
+      });
+    })();
+
+    // Delete Activity Functionality
+    (function() {
+      var deleteButtons = document.querySelectorAll('.btn-delete-activity');
+
+      // Bind delete button clicks
+      deleteButtons.forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          var activityId = this.getAttribute('data-activity-id');
+          
+          if (!activityId) return;
+
+          // Get CSRF token
+          var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+          var token = csrfToken ? csrfToken.value : '';
+          
+          // If no CSRF token in form, try to get from cookie
+          if (!token) {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+              var cookie = cookies[i].trim();
+              if (cookie.startsWith('csrftoken=')) {
+                token = cookie.substring('csrftoken='.length);
+                break;
+              }
+            }
+          }
+
+          // Perform delete request immediately
+          fetch('/history/delete/' + activityId + '/', {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': token,
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(data) {
+            if (data.success) {
+              // Store updated dashboard data in localStorage to update dashboard
+              if (data.dashboard_data) {
+                localStorage.setItem('dashboard_updated', JSON.stringify({
+                  timestamp: new Date().getTime(),
+                  data: data.dashboard_data
+                }));
+                
+                // Trigger storage event for same-tab updates
+                window.dispatchEvent(new CustomEvent('dashboardUpdate', {
+                  detail: data.dashboard_data
+                }));
+              }
+              
+              // Remove the row from the table
+              var row = document.querySelector('tr[data-activity-id="' + activityId + '"]');
+              if (row) {
+                row.style.transition = 'opacity 0.3s ease';
+                row.style.opacity = '0';
+                setTimeout(function() {
+                  row.remove();
+                  // Check if table is now empty
+                  var tbody = document.querySelector('.history-table tbody');
+                  if (tbody && tbody.children.length === 0) {
+                    var container = document.querySelector('.history-container');
+                    var table = document.querySelector('.history-table');
+                    if (table) table.remove();
+                    var emptyDiv = document.createElement('div');
+                    emptyDiv.className = 'history-empty';
+                    emptyDiv.textContent = 'No activity history yet.';
+                    container.appendChild(emptyDiv);
+                  }
+                }, 300);
+              }
+            } else {
+              alert('Error deleting activity: ' + (data.error || 'Unknown error'));
+            }
+          })
+          .catch(function(error) {
+            alert('Error deleting activity: ' + error.message);
+          });
         });
       });
     })();
