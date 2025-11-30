@@ -92,30 +92,32 @@
       </div>
 
       {% if history_items %}
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Activity</th>
-              <th>Consumption/Distance</th>
-              <th>Notes</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in history_items %}
-              <tr data-activity-id="{{ item.id }}">
-                <td>{{ item.date }}</td>
-                <td>{{ item.activity }}</td>
-                <td>{{ item.duration }}</td>
-                <td>{{ item.notes }}</td>
-                <td>
-                  <span class="btn-delete-activity" data-activity-id="{{ item.id }}" title="Delete this activity" style="color: red; cursor: pointer;">Delete</span>
-                </td>
+        <div class="history-table-wrapper">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Activity</th>
+                <th>Consumption/Distance</th>
+                <th>Notes</th>
+                <th>Action</th>
               </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {% for item in history_items %}
+                <tr data-activity-id="{{ item.id }}">
+                  <td>{{ item.date }}</td>
+                  <td>{{ item.activity }}</td>
+                  <td>{{ item.duration }}</td>
+                  <td>{{ item.notes }}</td>
+                  <td>
+                    <span class="btn-delete-activity" data-activity-id="{{ item.id }}" title="Delete this activity" style="color: red; cursor: pointer;">Delete</span>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       {% else %}
         <div class="history-empty">No activity history yet.</div>
       {% endif %}
