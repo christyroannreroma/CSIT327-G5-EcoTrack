@@ -732,5 +732,108 @@ document.addEventListener('DOMContentLoaded', function() {
     // initial badge UI setup
     Object.keys(state.badges).forEach(updateBadgeUI);
 
+    // Listen for dashboard updates from history page (activity deletions)
+    function handleDashboardUpdate(data) {
+        if (!data) return;
+        
+        // Update breakdown
+        const bd = data.breakdown || {};
+        state.breakdown.transport = Number(bd.transportation || bd.transport || 0) || 0;
+        state.breakdown.diet = Number(bd.diet || 0) || 0;
+        state.breakdown.energy = Number(bd.energy || 0) || 0;
+        state.breakdown.shopping = Number(bd.shopping || 0) || 0;
+        
+        // Update recent activities display
+        const recent = data.recent || [];
+        if (recentActivities) {
+            recentActivities.innerHTML = '';
+            recent.forEach(activity => {
+                const li = document.createElement('li');
+                li.className = 'activity-item';
+                li.setAttribute('data-activity-id', activity.id);
+                
+                const icon = {
+                    transportation: '<i class="fas fa-car"></i>',
+                    transport: '<i class="fas fa-car"></i>',
+                    diet: '<i class="fas fa-utensils"></i>',
+                    energy: '<i class="fas fa-bolt"></i>',
+                    shopping: '<i class="fas fa-shopping-bag"></i>'
+                }[activity.category] || '<i class="fas fa-circle"></i>';
+                
+                let description = '';
+                if (activity.category === 'transportation' || activity.category === 'transport') {
+                    description = `${activity.subtype || 'Transport'} (${(Number(activity.distance) || 0).toFixed(1)} km)`;
+                } else if (activity.category === 'diet') {
+                    description = `${activity.subtype || 'Meal'}`;
+                } else if (activity.category === 'energy') {
+                    description = `${(Number(activity.amount) || 0).toFixed(1)} kWh`;
+                } else if (activity.category === 'shopping') {
+                    description = activity.subtype || 'Shopping';
+                } else {
+                    description = activity.subtype || 'Activity';
+                }
+                
+                const impactKg = Number(activity.impact) || 0;
+                li.innerHTML = `
+                    <div class="activity-category">
+                      <div class="category-icon">${icon}</div>
+                      <span>${description}</span>
+                    </div>
+                    <div class="activity-impact">${impactKg > 0 ? '+' : ''}${impactKg.toFixed(1)} kg</div>
+                `;
+                recentActivities.appendChild(li);
+            });
+            
+            // Show "No activities" message if empty
+            if (recent.length === 0) {
+                const emptyLi = document.createElement('li');
+                emptyLi.className = 'activity-item';
+                emptyLi.style.justifyContent = 'center';
+                emptyLi.style.color = '#999';
+                emptyLi.innerHTML = '<span>No recent activities</span>';
+                recentActivities.appendChild(emptyLi);
+            }
+        }
+        
+        // Update UI with new breakdown
+        updateUI();
+        
+        // Re-evaluate badges based on new data
+        evaluateBadges();
+    }
+    
+    // Listen for custom event (same tab)
+    window.addEventListener('dashboardUpdate', function(e) {
+        handleDashboardUpdate(e.detail);
+    });
+    
+    // Listen for localStorage changes (cross-tab)
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'dashboard_updated' && e.newValue) {
+            try {
+                const updateInfo = JSON.parse(e.newValue);
+                handleDashboardUpdate(updateInfo.data);
+            } catch (err) {
+                console.error('Error parsing dashboard update:', err);
+            }
+        }
+    });
+    
+    // Check for updates on page load
+    try {
+        const stored = localStorage.getItem('dashboard_updated');
+        if (stored) {
+            const updateInfo = JSON.parse(stored);
+            // Only use if recent (within last 5 seconds)
+            if (updateInfo.timestamp && (Date.now() - updateInfo.timestamp < 5000)) {
+                handleDashboardUpdate(updateInfo.data);
+            }
+            // Clear the stored update after reading
+            localStorage.removeItem('dashboard_updated');
+        }
+    } catch (err) {
+        console.error('Error checking for dashboard updates:', err);
+    }
+
     // ...existing code below...
 });
