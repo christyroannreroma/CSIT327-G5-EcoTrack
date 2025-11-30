@@ -85,17 +85,48 @@ body {
   border-radius: 10px;
   box-shadow: 0 6px 18px rgba(10, 30, 20, 0.08);
   padding: 24px;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
 }
 .history-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 16px;
+  flex-shrink: 0;
 }
 .history-title {
   font-size: 1.25rem;
   font-weight: 600;
 }
+
+.history-table-wrapper {
+  overflow-y: auto;
+  overflow-x: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.history-table-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.history-table-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.history-table-wrapper::-webkit-scrollbar-thumb {
+  background: #2f8f61;
+  border-radius: 4px;
+}
+
+.history-table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #257050;
+}
+
 .history-table {
   width: 100%;
   border-collapse: collapse;
