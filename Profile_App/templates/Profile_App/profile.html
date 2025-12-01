@@ -5,14 +5,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Profile — EcoTrack</title>
- 
+  
   <!-- External Libraries -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
- 
+
   <!-- Local Styles and Scripts -->
   <link rel="stylesheet" href="{% static 'Profile_App/profile.css' %}">
   <link rel="stylesheet" href="{% static 'Dashboard_App/dashboard.css' %}">
@@ -25,7 +25,7 @@
     };
   </script>
 </head>
- 
+
 <body>
   <!-- Sidebar Navigation -->
   <aside class="sidebar">
@@ -46,7 +46,7 @@
         </a>
       </nav>
     </div>
- 
+
     <div class="sidebar-bottom">
       <a href="#" class="nav-item">
         <span class="icon">⚙️</span> Settings
@@ -56,7 +56,7 @@
       </a>
     </div>
   </aside>
- 
+
   <!-- Main Profile Content -->
   <div class="dashboard">
     <header>
@@ -66,12 +66,7 @@
       <div class="user-profile" id="userProfile">
         <div class="avatar">
           {% if user.is_authenticated %}
-            {# Prefer profile.avatar from view context to avoid RelatedObjectDoesNotExist #}
-            {% if profile and profile.avatar %}
-              <img src="{{ profile.avatar.url }}" alt="Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;"/>
-            {% else %}
-              {{ user.username|slice:":2"|upper }}
-            {% endif %}
+            {{ user.username|slice:":2"|upper }}
           {% else %}
             Guest
           {% endif %}
@@ -94,31 +89,32 @@
         </div>
       </div>
     </header>
- 
+
+    
+    
     <div class="profile-avatar-section">
       <h1 class="welcome-text"> Profile</h1>
       <br/>
       <div class="profile-avatar">
-          {% if user.is_authenticated %}
-            {% if profile and profile.avatar %}
-              <img id="profileAvatarImg" src="{{ profile.avatar.url }}" alt="Avatar" style="width:120px;height:120px;border-radius:50%;object-fit:cover;"/>
-            {% else %}
-              <div id="profileAvatarInitials" style="width:120px;height:120px;border-radius:50%;background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-weight:700;color:#444;">{{ user.username|slice:":2"|upper }}</div>
-            {% endif %}
-          {% else %}
-            GU
-          {% endif %}
+        {% if user.is_authenticated %}
+          {{ user.username|slice:":2"|upper }}
+        {% else %}
+          GU
+        {% endif %}
+      </div>
+      <div class="profile-username">
+        {% if user.is_authenticated %}
+          {{ user.username }}
+        {% else %}
+          Guest
+        {% endif %}
       </div>
     </div>
-   
+    
     <div class="profile-card">
-      <div class="profile-card-header">
-        <h2>Account Details</h2>
-        <button type="button" id="avatarChooseBtn" class="avatar-btn">Choose File</button>
-      </div>
-      <form method="post" enctype="multipart/form-data" novalidate>
+      <h2>Account Details</h2>
+      <form method="post" novalidate>
         {% csrf_token %}
-        <input type="file" name="avatar" id="id_avatar" accept="image/*" style="display:none;" />
         {% if messages %}
           <ul class="messages">
             {% for msg in messages %}
@@ -130,52 +126,52 @@
             {% endfor %}
           </ul>
         {% endif %}
-       
+        
         <div class="form-group">
           <label for="id_username">
-            <i class="fas fa-user"></i> Username
+            <i class="fas fa-user"></i>  Username
           </label>
           <input type="text" name="username" id="id_username" value="{{ user.username }}" required>
         </div>
- 
+        
         <div class="form-group">
           <label for="id_email">
-                <i class="fas fa-envelope"></i> Email
+                <i class="fas fa-envelope"></i>  Email
             </label>
           <input type="email" name="email" id="id_email" value="{{ user.email }}" required>
         </div>
-       
+        
         <div class="form-group">
           <label for="id_first_name">First Name</label>
           <input type="text" name="first_name" id="id_first_name" value="{{ user.first_name }}">
         </div>
-       
+        
         <div class="form-group">
           <label for="id_last_name">Last Name</label>
           <input type="text" name="last_name" id="id_last_name" value="{{ user.last_name }}">
         </div>
        
-        <h3><i class="fas fa-lock"></i> Change Password</h3>
+        <h3><i class="fas fa-lock"></i>  Change Password</h3>
         <div class="form-group">
           <label for="id_current_password">Current Password</label>
           <input type="password" name="current_password" id="id_current_password">
         </div>
-       
+        
         <div class="form-group">
           <label for="id_new_password">New Password</label>
           <input type="password" name="new_password" id="id_new_password">
         </div>
-       
+        
         <div class="form-group">
           <label for="id_confirm_new_password">Confirm New Password</label>
           <input type="password" name="confirm_new_password" id="id_confirm_new_password">
         </div>
-       
+        
         <button type="submit" class="btn">Update Profile</button>
       </form>
     </div>
   </div>
- 
+
   <!-- Logout Confirmation Modal (Same as Dashboard) -->
   <div class="modal" id="logoutModal" style="display: none;">
     <div class="modal-content logout-modal">
@@ -193,12 +189,12 @@
       </div>
     </div>
   </div>
- 
+
   <!-- JavaScript (Same as Dashboard, with Profile JS) -->
   <script src="{% static 'Profile_App/profile.js' %}"></script>
   <script>
     (function() {
-    // Bind logout modal handlers once for the Profile page
+     // Bind logout modal handlers once for the Profile page
     var logoutLinks = Array.from(document.querySelectorAll('a[href*="logout"]'));
     var modal = document.getElementById('logoutModal');
     // Added: Explicit binding for #logoutBtn (matches Dashboard/Activity inline JS)
@@ -230,40 +226,7 @@
       if (a.classList && a.classList.contains('btn-logout-confirm')) return;
       a.addEventListener('click', function(e){ e.preventDefault(); openModalFor(a.getAttribute('href')); });
     });
-  })();
- 
-    // (function() {
-    //   // Bind logout modal handlers
-    //   var logoutLinks = Array.from(document.querySelectorAll('a[href*="logout"]'));
-    //   var modal = document.getElementById('logoutModal');
- 
-    //   if (!modal) {
-    //     logoutLinks.forEach(function(a){
-    //       if (a.classList && a.classList.contains('btn-logout-confirm')) return;
-    //       a.addEventListener('click', function(e){ e.preventDefault(); window.location = a.getAttribute('href'); });
-    //     });
-    //     return;
-    //   }
- 
-    //   var cancelBtn = modal.querySelector('.btn-logout-cancel');
-    //   var confirmBtn = modal.querySelector('.btn-logout-confirm');
- 
-    //   function openModalFor(href) {
-    //     if (confirmBtn && href) confirmBtn.setAttribute('href', href);
-    //     modal.style.display = 'flex';
-    //   }
- 
-    //   function closeModal() { modal.style.display = 'none'; }
- 
-    //   if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
-    //   modal.addEventListener('click', function(ev){ if (ev.target === modal) closeModal(); });
-    //   window.addEventListener('keydown', function(ev){ if (ev.key === 'Escape') closeModal(); });
- 
-    //   logoutLinks.forEach(function(a){
-    //     if (a.classList && a.classList.contains('btn-logout-confirm')) return;
-    //     a.addEventListener('click', function(e){ e.preventDefault(); openModalFor(a.getAttribute('href')); });
-    //   });
-    // })();
+  })(); 
   </script>
 </body>
 </html>
