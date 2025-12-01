@@ -69,9 +69,12 @@ EcoTrack is a sustainability-focused web application developed in partial fulfil
     │   └── wsgi.py
     │
     ├── Activity_App/
+    ├── Challenges_App/
     ├── Dashboard_App/
+    ├── History_App/
     ├── Homepage_App/
     ├── Login_App/
+    ├── Profile_App/
     ├── Signup_App/
     └── static/...
 
@@ -95,7 +98,7 @@ python -m venv venv
 ```
 
 ``` bash
-venv\Scripts ctivate         # Windows
+venv\Scripts\activate         # Windows
 ```
 
 ``` bash
