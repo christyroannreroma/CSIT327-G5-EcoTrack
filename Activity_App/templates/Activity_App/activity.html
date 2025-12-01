@@ -64,11 +64,7 @@
       <div class="user-profile" id="userProfile">
         <div class="avatar">
           {% if user.is_authenticated %}
-            {% if profile and profile.avatar %}
-              <img src="{{ profile.avatar.url }}" alt="Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;"/>
-            {% else %}
-              {{ user.username|slice:":2"|upper }}
-            {% endif %}
+            {{ user.username|slice:":2"|upper }}
           {% else %}
             Guest
           {% endif %}

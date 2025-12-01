@@ -278,12 +278,15 @@ header::after {
   color: var(--text-dark);
 }
 
+
 .profile-menu-item:hover {
-  background: rgba(211, 211, 211, 0.781);
-  height: fit-content;
-  width: fit-content;
-  border-radius: 16px;
-  transform: translateX(5px);
+  background: rgba(212, 211, 211, 0.596);
+  border-radius: 12px; 
+  margin-right: 5px;
+  margin-left: 5px;
+  padding: 12px 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+  transition: all 0.3s ease;
 }
 
 /* Activity Selection Columns - Much more fun! */

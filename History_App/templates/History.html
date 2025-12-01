@@ -59,11 +59,7 @@
       <div class="user-profile" id="userProfile">
         <div class="avatar">
           {% if user.is_authenticated %}
-            {% if profile and profile.avatar %}
-              <img src="{{ profile.avatar.url }}" alt="Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;"/>
-            {% else %}
-              {{ user.username|slice:":2"|upper }}
-            {% endif %}
+            {{ user.username|slice:":2"|upper }}
           {% else %}
             Guest
           {% endif %}
@@ -115,7 +111,7 @@
                   <td>{{ item.duration }}</td>
                   <td>{{ item.notes }}</td>
                   <td>
-                    <span class="btn-delete-activity" data-activity-id="{{ item.id }}" title="Delete this activity" style="color: red; cursor: pointer;">Delete</span>
+                    <span class="btn-delete-activity" data-activity-id="{{ item.id }}" title="Delete this activity">Delete</span>
                   </td>
                 </tr>
               {% endfor %}
