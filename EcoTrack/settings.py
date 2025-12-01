@@ -60,6 +60,10 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+# Media (user-uploaded files)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -101,6 +105,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'Profile_App.context_processors.profile',
             ],
         },
     },

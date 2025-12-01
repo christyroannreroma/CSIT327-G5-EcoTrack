@@ -172,6 +172,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 /* ignore */
             }
             evaluateBadges();
+            // Ensure the badge elements reflect authoritative INIT_DATA earned flags
+            try { Object.keys(state.badges).forEach(updateBadgeUI); } catch (e) { /* ignore */ }
         } catch (e) {
             console.warn('Failed to parse INIT_DATA', e);
         }
@@ -555,12 +557,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if(!el) return;
         if (state.badges[badgeKey].earned) {
             el.classList.remove('locked');
-            el.classList.add('earned');
+            el.classList.add('badge-unlocked');
             // update tooltip to show earned
             const tt = el.querySelector('.badge-tooltip');
             if(tt) tt.innerHTML = `${prettyName(badgeKey)}<br><small class="earned-text">Badge earned</small>`;
         } else {
-            el.classList.remove('earned');
+            el.classList.remove('badge-unlocked');
             el.classList.add('locked');
             const tt = el.querySelector('.badge-tooltip');
             if(tt) {

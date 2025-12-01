@@ -67,7 +67,11 @@
       <div class="user-profile" id="userProfile">
         <div class="avatar">
           {% if user.is_authenticated %}
-            {{ user.username|slice:":2"|upper }}
+            {% if profile and profile.avatar %}
+              <img src="{{ profile.avatar.url }}" alt="Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;"/>
+            {% else %}
+              {{ user.username|slice:":2"|upper }}
+            {% endif %}
           {% else %}
             Guest
           {% endif %}
@@ -188,11 +192,11 @@
             <i class="fas fa-award"></i>
           </div>
           <div class="badges-container">
-            <div class="badge locked" id="badge-eco_commuter" data-badge="eco_commuter" data-prereq="Take 5 bike/walk trips or accumulate 50 km by bike/walk">
+            <div class="badge {% if badges_context.eco_commuter.earned %}badge-unlocked{% else %}locked{% endif %}" id="badge-eco_commuter" data-badge="eco_commuter" data-prereq="Take 5 bike/walk trips or accumulate 50 km by bike/walk">
               <img src="{% static 'Homepage_App/images/Bike_Badge.svg' %}" alt="Eco Commuter Badge" class="icon-svg">
               <div class="badge-tooltip">Eco Commuter<br><small class="prereq">Prereq: Take 5 bike/walk trips or 50 km</small></div>
             </div>
-            <div class="badge locked" id="badge-green_eater" data-badge="green_eater" data-prereq="Log 7 vegetarian/vegan meals">
+            <div class="badge {% if badges_context.green_eater.earned %}badge-unlocked{% else %}locked{% endif %}" id="badge-green_eater" data-badge="green_eater" data-prereq="Log 7 vegetarian/vegan meals">
               <img src="{% static 'Homepage_App/images/GreenEater_Badge.svg' %}" alt="Green Eater Badge" class="icon-svg">
               <div class="badge-tooltip">Green Eater<br><small class="prereq">Prereq: 7 veg/vegan meals</small></div>
             </div>
@@ -200,11 +204,11 @@
               <i class="fas fa-recycle"></i>
               <div class="badge-tooltip">Recycling Champion<br><small class="prereq">Prereq: 5 recycling actions</small></div>
             </div> -->
-            <div class="badge locked" id="badge-energy_saver" data-badge="energy_saver" data-prereq="Use renewable energy 5 times or log low energy usage">
+            <div class="badge {% if badges_context.energy_saver.earned %}badge-unlocked{% else %}locked{% endif %}" id="badge-energy_saver" data-badge="energy_saver" data-prereq="Use renewable energy 5 times or log low energy usage">
               <img src="{% static 'Homepage_App/images/EnergySaver_Badge.svg' %}" alt="Energy Saver Badge" class="icon-svg">
               <div class="badge-tooltip">Energy Saver<br><small class="prereq">Prereq: 5 renewable energy uses</small></div>
             </div>
-            <div class="badge locked" id="badge-carbon_neutral" data-badge="carbon_neutral" data-prereq="Achieve total footprint ≤ 0.5 kg CO2">
+            <div class="badge {% if badges_context.carbon_neutral.earned %}badge-unlocked{% else %}locked{% endif %}" id="badge-carbon_neutral" data-badge="carbon_neutral" data-prereq="Achieve total footprint ≤ 0.5 kg CO2">
               <img src="{% static 'Homepage_App/images/CarbonNeutral_Badge.svg' %}" alt="Carbon Neutral Badge" class="icon-svg">
               <div class="badge-tooltip">Carbon Neutral<br><small class="prereq">Prereq: Total ≤ 0.5 kg CO2</small></div>
             </div>

@@ -3,6 +3,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
+from django.db.models import Count, Max
 
 # Avoid circular import at top-level: import inside signal handler when needed
 
@@ -48,9 +49,12 @@ def award_badges_on_activity(sender, instance, created, **kwargs):
 		# ECO COMMUTER: bike/walk trips or km
 		eco_qs = sender.objects.filter(user=user).filter(Q(category='transportation') | Q(category='transport'))
 		eco_qs = eco_qs.filter(Q(subtype__iexact='bicycle') | Q(subtype__iexact='walk'))
-		eco_trips = eco_qs.count()
+		# Compute max number of bike/walk trips recorded on any single date
+		daily_counts = eco_qs.values('date').annotate(cnt=Count('id'))
+		max_daily = int(daily_counts.aggregate(max_cnt=Max('cnt'))['max_cnt'] or 0)
 		eco_km = float(eco_qs.aggregate(total_km=Sum('distance'))['total_km'] or 0)
-		if (eco_trips >= 5 or eco_km >= 50) and not UserBadge.objects.filter(user=user, key='eco_commuter').exists():
+		# Award when user has >=5 bike/walk trips on the same date OR accumulated >=50 km
+		if (max_daily >= 5 or eco_km >= 50) and not UserBadge.objects.filter(user=user, key='eco_commuter').exists():
 			ub = UserBadge.objects.create(user=user, key='eco_commuter', earned_at=timezone.now())
 			# mark related Challenge as completed for points (prefer Challenge.key)
 			try:

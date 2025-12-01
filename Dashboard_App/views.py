@@ -53,7 +53,10 @@ def dashboard(request):
     eco_qs = Activity.objects.filter(user=user).filter(
         Q(category='transportation') | Q(category='transport')
     ).filter(Q(subtype__iexact='bicycle') | Q(subtype__iexact='walk'))
-    eco_trips = eco_qs.count()
+    # Compute max bike/walk trips within a single date (frequency-based badge)
+    from django.db.models import Count, Max
+    daily_counts = eco_qs.values('date').annotate(cnt=Count('id'))
+    eco_trips = int(daily_counts.aggregate(max_cnt=Max('cnt'))['max_cnt'] or 0)
     eco_km_agg = eco_qs.aggregate(total_km=Sum('distance'))
     eco_km = float(eco_km_agg['total_km'] or 0)
 
@@ -74,6 +77,13 @@ def dashboard(request):
         Q(subtype__icontains='renew')
     )
     renewable_uses = energy_qs.count()
+
+    # Total footprint (kg CO2) across all activities for status endpoint
+    try:
+        totals = Activity.objects.filter(user=user).aggregate(total=Sum('impact'))
+        total_footprint = float(totals['total'] or 0)
+    except Exception:
+        total_footprint = 0.0
 
     # Total footprint (kg CO2) across all categories (use breakdown sums)
     total_footprint = sum(breakdown.get(k, 0) for k in breakdown)
@@ -156,26 +166,31 @@ def dashboard(request):
         pass
 
     # Badge earned flags: prefer persisted UserBadge (permanent earn). Still include counters for progress display.
+    # Determine whether a badge should be shown as earned. Prefer persisted UserBadge
+    # but also mark as earned if the user's historical activity already meets the
+    # criteria (covers legacy data where badges weren't created retroactively).
     badges = {
         'eco_commuter': {
-            'earned': UserBadge.objects.filter(user=user, key='eco_commuter').exists(),
+            # earned if persisted or if user has >=5 bike/walk trips on a single date
+            'earned': UserBadge.objects.filter(user=user, key='eco_commuter').exists() or (eco_trips >= 5 or eco_km >= 50),
+            # expose the max trips in a single day for UI/tooltip
             'bike_walk_trips': eco_trips,
             'bike_walk_km': eco_km
         },
         'green_eater': {
-            'earned': UserBadge.objects.filter(user=user, key='green_eater').exists(),
+            'earned': UserBadge.objects.filter(user=user, key='green_eater').exists() or (green_meals >= 7),
             'veg_meals': green_meals
         },
         'recycling_champion': {
-            'earned': UserBadge.objects.filter(user=user, key='recycling_champion').exists(),
+            'earned': UserBadge.objects.filter(user=user, key='recycling_champion').exists() or (recycle_actions >= 5),
             'recycle_actions': recycle_actions
         },
         'energy_saver': {
-            'earned': UserBadge.objects.filter(user=user, key='energy_saver').exists(),
+            'earned': UserBadge.objects.filter(user=user, key='energy_saver').exists() or (renewable_uses >= 5),
             'renewable_uses': renewable_uses
         },
         'carbon_neutral': {
-            'earned': UserBadge.objects.filter(user=user, key='carbon_neutral').exists(),
+            'earned': UserBadge.objects.filter(user=user, key='carbon_neutral').exists() or (total_footprint <= 0.5),
         }
     }
 
@@ -186,6 +201,9 @@ def dashboard(request):
         'user': user,
         'init_data_json': json.dumps(init_data),
     }
+    # Expose badge earned flags to template rendering so server-side markup
+    # can immediately reflect persisted badge state (useful after direct DB updates).
+    context['badges_context'] = badges
     return render(request, 'Dashboard_App/dashboard.html', context)
 
 
@@ -243,7 +261,9 @@ def dashboard_status(request):
     eco_qs = Activity.objects.filter(user=user).filter(
         Q(category='transportation') | Q(category='transport')
     ).filter(Q(subtype__iexact='bicycle') | Q(subtype__iexact='walk'))
-    eco_trips = eco_qs.count()
+    from django.db.models import Count, Max
+    daily_counts = eco_qs.values('date').annotate(cnt=Count('id'))
+    eco_trips = int(daily_counts.aggregate(max_cnt=Max('cnt'))['max_cnt'] or 0)
     eco_km_agg = eco_qs.aggregate(total_km=Sum('distance'))
     eco_km = float(eco_km_agg['total_km'] or 0)
 
@@ -262,26 +282,28 @@ def dashboard_status(request):
     )
     renewable_uses = energy_qs.count()
 
+    # Mirror the same earned detection in the status endpoint: prefer persisted
+    # UserBadge but also mark as earned when historical activity satisfies criteria.
     badges = {
         'eco_commuter': {
-            'earned': UserBadge.objects.filter(user=user, key='eco_commuter').exists(),
+            'earned': UserBadge.objects.filter(user=user, key='eco_commuter').exists() or (eco_trips >= 5 or eco_km >= 50),
             'bike_walk_trips': eco_trips,
             'bike_walk_km': eco_km
         },
         'green_eater': {
-            'earned': UserBadge.objects.filter(user=user, key='green_eater').exists(),
+            'earned': UserBadge.objects.filter(user=user, key='green_eater').exists() or (green_meals >= 7),
             'veg_meals': green_meals
         },
         'recycling_champion': {
-            'earned': UserBadge.objects.filter(user=user, key='recycling_champion').exists(),
+            'earned': UserBadge.objects.filter(user=user, key='recycling_champion').exists() or (recycle_actions >= 5),
             'recycle_actions': recycle_actions
         },
         'energy_saver': {
-            'earned': UserBadge.objects.filter(user=user, key='energy_saver').exists(),
+            'earned': UserBadge.objects.filter(user=user, key='energy_saver').exists() or (renewable_uses >= 5),
             'renewable_uses': renewable_uses
         },
         'carbon_neutral': {
-            'earned': UserBadge.objects.filter(user=user, key='carbon_neutral').exists(),
+            'earned': UserBadge.objects.filter(user=user, key='carbon_neutral').exists() or (total_footprint <= 0.5),
         }
     }
 

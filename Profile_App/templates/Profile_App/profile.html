@@ -66,7 +66,12 @@
       <div class="user-profile" id="userProfile">
         <div class="avatar">
           {% if user.is_authenticated %}
-            {{ user.username|slice:":2"|upper }}
+            {# Prefer profile.avatar from view context to avoid RelatedObjectDoesNotExist #}
+            {% if profile and profile.avatar %}
+              <img src="{{ profile.avatar.url }}" alt="Avatar" style="width:36px;height:36px;border-radius:50%;object-fit:cover;"/>
+            {% else %}
+              {{ user.username|slice:":2"|upper }}
+            {% endif %}
           {% else %}
             Guest
           {% endif %}
@@ -92,27 +97,28 @@
  
     <div class="profile-avatar-section">
       <h1 class="welcome-text"> Profile</h1>
-      <br/>  
+      <br/>
       <div class="profile-avatar">
-        {% if user.is_authenticated %}
-          {{ user.username|slice:":2"|upper }}
-        {% else %}
-          GU
-        {% endif %}
-      </div>
-      <div class="profile-username">
-        {% if user.is_authenticated %}
-          {{ user.username }}
-        {% else %}
-          Guest
-        {% endif %}
+          {% if user.is_authenticated %}
+            {% if profile and profile.avatar %}
+              <img id="profileAvatarImg" src="{{ profile.avatar.url }}" alt="Avatar" style="width:120px;height:120px;border-radius:50%;object-fit:cover;"/>
+            {% else %}
+              <div id="profileAvatarInitials" style="width:120px;height:120px;border-radius:50%;background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-weight:700;color:#444;">{{ user.username|slice:":2"|upper }}</div>
+            {% endif %}
+          {% else %}
+            GU
+          {% endif %}
       </div>
     </div>
    
     <div class="profile-card">
-      <h2>Account Details</h2>
-      <form method="post" novalidate>
+      <div class="profile-card-header">
+        <h2>Account Details</h2>
+        <button type="button" id="avatarChooseBtn" class="avatar-btn">Choose File</button>
+      </div>
+      <form method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
+        <input type="file" name="avatar" id="id_avatar" accept="image/*" style="display:none;" />
         {% if messages %}
           <ul class="messages">
             {% for msg in messages %}

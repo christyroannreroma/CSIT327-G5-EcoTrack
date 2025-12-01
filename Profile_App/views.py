@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
+from .models import Profile
 
 @login_required
 def profile(request):
@@ -67,11 +68,22 @@ def profile(request):
                 user.set_password(new_password)
                 update_session_auth_hash(request, user)  # Keep user logged in after password change
             user.save()
+            # Handle avatar upload if provided
+            try:
+                profile, _ = Profile.objects.get_or_create(user=user)
+                avatar = request.FILES.get('avatar')
+                if avatar:
+                    profile.avatar = avatar
+                    profile.save()
+            except Exception:
+                # don't block profile update on avatar errors
+                pass
             messages.success(request, 'Profile updated successfully.')
             return redirect('Profile_App:profile')
     
     # GET: Render form with current data
     context = {
         'user': user,
+        'profile': Profile.objects.get_or_create(user=user)[0],
     }
     return render(request, 'Profile_App/profile.html', context)

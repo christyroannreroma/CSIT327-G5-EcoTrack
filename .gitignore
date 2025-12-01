@@ -77,3 +77,4 @@ ENV/
 *~
 
 staticfiles/
+avatars/

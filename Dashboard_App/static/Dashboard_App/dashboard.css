@@ -389,6 +389,60 @@ header::after {
   color:#0f0f0f;
 }
 
+/* Badges styling */
+.badges-container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.badges-container .badge {
+  width: 76px;
+  height: 76px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease, opacity 0.25s ease;
+}
+.badges-container .badge .icon-svg {
+  width: 56px;
+  height: 56px;
+  display: block;
+}
+
+/* Locked appearance: desaturated / slightly transparent */
+.badges-container .badge.locked {
+  filter: grayscale(100%) contrast(0.85) opacity(0.6);
+  transform: scale(1);
+  box-shadow: none;
+}
+
+/* Unlocked appearance (matches previous .earned styling): colorful + slight pop */
+.badges-container .badge.badge-unlocked {
+  filter: none;
+  opacity: 1;
+  transform: scale(1.06);
+  box-shadow: 0 6px 18px rgba(76, 175, 80, 0.18);
+  border: 1px solid rgba(76,175,80,0.12);
+}
+
+.badge-tooltip {
+  position: absolute;
+  bottom: -9999px; /* hidden by default, shown via hover in existing CSS or JS */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 .reset-btn {
   background: linear-gradient(45deg, #FFD93D, #FF6B6B);
   color: white;

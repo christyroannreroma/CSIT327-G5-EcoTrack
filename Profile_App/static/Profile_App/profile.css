@@ -88,17 +88,17 @@ input[type="text"], input[type="email"], input[type="password"] {
 }
  
 .profile-avatar {
-  width: 100px;
-  height: 100px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: #444;
   font-weight: bold;
-  font-size: 2.5rem;
-  background: var(--fun-gradient);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  font-size: 2.8rem;
+  background: #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   margin: 0 auto 15px;
   transition: var(--transition);
 }
@@ -109,4 +109,29 @@ input[type="text"], input[type="email"], input[type="password"] {
   font-size: 1.5rem;
   color: var(--text-dark);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Avatar choose button (replaces default file input UI) */
+.avatar-btn {
+  background: var(--primary-green);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1rem;
+  border: none;
+  box-shadow: 0 6px 14px rgba(76,175,80,0.18);
+}
+.avatar-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Align the profile-card header so the button sits to the far right of the Account Details box */
+.profile-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
 }
