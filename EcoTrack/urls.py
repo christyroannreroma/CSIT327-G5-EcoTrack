@@ -28,6 +28,7 @@ urlpatterns = [
     path('activity/', include('Activity_App.urls')),
     path('history/', include('History_App.urls')),
     path('challenges/', include('Challenges_App.urls')),
+    path('recycling/', include('Recycling_App.urls')),
     path('profile/', include('Profile_App.urls')),
 ]
 

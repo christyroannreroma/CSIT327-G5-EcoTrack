@@ -1,0 +1,441 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cebu City Recycling Guide - EcoTrack</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'Dashboard_App/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'Recycling_App/recycling.css' %}">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <h2 class="sidebar-logo">EcoTrack</h2>
+            <nav class="nav-links">
+                <a href="{% url 'Dashboard_App:dashboard' %}" class="nav-item">
+                    <span class="icon">🏠</span> Home
+                </a>
+                <a href="{% url 'Activity_App:activity' %}" class="nav-item">
+                    <span class="icon">➕</span> Add Activity
+                </a>
+                <a href="{% url 'Challenges_App:challenges' %}" class="nav-item">
+                    <span class="icon">🏆</span> Challenges
+                </a>
+                <a href="{% url 'Recycling_App:recycling' %}" class="nav-item active">
+                    <span class="icon">♻️</span> Recycling
+                </a>
+                <a href="{% url 'History_App:history' %}" class="nav-item">
+                    <span class="icon">📜</span> History
+                </a>
+            </nav>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="#" class="nav-item">
+                <span class="icon">⚙️</span> Settings
+            </a>
+            <a href="{% url 'Login_App:logout' %}" class="nav-item">
+                <i class="fas fa-sign-out-alt"></i> Log out
+            </a>
+        </div>
+    </aside>
+
+    <div class="dashboard">
+        <div class="container">
+        <div class="header">
+            <h1>♻️ Cebu City Recycling Guide</h1>
+            <p>Local Laws, Rules & Regulations on Waste Management and Recycling</p>
+        </div>
+
+        <!-- The 3Rs Section (Top Priority) -->
+        <div class="three-rs-section">
+            <h2>🌿 The 3Rs: Foundation of Waste Management</h2>
+            <div class="three-rs-grid">
+                <div class="rs-card reduce">
+                    <div class="rs-icon">🔴</div>
+                    <h3>REDUCE</h3>
+                    <p class="rs-subtitle">First Priority</p>
+                    <ul>
+                        <li>Buy only what you need</li>
+                        <li>Choose products with minimal packaging</li>
+                        <li>Avoid single-use items</li>
+                        <li>Use reusable bags and containers</li>
+                        <li>Say no to plastic straws and utensils</li>
+                    </ul>
+                </div>
+                <div class="rs-card reuse">
+                    <div class="rs-icon">🟢</div>
+                    <h3>REUSE</h3>
+                    <p class="rs-subtitle">Second Priority</p>
+                    <ul>
+                        <li>Repair items instead of replacing them</li>
+                        <li>Donate or sell unwanted items</li>
+                        <li>Use refillable water bottles</li>
+                        <li>Repurpose containers and materials</li>
+                        <li>Choose durable, long-lasting products</li>
+                    </ul>
+                </div>
+                <div class="rs-card recycle">
+                    <div class="rs-icon">🔵</div>
+                    <h3>RECYCLE</h3>
+                    <p class="rs-subtitle">Third Priority</p>
+                    <ul>
+                        <li>Segregate waste properly</li>
+                        <li>Clean recyclables before disposal</li>
+                        <li>Know what can be recycled</li>
+                        <li>Participate in local recycling programs</li>
+                        <li>Support businesses that recycle</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cebu City Local Laws -->
+        <div class="laws-section">
+            <h2>📜 Republic Act No. 9003 - Ecological Solid Waste Management Act</h2>
+            <p class="law-intro">The Philippines' national framework for solid waste management, enforced in Cebu City</p>
+            
+            <div class="law-card">
+                <h3>🏛️ Key Provisions</h3>
+                <ul>
+                    <li><strong>Segregation at Source:</strong> All residents must segregate waste into biodegradable, non-biodegradable, recyclable, and special waste</li>
+                    <li><strong>Mandatory Composting:</strong> Households and establishments must compost biodegradable waste</li>
+                    <li><strong>No Burning of Waste:</strong> Open burning of solid waste is strictly prohibited</li>
+                    <li><strong>Extended Producer Responsibility:</strong> Manufacturers must manage post-consumer waste of their products</li>
+                    <li><strong>Ban on Non-Environmentally Acceptable Products:</strong> Certain plastic products and packaging are prohibited</li>
+                </ul>
+            </div>
+
+            <div class="law-card epr-highlight">
+                <h3>🆕 Republic Act No. 11898 - Extended Producer Responsibility Act (2022)</h3>
+                <p class="ordinance-title">Manufacturers now responsible for plastic waste recovery</p>
+                <ul>
+                    <li><strong>Large Enterprises:</strong> Companies must recover plastic packaging waste equivalent to 20% (2023) increasing to 80% by 2028</li>
+                    <li><strong>Producer Responsibility:</strong> Manufacturers, importers, and brands must establish collection and recycling systems</li>
+                    <li><strong>Single-Use Plastics:</strong> Gradual phase-out of non-essential single-use plastics</li>
+                    <li><strong>Local Implementation:</strong> Cebu City coordinates with EPR-compliant companies for waste collection</li>
+                    <li><strong>Consumer Role:</strong> Return packaging to designated collection points or retail stores</li>
+                </ul>
+            </div>
+
+            <div class="law-card">
+                <h3>📋 Cebu City Ordinance 2239</h3>
+                <p class="ordinance-title">Environmental Code of Cebu City</p>
+                <ul>
+                    <li><strong>4-Color Waste Segregation System:</strong>
+                        <ul style="margin-top: 10px;">
+                            <li>🟢 <strong>Green:</strong> Biodegradable waste (food scraps, garden waste)</li>
+                            <li>🔵 <strong>Blue:</strong> Recyclable materials (paper, plastic, metal, glass)</li>
+                            <li>🔴 <strong>Red:</strong> Non-recyclable waste (contaminated materials)</li>
+                            <li>⚫ <strong>Black:</strong> Special/Hazardous waste (batteries, electronics, chemicals)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Collection Schedule:</strong> Designated days for different waste types</li>
+                    <li><strong>Penalties:</strong> Fines ranging from ₱500 to ₱5,000 for violations</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Rules and Regulations Section -->
+        <div class="regulations-section">
+            <h2>⚖️ Cebu City Recycling Rules & Regulations</h2>
+            
+            <div class="regulation-grid">
+                <div class="regulation-card">
+                    <div class="reg-icon">🏘️</div>
+                    <h3>For Households</h3>
+                    <ul>
+                        <li>Segregate waste at source using the 4-color system</li>
+                        <li>Place waste in designated colored bags or bins</li>
+                        <li>Follow the barangay waste collection schedule</li>
+                        <li>Compost biodegradable waste at home</li>
+                        <li>Bring recyclables to Materials Recovery Facility (MRF)</li>
+                        <li>Never mix different types of waste</li>
+                        <li>Dispose of special waste at designated collection points</li>
+                    </ul>
+                </div>
+
+                <div class="regulation-card">
+                    <div class="reg-icon">🏢</div>
+                    <h3>For Businesses & Establishments</h3>
+                    <ul>
+                        <li>Implement waste management plans</li>
+                        <li>Provide separate waste bins for customers</li>
+                        <li>Partner with accredited waste collectors</li>
+                        <li>Submit quarterly waste management reports</li>
+                        <li>Train employees on proper waste segregation</li>
+                        <li>Reduce plastic use and promote alternatives</li>
+                        <li>Display waste segregation guidelines visibly</li>
+                    </ul>
+                </div>
+
+                <div class="regulation-card">
+                    <div class="reg-icon">🏭</div>
+                    <h3>For Industries & Manufacturers</h3>
+                    <ul>
+                        <li>Register with Environmental Management Bureau (EMB)</li>
+                        <li>Implement Extended Producer Responsibility (EPR)</li>
+                        <li>Provide collection systems for product packaging</li>
+                        <li>Use eco-friendly and recyclable materials</li>
+                        <li>Submit environmental compliance certificates</li>
+                        <li>Partner with recycling facilities</li>
+                        <li>Conduct regular environmental audits</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prohibited Items Section -->
+        <div class="prohibited-section">
+            <h2>🚫 Prohibited in Cebu City</h2>
+            <div class="prohibited-grid">
+                <div class="prohibited-item">
+                    <span class="prohibited-icon">🛍️</span>
+                    <h4>Single-Use Plastics</h4>
+                    <p>Plastic bags, styrofoam food containers, plastic straws</p>
+                </div>
+                <div class="prohibited-item">
+                    <span class="prohibited-icon">🔥</span>
+                    <h4>Open Burning</h4>
+                    <p>Burning of leaves, garbage, or any solid waste</p>
+                </div>
+                <div class="prohibited-item">
+                    <span class="prohibited-icon">🗑️</span>
+                    <h4>Improper Disposal</h4>
+                    <p>Throwing waste in waterways, streets, or public areas</p>
+                </div>
+                <div class="prohibited-item">
+                    <span class="prohibited-icon">♻️</span>
+                    <h4>Mixed Waste</h4>
+                    <p>Combining different waste types in one container</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Penalties Section -->
+        <div class="penalties-section">
+            <h2>💰 Penalties for Non-Compliance</h2>
+            <div class="penalty-table">
+                <div class="penalty-row penalty-header">
+                    <div>Violation</div>
+                    <div>1st Offense</div>
+                    <div>2nd Offense</div>
+                    <div>3rd Offense</div>
+                </div>
+                <div class="penalty-row">
+                    <div>Improper waste segregation</div>
+                    <div>₱500 - ₱1,000</div>
+                    <div>₱1,000 - ₱2,000</div>
+                    <div>₱2,000 - ₱3,000</div>
+                </div>
+                <div class="penalty-row">
+                    <div>Littering in public places</div>
+                    <div>₱1,000 - ₱2,000</div>
+                    <div>₱2,000 - ₱3,000</div>
+                    <div>₱3,000 - ₱5,000</div>
+                </div>
+                <div class="penalty-row">
+                    <div>Open burning of waste</div>
+                    <div>₱2,000 - ₱3,000</div>
+                    <div>₱3,000 - ₱5,000</div>
+                    <div>₱5,000 + Legal Action</div>
+                </div>
+                <div class="penalty-row">
+                    <div>Using prohibited plastics</div>
+                    <div>₱1,000 - ₱2,000</div>
+                    <div>₱2,000 - ₱4,000</div>
+                    <div>₱4,000 - ₱5,000</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recycling Centers Section -->
+        <div class="centers-section">
+            <h2>📍 Cebu City Recycling Centers & MRFs</h2>
+            <div class="centers-grid">
+                <div class="center-card">
+                    <h4>🏘️ Barangay MRFs</h4>
+                    <p>Each barangay has a Materials Recovery Facility. Contact your barangay hall for schedules and accepted materials.</p>
+                </div>
+                <div class="center-card">
+                    <h4>♻️ Cebu City Environmental Sanitation and Enforcement Team (CESET)</h4>
+                    <p>Main office for waste management concerns and violations. Located at Cebu City Hall.</p>
+                </div>
+                <div class="center-card">
+                    <h4>🔋 E-Waste Collection Centers</h4>
+                    <p>SM City Cebu, Ayala Center Cebu, and major malls have e-waste drop-off points.</p>
+                </div>
+                <div class="center-card">
+                    <h4>🍃 Composting Centers</h4>
+                    <p>Community composting facilities available in major barangays. Check with your barangay captain.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Section -->
+        <div class="resources-section">
+            <h2>📞 Important Contacts</h2>
+            <p class="contact-note">📌 Please verify contact numbers before calling, as they may be updated by the local government.</p>
+            <div class="contacts-grid">
+                <div class="contact-item">
+                    <strong>Cebu City Environment and Natural Resources Office (CENRO)</strong>
+                    <p>Phone: (032) 255-8437</p>
+                    <p class="contact-purpose">Waste management inquiries, violations reporting</p>
+                </div>
+                <div class="contact-item">
+                    <strong>CESET Hotline</strong>
+                    <p>Phone: (032) 261-8777</p>
+                    <p class="contact-purpose">Environmental services, waste collection issues</p>
+                </div>
+                <div class="contact-item">
+                    <strong>Cebu City Hall</strong>
+                    <p>Phone: (032) 255-1000</p>
+                    <p class="contact-purpose">General inquiries, local ordinances</p>
+                </div>
+                <div class="contact-item">
+                    <strong>Emergency Environmental Concerns</strong>
+                    <p>Hotline: 919</p>
+                    <p class="contact-purpose">Urgent environmental emergencies</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="recycling-grid" style="display: none;">
+            <div class="recycling-card">
+                <h3><span class="icon">📄</span> Paper & Cardboard</h3>
+                <p>Paper products are highly recyclable and help save trees.</p>
+                <ul>
+                    <li>Newspapers and magazines</li>
+                    <li>Office paper and documents</li>
+                    <li>Cardboard boxes (flattened)</li>
+                    <li>Paper bags</li>
+                    <li>Junk mail and envelopes</li>
+                </ul>
+            </div>
+
+            <div class="recycling-card">
+                <h3><span class="icon">🥤</span> Plastics</h3>
+                <p>Check the recycling number on plastic items (1, 2, and 5 are most recyclable).</p>
+                <ul>
+                    <li>Plastic bottles (PET #1)</li>
+                    <li>Milk jugs (HDPE #2)</li>
+                    <li>Yogurt containers (PP #5)</li>
+                    <li>Detergent bottles</li>
+                    <li>Plastic bags (at designated drop-offs)</li>
+                </ul>
+            </div>
+
+            <div class="recycling-card">
+                <h3><span class="icon">🍾</span> Glass</h3>
+                <p>Glass can be recycled endlessly without losing quality.</p>
+                <ul>
+                    <li>Glass bottles and jars</li>
+                    <li>Food containers</li>
+                    <li>Beverage bottles</li>
+                    <li>Must be clean and label-free</li>
+                    <li>No window glass or mirrors</li>
+                </ul>
+            </div>
+
+            <div class="recycling-card">
+                <h3><span class="icon">🥫</span> Metals</h3>
+                <p>Aluminum and steel are valuable recyclable materials.</p>
+                <ul>
+                    <li>Aluminum cans</li>
+                    <li>Steel food cans</li>
+                    <li>Tin foil (clean)</li>
+                    <li>Metal bottle caps</li>
+                    <li>Empty aerosol cans</li>
+                </ul>
+            </div>
+
+            <div class="recycling-card">
+                <h3><span class="icon">💻</span> Electronics</h3>
+                <p>E-waste requires special recycling to recover valuable materials.</p>
+                <ul>
+                    <li>Computers and laptops</li>
+                    <li>Mobile phones</li>
+                    <li>Tablets and e-readers</li>
+                    <li>Cables and chargers</li>
+                    <li>Take to e-waste collection centers</li>
+                </ul>
+            </div>
+
+            <div class="recycling-card">
+                <h3><span class="icon">🔋</span> Batteries</h3>
+                <p>Batteries contain hazardous materials and must be recycled properly.</p>
+                <ul>
+                    <li>Rechargeable batteries</li>
+                    <li>Single-use alkaline batteries</li>
+                    <li>Button cell batteries</li>
+                    <li>Car batteries</li>
+                    <li>Never throw in regular trash</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Recycling Tips Section -->
+        <div class="tips-section">
+            <h2>🌱 Recycling Tips</h2>
+            <div class="tips-list">
+                <div class="tip-item">
+                    <h4>Clean Before Recycling</h4>
+                    <p>Rinse containers to remove food residue. Contaminated items can ruin entire recycling batches.</p>
+                </div>
+                <div class="tip-item">
+                    <h4>Remove Labels & Caps</h4>
+                    <p>Most labels can stay on, but remove caps and lids as they're often made from different materials.</p>
+                </div>
+                <div class="tip-item">
+                    <h4>Flatten Cardboard</h4>
+                    <p>Break down boxes to save space in recycling bins and make transportation more efficient.</p>
+                </div>
+                <div class="tip-item">
+                    <h4>Know Your Numbers</h4>
+                    <p>Learn the plastic recycling symbols (1-7) and check what your local facility accepts.</p>
+                </div>
+                <div class="tip-item">
+                    <h4>Don't Bag Recyclables</h4>
+                    <p>Place items loose in the bin. Plastic bags can jam sorting machinery.</p>
+                </div>
+                <div class="tip-item">
+                    <h4>When in Doubt, Throw it Out</h4>
+                    <p>If you're unsure if something is recyclable, it's better to trash it than contaminate recycling.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="stats-section">
+            <h2>♻️ Recycling Impact</h2>
+            <p style="margin-bottom: 25px; color: #666;">Global recycling statistics</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="number">75</div>
+                    <div class="label">Million Tons Recycled Annually</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">95</div>
+                    <div class="label">% Energy Saved (Aluminum)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">17</div>
+                    <div class="label">Trees Saved per Ton of Paper</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">32</div>
+                    <div class="label">% Average Recycling Rate</div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </div>
+
+    <script src="{% static 'Recycling_App/recycling.js' %}"></script>
+</body>
+</html>

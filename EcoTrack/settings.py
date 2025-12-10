@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     'History_App',
     'Activity_App',
     'Challenges_App',
+    'Recycling_App',
     'EcoTrack',
     'Profile_App',
 ]
