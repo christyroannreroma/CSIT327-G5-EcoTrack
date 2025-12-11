@@ -6,17 +6,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>History — EcoTrack</title>
 
-  <!-- External Libraries -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 
-  <!-- Core dashboard styles for sidebar and layout -->
   <link rel="stylesheet" href="{% static 'Dashboard_App/dashboard.css' %}">
-  <!-- Page-specific overrides -->
   <link rel="stylesheet" href="{% static 'History.css' %}">
+
   <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}">
 </head>
 <body>
@@ -44,9 +42,6 @@
     </div>
 
     <div class="sidebar-bottom">
-      <a href="#" class="nav-item">
-        <span class="icon">⚙️</span> Settings
-      </a>
       <a href="{% url 'Login_App:logout' %}" class="nav-item">
         <i class="fas fa-sign-out-alt"></i> Log out
       </a>
@@ -102,8 +97,8 @@
                 <th>Date</th>
                 <th>Activity</th>
                 <th>Consumption/Distance</th>
-                <th>Notes</th>
-                <th>Action</th>
+                <!-- <th>Notes</th>
+                <th>Action</th> -->
               </tr>
             </thead>
             <tbody>
@@ -112,10 +107,10 @@
                   <td>{{ item.date }}</td>
                   <td>{{ item.activity }}</td>
                   <td>{{ item.duration }}</td>
-                  <td>{{ item.notes }}</td>
+                  <!-- <td>{{ item.notes }}</td>
                   <td>
                     <span class="btn-delete-activity" data-activity-id="{{ item.id }}" title="Delete this activity">Delete</span>
-                  </td>
+                  </td> -->
                 </tr>
               {% endfor %}
             </tbody>

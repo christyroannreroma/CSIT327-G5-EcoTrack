@@ -150,14 +150,14 @@ body::before {
 header {
   position: fixed;
   top: 0;
-  left: 240px;  /* Starts right after the sidebar */
-  width: calc(100vw - 240px);  /* Spans the full width of the dashboard area */
-  z-index: 50;  /* Below sidebar (z-index: 100) */
+  left: 0;  
+  width: 100vw;  
+  z-index: 50; 
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 100px;
-  padding: 20px 20px;
+  padding: 20px 20px 20px 260px;
   border-bottom: 2px solid var(--light-green);
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -169,7 +169,7 @@ header::after {
   position: absolute;
   bottom: -2px;
   left: 0;
-  width: 120px;
+  width: 22%;
   height: 4px;
   background: var(--fun-gradient);
   border-radius: 4px;
@@ -391,13 +391,16 @@ header::after {
   color:#0f0f0f;
 }
 
-/* Badges styling */
+/* Enhanced Badges styling */
 .badges-container {
   display: flex;
   gap: 12px;
   align-items: center;
   flex-wrap: wrap;
+  justify-content: center;
+  padding: 10px 0;
 }
+
 .badges-container .badge {
   width: 76px;
   height: 76px;
@@ -406,14 +409,17 @@ header::after {
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease, opacity 0.25s ease;
+  overflow: visible; /* Changed from hidden to visible */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
 }
+
 .badges-container .badge .icon-svg {
   width: 76px;
   height: 76px;
   display: block;
   object-fit: contain;
+  transition: transform 0.3s ease;
 }
 
 /* Locked appearance: desaturated / slightly transparent */
@@ -423,27 +429,114 @@ header::after {
   box-shadow: none;
 }
 
-/* Unlocked appearance (matches previous .earned styling): colorful + slight pop */
+/* Unlocked appearance: colorful + glow effect */
 .badges-container .badge.badge-unlocked {
-  filter: none;
-  opacity: 1;
-  transform: scale(1.06);
-  box-shadow: 0 6px 18px rgba(76, 175, 80, 0.18);
-  border: 1px solid rgba(76,175,80,0.12);
+  filter: none !important;
+  opacity: 1 !important;
+  transform: scale(1.06) !important;
+  box-shadow: 0 6px 18px rgba(76, 175, 80, 0.18) !important;
+  border: 1px solid rgba(76,175,80,0.12) !important;
 }
 
+.badge.badge-unlocked.locked {
+    filter: none !important;
+    opacity: 1 !important;
+}
+
+/* Hover effects for all badges */
+.badges-container .badge:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.25);
+}
+
+.badges-container .badge:hover .icon-svg {
+  transform: scale(1.05);
+}
+
+/* Enhanced unlocked badge hover */
+.badges-container .badge.badge-unlocked:hover {
+  transform: scale(1.12);
+  box-shadow: 0 10px 30px rgba(76, 175, 80, 0.35);
+  border-color: var(--primary-green);
+}
+
+/* Enhanced tooltip styling */
 .badge-tooltip {
   position: absolute;
-  bottom: -9999px; /* hidden by default, shown via hover in existing CSS or JS */
+  bottom: -9999px; /* Hidden by default */
   left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.85);
+  transform: translateX(-50%) translateY(10px);
+  background: rgba(0, 0, 0, 0.9);
   color: #fff;
-  padding: 8px 10px;
-  border-radius: 8px;
-  font-size: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
   white-space: nowrap;
   pointer-events: none;
+  z-index: 1000;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 180px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Show tooltip on hover */
+.badge:hover .badge-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  bottom: -85px; /* Positioned well below the badge */
+}
+
+/* Tooltip arrow */
+.badge-tooltip::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 8px 8px 8px;
+  border-style: solid;
+  border-color: transparent transparent rgba(0, 0, 0, 0.9) transparent;
+}
+
+/* Tooltip text styling */
+.badge-tooltip small,
+.badge-tooltip .prereq {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  white-space: normal;
+  line-height: 1.4;
+  max-width: 160px;
+}
+
+/* Additional styling for unlocked badges tooltip */
+.badge.badge-unlocked .badge-tooltip {
+  background: rgba(76, 175, 80, 0.95);
+}
+
+.badge.badge-unlocked .badge-tooltip::before {
+  border-color: transparent transparent rgba(76, 175, 80, 0.95) transparent;
+}
+
+.badge.badge-unlocked .badge-tooltip .prereq {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 600;
+}
+
+/* Floating animation for unlocked badges */
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.badge.badge-unlocked {
+  animation: gentleFloat 3s ease-in-out infinite;
 }
 
 .reset-btn {
@@ -619,12 +712,6 @@ header::after {
   font-size: 24px;
   font-weight: 700;
   color: var(--dark-green);
-}
-
-.badges-container {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
 }
 
 .icon-svg {
@@ -872,6 +959,12 @@ a p {
   box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
 }
 
+/* Bounce animation for score */
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .dashboard-grid {
@@ -893,5 +986,31 @@ a p {
   .sidebar {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
+  }
+  
+  /* Responsive adjustments for tooltips */
+  .badge-tooltip {
+    font-size: 12px;
+    padding: 8px 12px;
+    min-width: 150px;
+    white-space: normal;
+  }
+  
+  .badge:hover .badge-tooltip {
+    bottom: -75px;
+  }
+  
+  .badges-container {
+    gap: 8px;
+  }
+  
+  .badges-container .badge {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .badges-container .badge .icon-svg {
+    width: 60px;
+    height: 60px;
   }
 }

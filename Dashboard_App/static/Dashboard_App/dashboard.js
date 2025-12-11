@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const transportValueEl = document.getElementById('transportValue');
     const dietValueEl = document.getElementById('dietValue');
     const energyValueEl = document.getElementById('energyValue');
-    const shoppingValueEl = document.getElementById('shoppingValue');
     const progressValueEl = document.getElementById('progressValue');
     const progressKgEl = document.getElementById('progressKg');
 
@@ -51,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const transportFields = document.getElementById('transportFields');
     const dietFields = document.getElementById('dietFields');
     const energyFields = document.getElementById('energyFields');
-    const shoppingFields = document.getElementById('shoppingFields');
 
     // transport inputs
     const transportType = document.getElementById('transportType');
@@ -63,10 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // energy inputs
     const energyType = document.getElementById('energyType');
     const energyAmount = document.getElementById('energyAmount');
-
-    // shopping inputs
-    const shoppingDesc = document.getElementById('shoppingDesc');
-    const shoppingImpact = document.getElementById('shoppingImpact');
 
     // User profile dropdown
     const userProfile = document.getElementById('userProfile');
@@ -90,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // state
     const state = {
-        breakdown: { transport: 0, diet: 0, energy: 0, shopping: 0 },
+        breakdown: { transport: 0, diet: 0, energy: 0},
         activities: []
     };
 
@@ -102,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
             state.breakdown.transport = Number(bd.transportation || bd.transport || 0) || 0;
             state.breakdown.diet = Number(bd.diet || 0) || 0;
             state.breakdown.energy = Number(bd.energy || 0) || 0;
-            state.breakdown.shopping = Number(bd.shopping || 0) || 0;
 
             // recent activities list from server
             const recent = window.INIT_DATA.recent || [];
@@ -124,10 +117,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else if (r.category === 'energy') {
                         activityForList.category = 'energy';
                         activityForList.energyAmount = r.amount || r.energyAmount || 0;
-                    } else {
-                        activityForList.category = r.category || 'shopping';
-                        activityForList.shoppingDesc = r.subtype || '';
-                        activityForList.shoppingImpact = r.amount || r.impact || 0;
                     }
                     addActivityToList(activityForList, impact);
                 });
@@ -189,7 +178,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 state.breakdown.transport = Number(bd.transportation || bd.transport || 0) || 0;
                 state.breakdown.diet = Number(bd.diet || 0) || 0;
                 state.breakdown.energy = Number(bd.energy || 0) || 0;
-                state.breakdown.shopping = Number(bd.shopping || 0) || 0;
 
                 // rebuild recent list
                 document.getElementById('recentActivities').innerHTML = '';
@@ -206,10 +194,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else if (r.category === 'energy') {
                         activityForList.category = 'energy';
                         activityForList.energyAmount = r.amount || r.energyAmount || 0;
-                    } else {
-                        activityForList.category = r.category || 'shopping';
-                        activityForList.shoppingDesc = r.subtype || '';
-                        activityForList.shoppingImpact = r.amount || r.impact || 0;
                     }
                     addActivityToList(activityForList, impact);
                 });
@@ -281,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
-    // Initialize Chart.js with 4 segments
+    // Initialize Chart.js with 3 segments
     const ctx = document.getElementById('carbonChart').getContext('2d');
     const carbonChart = new Chart(ctx, {
         type: 'doughnut',
@@ -292,8 +276,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 backgroundColor: [
                     '#4CAF50',
                     '#81C784',
-                    '#C8E6C9',
-                    '#A5D6A7'
+                    '#C8E6C9'
                 ],
                 borderWidth: 0
             }]
@@ -310,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // helpers
     function resetAnalytics() {
-        state.breakdown = { transport: 0, diet: 0, energy: 0, shopping: 0 };
+        state.breakdown = { transport: 0, diet: 0, energy: 0};
         state.activities = [];
         updateUI();
         recentActivities.innerHTML = '';
@@ -318,8 +301,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateUI() {
         const totals = state.breakdown;
-        const totalAbs = Math.abs(totals.transport) + Math.abs(totals.diet) + Math.abs(totals.energy) + Math.abs(totals.shopping);
-        const total = totals.transport + totals.diet + totals.energy + totals.shopping;
+        const totalAbs = Math.abs(totals.transport) + Math.abs(totals.diet) + Math.abs(totals.energy);
+        const total = totals.transport + totals.diet + totals.energy;
 
         // Show total as kg CO2 (one decimal)
         scoreValueEl.textContent = total.toFixed(1);
@@ -329,8 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
         carbonChart.data.datasets[0].data = [
             Math.abs(totals.transport),
             Math.abs(totals.diet),
-            Math.abs(totals.energy),
-            Math.abs(totals.shopping)
+            Math.abs(totals.energy)
         ];
         carbonChart.update();
 
@@ -341,7 +323,6 @@ document.addEventListener('DOMContentLoaded', function() {
         transportValueEl.textContent = pct(totals.transport);
         dietValueEl.textContent = pct(totals.diet);
         energyValueEl.textContent = pct(totals.energy);
-        shoppingValueEl.textContent = pct(totals.shopping);
 
         // progress toward a sample daily target (3.0 kg)
         const dailyTarget = 3.0;
@@ -377,12 +358,10 @@ document.addEventListener('DOMContentLoaded', function() {
         transportFields.style.display = 'none';
         dietFields.style.display = 'none';
         energyFields.style.display = 'none';
-        shoppingFields.style.display = 'none';
 
         if (categorySelect.value === 'transport') transportFields.style.display = 'block';
         if (categorySelect.value === 'diet') dietFields.style.display = 'block';
         if (categorySelect.value === 'energy') energyFields.style.display = 'block';
-        if (categorySelect.value === 'shopping') shoppingFields.style.display = 'block';
     });
 
     // compute emissions for an activity (kg)
@@ -402,10 +381,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const kwh = Number(activity.energyAmount) || 0;
                 return kwh * EMISSION_FACTORS.energy_kwh;
             }
-            case 'shopping': {
-                // shoppingImpact entered as estimated kg CO2
-                return Number(activity.shoppingImpact) || 0;
-            }
             default:
                 return 0;
         }
@@ -417,8 +392,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const icon = {
             transport: '<i class="fas fa-car"></i>',
             diet: '<i class="fas fa-utensils"></i>',
-            energy: '<i class="fas fa-bolt"></i>',
-            shopping: '<i class="fas fa-shopping-bag"></i>'
+            energy: '<i class="fas fa-bolt"></i>'
         }[activity.category] || '<i class="fas fa-circle"></i>';
 
         const description = (activity.category === 'transport')
@@ -427,9 +401,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 ? `${activity.mealType || ''} meal`
                 : (activity.category === 'energy')
                     ? `${(Number(activity.energyAmount) || 0).toFixed(1)} kWh`
-                    : (activity.category === 'shopping')
-                        ? (activity.shoppingDesc || 'Shopping')
-                        : 'Activity';
+                    : 'Activity';
 
         li.innerHTML = `
             <div class="activity-category">
@@ -468,9 +440,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (category === 'energy') {
             activity.energyType = energyType.value;
             activity.energyAmount = Number(energyAmount.value) || 0;
-        } else if (category === 'shopping') {
-            activity.shoppingDesc = shoppingDesc.value;
-            activity.shoppingImpact = Number(shoppingImpact.value) || 0;
         }
 
         const impactKg = computeEmissions(activity);
@@ -495,7 +464,6 @@ document.addEventListener('DOMContentLoaded', function() {
         transportFields.style.display = 'none';
         dietFields.style.display = 'none';
         energyFields.style.display = 'none';
-        shoppingFields.style.display = 'none';
     });
 
     // reset button via double-click on score card (developer convenience)
@@ -619,7 +587,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // carbon neutral: check total footprint
         const carbon = state.badges.carbon_neutral;
-        const total = totals.transport + totals.diet + totals.energy + totals.shopping;
+        const total = totals.transport + totals.diet + totals.energy;
         if (!carbon.earned && total <= BADGE_RULES.carbon_neutral.maxKg) {
             carbon.earned = true;
             notifyBadge('Carbon Neutral earned!');
@@ -662,9 +630,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (category === 'energy') {
                 activity.energyType = energyType.value;
                 activity.energyAmount = Number(energyAmount.value) || 0;
-            } else if (category === 'shopping') {
-                activity.shoppingDesc = shoppingDesc.value;
-                activity.shoppingImpact = Number(shoppingImpact.value) || 0;
             }
 
             const impactKg = computeEmissions(activity);
@@ -681,15 +646,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (category === 'diet') {
                 if (activity.mealType === 'vegetarian' || activity.mealType === 'vegan') {
                     state.badges.green_eater.veg_meals += 1;
-                }
-            } else if (category === 'shopping') {
-                const desc = (activity.shoppingDesc || '').toLowerCase();
-                if (desc.includes('recycle') || desc.includes('recycling') || desc.includes('reused') || desc.includes('upcycle')) {
-                    state.badges.recycling_champion.recycle_actions += 1;
-                }
-            } else if (category === 'energy') {
-                if ((activity.energyType || '').toLowerCase() === 'renewable') {
-                    state.badges.energy_saver.renewable_uses += 1;
                 }
             }
 
@@ -720,7 +676,6 @@ document.addEventListener('DOMContentLoaded', function() {
             transportFields.style.display = 'none';
             dietFields.style.display = 'none';
             energyFields.style.display = 'none';
-            shoppingFields.style.display = 'none';
         });
     }
 
@@ -743,7 +698,6 @@ document.addEventListener('DOMContentLoaded', function() {
         state.breakdown.transport = Number(bd.transportation || bd.transport || 0) || 0;
         state.breakdown.diet = Number(bd.diet || 0) || 0;
         state.breakdown.energy = Number(bd.energy || 0) || 0;
-        state.breakdown.shopping = Number(bd.shopping || 0) || 0;
         
         // Update recent activities display
         const recent = data.recent || [];
@@ -758,8 +712,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     transportation: '<i class="fas fa-car"></i>',
                     transport: '<i class="fas fa-car"></i>',
                     diet: '<i class="fas fa-utensils"></i>',
-                    energy: '<i class="fas fa-bolt"></i>',
-                    shopping: '<i class="fas fa-shopping-bag"></i>'
+                    energy: '<i class="fas fa-bolt"></i>'
                 }[activity.category] || '<i class="fas fa-circle"></i>';
                 
                 let description = '';
@@ -769,8 +722,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     description = `${activity.subtype || 'Meal'}`;
                 } else if (activity.category === 'energy') {
                     description = `${(Number(activity.amount) || 0).toFixed(1)} kWh`;
-                } else if (activity.category === 'shopping') {
-                    description = activity.subtype || 'Shopping';
                 } else {
                     description = activity.subtype || 'Activity';
                 }
