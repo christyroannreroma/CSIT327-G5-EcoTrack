@@ -20,7 +20,7 @@ def dashboard(request):
     user = request.user
 
     totals = Activity.objects.filter(user=user).values('category').annotate(total=Sum('impact'))
-    breakdown = {'transportation': 0.0, 'diet': 0.0, 'energy': 0.0, 'shopping': 0.0}
+    breakdown = {'transportation': 0.0, 'diet': 0.0, 'energy': 0.0}
     for t in totals:
         cat = t['category']
         try:
@@ -66,12 +66,6 @@ def dashboard(request):
     )
     green_meals = green_qs.count()
 
-    # Recycling: shopping actions whose subtype/notes mention recycle/reused/upcycle
-    recycle_qs = Activity.objects.filter(user=user, category='shopping').filter(
-        Q(subtype__icontains='recycle') | Q(subtype__icontains='reused') | Q(subtype__icontains='upcycle')
-    )
-    recycle_actions = recycle_qs.count()
-
     # Energy saver: energy activities marked renewable
     energy_qs = Activity.objects.filter(user=user, category='energy').filter(
         Q(subtype__icontains='renew')
@@ -110,7 +104,6 @@ def dashboard(request):
             badge_to_tokens = {
                 'eco_commuter': ['eco commuter', 'eco-commuter', 'bike', 'commuter'],
                 'green_eater': ['green eater', 'green-eater', 'vegetarian', 'vegan'],
-                'recycling_champion': ['recycle', 'recycling'],
                 'energy_saver': ['energy saver', 'energy-saver', 'renewable'],
                 'carbon_neutral': ['carbon neutral', 'carbon-neutral', 'carbon']
             }
@@ -140,7 +133,6 @@ def dashboard(request):
             badge_to_tokens = {
                 'eco_commuter': ['eco commuter', 'eco-commuter', 'bike', 'commuter'],
                 'green_eater': ['green eater', 'green-eater', 'vegetarian', 'vegan'],
-                'recycling_champion': ['recycle', 'recycling'],
                 'energy_saver': ['energy saver', 'energy-saver', 'renewable'],
                 'carbon_neutral': ['carbon neutral', 'carbon-neutral', 'carbon']
             }
@@ -180,10 +172,6 @@ def dashboard(request):
         'green_eater': {
             'earned': UserBadge.objects.filter(user=user, key='green_eater').exists() or (green_meals >= 7),
             'veg_meals': green_meals
-        },
-        'recycling_champion': {
-            'earned': UserBadge.objects.filter(user=user, key='recycling_champion').exists() or (recycle_actions >= 5),
-            'recycle_actions': recycle_actions
         },
         'energy_saver': {
             'earned': UserBadge.objects.filter(user=user, key='energy_saver').exists() or (renewable_uses >= 5),
@@ -234,7 +222,6 @@ def dashboard_status(request):
             badge_to_tokens = {
                 'eco_commuter': ['eco commuter', 'eco-commuter', 'bike', 'commuter'],
                 'green_eater': ['green eater', 'green-eater', 'vegetarian', 'vegan'],
-                'recycling_champion': ['recycle', 'recycling'],
                 'energy_saver': ['energy saver', 'energy-saver', 'renewable'],
                 'carbon_neutral': ['carbon neutral', 'carbon-neutral', 'carbon']
             }
@@ -272,11 +259,6 @@ def dashboard_status(request):
     )
     green_meals = green_qs.count()
 
-    recycle_qs = Activity.objects.filter(user=user, category='shopping').filter(
-        Q(subtype__icontains='recycle') | Q(subtype__icontains='reused') | Q(subtype__icontains='upcycle')
-    )
-    recycle_actions = recycle_qs.count()
-
     energy_qs = Activity.objects.filter(user=user, category='energy').filter(
         Q(subtype__icontains='renew')
     )
@@ -293,10 +275,6 @@ def dashboard_status(request):
         'green_eater': {
             'earned': UserBadge.objects.filter(user=user, key='green_eater').exists() or (green_meals >= 7),
             'veg_meals': green_meals
-        },
-        'recycling_champion': {
-            'earned': UserBadge.objects.filter(user=user, key='recycling_champion').exists() or (recycle_actions >= 5),
-            'recycle_actions': recycle_actions
         },
         'energy_saver': {
             'earned': UserBadge.objects.filter(user=user, key='energy_saver').exists() or (renewable_uses >= 5),

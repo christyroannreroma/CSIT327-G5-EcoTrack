@@ -35,9 +35,6 @@
         </div>
 
         <div class="sidebar-bottom">
-            <a href="#" class="nav-item">
-                <span class="icon">⚙️</span> Settings
-            </a>
             <a href="{% url 'Login_App:logout' %}" class="nav-item">
                 <i class="fas fa-sign-out-alt"></i> Log out
             </a>
@@ -45,6 +42,37 @@
     </aside>
 
     <div class="dashboard">
+        <header>
+            <div class="logo">
+                <img src="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}" alt="EcoTrack" style="height: 60px; width: 120px;">
+            </div>
+            <div class="user-profile" id="userProfile">
+                <div class="avatar">
+                    {% if user.is_authenticated %}
+                        {{ user.username|slice:":2"|upper }}
+                    {% else %}
+                        Guest
+                    {% endif %}
+                </div>
+                <span>
+                    {% if user.is_authenticated %}
+                        {{ user.get_full_name|default:user.username }}
+                    {% else %}
+                        Guest
+                    {% endif %}
+                </span>
+                <i class="fas fa-chevron-down"></i>
+                <div class="profile-menu" id="profileMenu">
+                    <div class="profile-menu-item">
+                        <a href="{% url 'Profile_App:profile' %}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px;">
+                        <i class="fas fa-user"></i>
+                        <span>My Profile</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
         <div class="container">
         <div class="header">
             <h1>♻️ Cebu City Recycling Guide</h1>
