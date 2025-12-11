@@ -286,9 +286,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const carbonChart = new Chart(ctx, {
         type: 'doughnut',
         data: {
-            labels: ['Transport', 'Food', 'Energy', 'Shopping'],
+            labels: ['Transport', 'Food', 'Energy'],
             datasets: [{
-                data: [0, 0, 0, 0],
+                data: [0, 0, 0],
                 backgroundColor: [
                     '#4CAF50',
                     '#81C784',

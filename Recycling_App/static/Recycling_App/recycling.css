@@ -10,7 +10,7 @@
 }
 
 body:not(.dashboard) {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
     background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
@@ -58,6 +58,7 @@ body:not(.dashboard) {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     position: relative;
     z-index: 1;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .header p {
@@ -87,6 +88,7 @@ body:not(.dashboard) {
     font-size: 2.2em;
     font-weight: 700;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    font-family: 'Montserrat', sans-serif;
 }
 
 .three-rs-grid {
@@ -161,6 +163,7 @@ body:not(.dashboard) {
     margin: 15px 0;
     font-weight: 700;
     letter-spacing: 1px;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .rs-subtitle {
@@ -212,6 +215,7 @@ body:not(.dashboard) {
     font-size: 2em;
     font-weight: 700;
     text-align: center;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .law-intro {
@@ -306,6 +310,7 @@ body:not(.dashboard) {
     margin-bottom: 40px;
     font-size: 2.2em;
     font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .regulation-grid {
@@ -403,6 +408,7 @@ body:not(.dashboard) {
     font-size: 2.2em;
     font-weight: 700;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+    font-family: 'Montserrat', sans-serif;
 }
 
 .prohibited-grid {
@@ -484,6 +490,7 @@ body:not(.dashboard) {
     margin-bottom: 40px;
     font-size: 2.2em;
     font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .penalty-table {
@@ -550,6 +557,7 @@ body:not(.dashboard) {
     margin-bottom: 40px;
     font-size: 2.2em;
     font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .centers-grid {
@@ -625,6 +633,7 @@ body:not(.dashboard) {
     margin-bottom: 15px;
     font-size: 2.2em;
     font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .contact-note {
@@ -806,6 +815,7 @@ body:not(.dashboard) {
     margin-bottom: 20px;
     font-size: 2em;
     text-align: center;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .tips-list {
@@ -852,6 +862,7 @@ body:not(.dashboard) {
     margin-top: 0;
     margin-bottom: 25px;
     font-size: 2em;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .stats-grid {
