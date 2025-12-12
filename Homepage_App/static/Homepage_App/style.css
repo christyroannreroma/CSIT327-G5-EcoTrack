@@ -18,6 +18,10 @@
   font-style: normal;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 .p-welcome {
     font-family: 'Inter', sans-serif;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
@@ -117,6 +121,8 @@ nav ul {
     display: flex;
     list-style: none;
     gap: 2rem;
+    justify-content: center;
+    align-items: center;
 }
 
 nav a {
