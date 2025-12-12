@@ -379,7 +379,7 @@ document.addEventListener('DOMContentLoaded', function () {
             plugins: {
                 legend: { position: 'bottom' }
             },
-            cutout: '70%'
+            cutout: '78%'
         }
     });
 
@@ -648,7 +648,6 @@ document.addEventListener('DOMContentLoaded', function () {
         carbon_neutral: { earned: false }
     };
 
-    // badge elements map
     const badgeEls = {
         eco_commuter: document.getElementById('badge-eco_commuter'),
         green_eater: document.getElementById('badge-green_eater'),
@@ -656,6 +655,14 @@ document.addEventListener('DOMContentLoaded', function () {
         energy_saver: document.getElementById('badge-energy_saver'),
         carbon_neutral: document.getElementById('badge-carbon_neutral'),
     };
+
+    // Initialize state from DOM to avoid overwriting server-rendered state with defaults
+    Object.keys(badgeEls).forEach(key => {
+        const el = badgeEls[key];
+        if (el && (el.classList.contains('badge-unlocked') || !el.classList.contains('locked'))) {
+            state.badges[key].earned = true;
+        }
+    });
 
     // thresholds / prerequisites
     const BADGE_RULES = {
@@ -667,6 +674,9 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function resetBadges() {
+        // Badges are persistent and stored in DB, so we should not reset them locally
+        // just because the daily carbon score resets.
+        /*
         Object.keys(state.badges).forEach(key => {
             const b = state.badges[key];
             // reset counters
@@ -683,6 +693,7 @@ document.addEventListener('DOMContentLoaded', function () {
             b.earned = false;
             updateBadgeUI(key);
         });
+        */
     }
 
     function updateBadgeUI(badgeKey) {

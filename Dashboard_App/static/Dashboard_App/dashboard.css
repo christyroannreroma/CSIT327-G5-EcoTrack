@@ -618,7 +618,7 @@ header::after {
 }
 
 .chart-container {
-  height: 250px;
+  height: 300px;
   margin-top: 20px;
 }
 
@@ -1049,4 +1049,8 @@ a p {
     width: 60px;
     height: 60px;
   }
+}
+
+.pie-chart-resize {
+  height: 500px;
 }
