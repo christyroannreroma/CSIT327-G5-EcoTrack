@@ -1,31 +1,3 @@
-.score-card {
-  transition: background 0.4s, color 0.4s;
-}
-
-.score-card.bg-green {
-  background: linear-gradient(135deg, #4CAF50, #81C784) !important;
-  color: #fff !important;
-}
-
-.score-card.bg-yellow {
-  background: linear-gradient(135deg, #FFD93D, #FF6B6B) !important;
-  color: #fff !important;
-}
-
-.score-card.bg-red {
-  background: linear-gradient(135deg, #d32f2f, #ff6b6b) !important;
-  color: #fff !important;
-}
-
-.score-warning {
-  font-size: 1.1em;
-  margin-top: 8px;
-  font-weight: 700;
-  color: #d32f2f;
-  display: none;
-  transition: color 0.3s;
-}
-
 :root {
   --primary-green: #4CAF50;
   --light-green: #E8F5E9;
@@ -646,7 +618,7 @@ header::after {
 }
 
 .chart-container {
-  height: 250px;
+  height: 300px;
   margin-top: 20px;
 }
 
@@ -1080,5 +1052,5 @@ a p {
 }
 
 .pie-chart-resize {
-  height: 400px;
+  height: 500px;
 }

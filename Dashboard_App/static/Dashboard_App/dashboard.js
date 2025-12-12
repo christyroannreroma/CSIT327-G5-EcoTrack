@@ -405,52 +405,7 @@ document.addEventListener('DOMContentLoaded', function () {
         scoreLabelEl.textContent = 'kg CO2';
         // Timer update handled separately
 
-        // --- Score Card Color & Warning Logic ---
-        const scoreCard = document.querySelector('.score-card');
-        const progressRing = document.querySelector('.progress-ring svg circle[stroke="#4CAF50"]');
-        const scoreWarning = document.getElementById('scoreWarning');
-        let color = '#4CAF50'; // green
-        let bg = 'linear-gradient(135deg, #4CAF50, #81C784)';
-        let ringColor = '#4CAF50';
-        let warningMsg = '';
-        let percent = Math.round((Math.min(Math.max(total, 0), 13.0) / 13.0) * 100);
-        if (total >= 13.0) {
-            color = '#fff';
-            bg = 'linear-gradient(135deg, #d32f2f, #ff6b6b)';
-            ringColor = '#d32f2f';
-            warningMsg = 'ALERT: YOU HAVE EXCEEDED YOUR DAILY LIMIT!';
-        } else if (total >= 9.0) {
-            color = '#fff';
-            bg = 'linear-gradient(135deg, #d32f2f, #ff6b6b)';
-            ringColor = '#d32f2f';
-            warningMsg = 'Warning: You are about to reach your daily limit.';
-        } else if (total >= 6.0) {
-            color = '#fff';
-            bg = 'linear-gradient(135deg, #FFD93D, #FF6B6B)';
-            ringColor = '#FFD93D';
-            warningMsg = 'Warning: You are about to reach your daily limit.';
-        } else {
-            color = '#fff';
-            bg = 'linear-gradient(135deg, #4CAF50, #81C784)';
-            ringColor = '#4CAF50';
-            warningMsg = '';
-        }
-        if (scoreCard) {
-            scoreCard.style.background = bg;
-            scoreCard.style.color = color;
-        }
-        if (scoreWarning) {
-            scoreWarning.textContent = warningMsg;
-            scoreWarning.style.color = (total >= 6.0) ? '#d32f2f' : '#fff';
-            scoreWarning.style.display = warningMsg ? 'block' : 'none';
-        }
-        // Progress ring color and fill
-        if (progressRing) {
-            progressRing.setAttribute('stroke', ringColor);
-            // Fill the wheel proportionally (220 is full circumference)
-            let dashoffset = 220 - (Math.min(percent, 100) / 100) * 220;
-            progressRing.setAttribute('stroke-dashoffset', dashoffset);
-        }
+
 
         // Update chart with absolute contributions (so negatives still appear proportionally)
         carbonChart.data.datasets[0].data = [
@@ -514,7 +469,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const m = pad(Math.floor((diff % 3600) / 60));
         const s = pad(diff % 60);
         if (scoreTimerEl) {
-            scoreTimerEl.textContent = `Next reset: ${h}:${m}:${s}`;
+            scoreTimerEl.textContent = `${h}:${m}:${s}`;
         }
     }
 
