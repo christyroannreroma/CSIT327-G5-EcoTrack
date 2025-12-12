@@ -1,11 +1,12 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=0.8">
   <title>Dashboard — EcoTrack</title>
-  
+
   <!-- External Libraries -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,15 +15,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
+
   <!-- Local Styles and Scripts -->
   <link rel="stylesheet" href="{% static 'Dashboard_App/dashboard.css' %}">
   <link rel="icon" type="image/x-icon" href="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}">
   <script>
     // Expose a small user object for client-side logic (no secrets)
     window.USER = {
-      isAuthenticated: {% if user.is_authenticated %}true{% else %}false{% endif %},
-      username: {% if user.is_authenticated %}"{{ user.username|escapejs }}"{% else %}null{% endif %}
+      isAuthenticated: {% if user.is_authenticated %}true{% else %} false{% endif %},
+    username: {% if user.is_authenticated %} "{{ user.username|escapejs }}"{% else %} null{% endif %}
     };
   </script>
 </head>
@@ -62,44 +63,46 @@
   <div class="dashboard">
     <header>
       <div class="logo">
-        <img src="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}" alt="EcoTrack" style="height: 60px; width: 120px;">
+        <img src="{% static 'Homepage_App/images/EcoTrack_Logo1.png' %}" alt="EcoTrack"
+          style="height: 60px; width: 120px;">
       </div>
       <div class="user-profile" id="userProfile">
         <div class="avatar">
           {% if user.is_authenticated %}
-            {{ user.username|slice:":2"|upper }}
+          {{ user.username|slice:":2"|upper }}
           {% else %}
-            Guest
+          Guest
           {% endif %}
         </div>
         <span>
           {% if user.is_authenticated %}
-            {{ user.get_full_name|default:user.username }}
+          {{ user.get_full_name|default:user.username }}
           {% else %}
-            Guest
+          Guest
           {% endif %}
         </span>
         <i class="fas fa-chevron-down"></i>
         <div class="profile-menu" id="profileMenu">
           <div class="profile-menu-item">
-            <a href="{% url 'Profile_App:profile' %}" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px;">
-            <i class="fas fa-user"></i>
-            <span>My Profile</span>
+            <a href="{% url 'Profile_App:profile' %}"
+              style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px;">
+              <i class="fas fa-user"></i>
+              <span>My Profile</span>
             </a>
           </div>
         </div>
       </div>
     </header>
 
-    <h1 class="welcome-text">🌿Welcome, 
+    <h1 class="welcome-text">🌿Welcome,
       {% if user.is_authenticated %}
-          {{ user.get_full_name|default:user.username }}!
+      {{ user.get_full_name|default:user.username }}!
       {% else %}
-          Guest!
+      Guest!
       {% endif %}
     </h1>
-    <br/>
-    
+    <br />
+
     <div class="dashboard-grid">
       <div class="left-column">
         <!-- Carbon Footprint Score -->
@@ -107,15 +110,16 @@
           <h2 style="text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);">⭐ Your Daily Carbon Footprint Score ⭐</h2>
           <div class="score-value" id="scoreValue">0.0</div>
           <div class="score-label" id="scoreLabel">kg CO2</div>
-          <div class="score-description" id="scoreResetMsg" style="font-size:1em;margin-top:4px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.2);font-weight:600;">Your Daily Score will reset in</div>
-          <div class="score-timer" id="scoreTimer" style="font-size:1.2em;margin-top:2px;color:#f5f5f5;text-shadow:0 1px 2px rgba(0,0,0,0.2);">Next reset: 24:00:00</div>
-          <div class="score-warning" id="scoreWarning" style="font-size:1.1em;margin-top:8px;font-weight:700;"></div>
+          <div class="score-description"
+            style="font-size:1em;margin-top:4px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.2);font-weight:600;">Your
+            Daily Score will reset in: <span id="scoreTimer" style="font-weight:bold;">24:00:00</span></div>
+
           <div class="trend-indicator trend-down" id="trendIndicator" style="display:none;">
             <i class="fas fa-arrow-down"></i>
             <span id="trendText">Trending down this week</span>
           </div>
         </div>
-        
+
         <!-- Chart (Doughnut Graph) -->
         <div class="card">
           <div class="card-header">
@@ -126,7 +130,7 @@
             <canvas id="carbonChart"></canvas>
           </div>
         </div>
-        
+
         <!-- Chart Details -->
         <div class="chart-details">
           <div class="detail-item">
@@ -158,7 +162,7 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Right Column -->
       <div class="right-column">
         <!-- Daily Target -->
@@ -180,7 +184,7 @@
             <canvas id="cfLineChart" height="120"></canvas>
           </div>
         </div>
-        
+
         <!-- Badges -->
         <div class="card-right">
           <div class="card-header">
@@ -188,29 +192,41 @@
             <i class="fas fa-award"></i>
           </div>
           <div class="badges-container">
-            <div class="badge {% if badges_context.eco_commuter.earned %}badge-unlocked{% else %}locked{% endif %}" id="badge-eco_commuter" data-badge="eco_commuter" data-prereq="Take 5 bike/walk trips or accumulate 50 km by bike/walk">
+            <div class="badge {% if badges_context.eco_commuter.earned %}badge-unlocked{% else %}locked{% endif %}"
+              id="badge-eco_commuter" data-badge="eco_commuter"
+              data-prereq="Take 5 bike/walk trips or accumulate 50 km by bike/walk">
               <img src="{% static 'Homepage_App/images/Bike_Badge.svg' %}" alt="Eco Commuter Badge" class="icon-svg">
-              <div class="badge-tooltip">Eco Commuter<br><small class="prereq">Prereq: Take 5 bike/walk trips or 50 km</small></div>
+              <div class="badge-tooltip">Eco Commuter<br><small class="prereq">Prereq: Take 5 bike/walk trips or 50
+                  km</small></div>
             </div>
-            <div class="badge {% if badges_context.green_eater.earned %}badge-unlocked{% else %}locked{% endif %}" id="badge-green_eater" data-badge="green_eater" data-prereq="Log 7 vegetarian/vegan meals">
-              <img src="{% static 'Homepage_App/images/GreenEater_Badge.svg' %}" alt="Green Eater Badge" class="icon-svg">
+            <div class="badge {% if badges_context.green_eater.earned %}badge-unlocked{% else %}locked{% endif %}"
+              id="badge-green_eater" data-badge="green_eater" data-prereq="Log 7 vegetarian/vegan meals">
+              <img src="{% static 'Homepage_App/images/GreenEater_Badge.svg' %}" alt="Green Eater Badge"
+                class="icon-svg">
               <div class="badge-tooltip">Green Eater<br><small class="prereq">Prereq: 7 veg/vegan meals</small></div>
             </div>
             <!-- <div class="badge locked" id="badge-recycling_champion" data-badge="recycling_champion" data-prereq="Record 5 recycling actions (shopping note includes 'recycle')">
               <i class="fas fa-recycle"></i>
               <div class="badge-tooltip">Recycling Champion<br><small class="prereq">Prereq: 5 recycling actions</small></div>
             </div> -->
-            <div class="badge {% if badges_context.energy_saver.earned %}badge-unlocked{% else %}locked{% endif %}" id="badge-energy_saver" data-badge="energy_saver" data-prereq="Use renewable energy 5 times or log low energy usage">
-              <img src="{% static 'Homepage_App/images/EnergySaver_Badge.svg' %}" alt="Energy Saver Badge" class="icon-svg">
-              <div class="badge-tooltip">Energy Saver<br><small class="prereq">Prereq: 5 renewable energy uses</small></div>
+            <div class="badge {% if badges_context.energy_saver.earned %}badge-unlocked{% else %}locked{% endif %}"
+              id="badge-energy_saver" data-badge="energy_saver"
+              data-prereq="Use renewable energy 5 times or log low energy usage">
+              <img src="{% static 'Homepage_App/images/EnergySaver_Badge.svg' %}" alt="Energy Saver Badge"
+                class="icon-svg">
+              <div class="badge-tooltip">Energy Saver<br><small class="prereq">Prereq: 5 renewable energy uses</small>
+              </div>
             </div>
-            <div class="badge {% if badges_context.carbon_neutral.earned %}badge-unlocked{% else %}locked{% endif %}" id="badge-carbon_neutral" data-badge="carbon_neutral" data-prereq="Achieve total footprint ≤ 0.5 kg CO2">
-              <img src="{% static 'Homepage_App/images/CarbonNeutral_Badge.svg' %}" alt="Carbon Neutral Badge" class="icon-svg">
-              <div class="badge-tooltip">Carbon Neutral<br><small class="prereq">Prereq: Total ≤ 0.5 kg CO2</small></div>
+            <div class="badge {% if badges_context.carbon_neutral.earned %}badge-unlocked{% else %}locked{% endif %}"
+              id="badge-carbon_neutral" data-badge="carbon_neutral" data-prereq="Achieve total footprint ≤ 0.5 kg CO2">
+              <img src="{% static 'Homepage_App/images/CarbonNeutral_Badge.svg' %}" alt="Carbon Neutral Badge"
+                class="icon-svg">
+              <div class="badge-tooltip">Carbon Neutral<br><small class="prereq">Prereq: Total ≤ 0.5 kg CO2</small>
+              </div>
             </div>
           </div>
         </div>
-        
+
         <!-- Tips & Resources -->
         <div class="card-right">
           <div class="card-header">
@@ -246,7 +262,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Recent Activities - Full Width Section -->
     <div class="card-activities full-width-section">
       <div class="card-header">
@@ -257,7 +273,9 @@
         <!-- populated by JS -->
       </ul>
       <div class="history-button-wrapper" style="text-align: center; padding: 12px 0;">
-        <a href="{% url 'History_App:history' %}" class="btn-history" style="display:inline-block; padding:10px 16px; background:var(--primary-green); color:white; border-radius:10px; text-decoration:none; font-weight:600;">View full history</a>
+        <a href="{% url 'History_App:history' %}" class="btn-history"
+          style="display:inline-block; padding:10px 16px; background:var(--primary-green); color:white; border-radius:10px; text-decoration:none; font-weight:600;">View
+          full history</a>
       </div>
     </div>
   </div>
@@ -288,19 +306,19 @@
   <!-- JavaScript -->
   <script>
     // Initial data from server (breakdown totals and recent activities)
-    window.INIT_DATA = {{ init_data_json|safe }};
+    window.INIT_DATA = {{ init_data_json | safe }};
   </script>
   <script src="{% static 'Dashboard_App/dashboard.js' %}"></script>
   <script>
-    (function() {
+    (function () {
       // Bind logout modal handlers once for the Dashboard page
       var logoutLinks = Array.from(document.querySelectorAll('a[href*="logout"]'));
       var modal = document.getElementById('logoutModal');
 
       if (!modal) {
-        logoutLinks.forEach(function(a){
+        logoutLinks.forEach(function (a) {
           if (a.classList && a.classList.contains('btn-logout-confirm')) return;
-          a.addEventListener('click', function(e){ e.preventDefault(); window.location = a.getAttribute('href'); });
+          a.addEventListener('click', function (e) { e.preventDefault(); window.location = a.getAttribute('href'); });
         });
         return;
       }
@@ -316,14 +334,15 @@
       function closeModal() { modal.style.display = 'none'; }
 
       if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
-      modal.addEventListener('click', function(ev){ if (ev.target === modal) closeModal(); });
-      window.addEventListener('keydown', function(ev){ if (ev.key === 'Escape') closeModal(); });
+      modal.addEventListener('click', function (ev) { if (ev.target === modal) closeModal(); });
+      window.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') closeModal(); });
 
-      logoutLinks.forEach(function(a){
+      logoutLinks.forEach(function (a) {
         if (a.classList && a.classList.contains('btn-logout-confirm')) return;
-        a.addEventListener('click', function(e){ e.preventDefault(); openModalFor(a.getAttribute('href')); });
+        a.addEventListener('click', function (e) { e.preventDefault(); openModalFor(a.getAttribute('href')); });
       });
     })();
   </script>
 </body>
+
 </html>
