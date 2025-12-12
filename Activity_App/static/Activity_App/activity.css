@@ -225,7 +225,6 @@ p {
 }
 
 .activity-stats::before {
-  content: '🌱';
   position: absolute;
   top: -8px;
   right: 12px;
