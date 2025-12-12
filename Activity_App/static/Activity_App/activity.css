@@ -42,6 +42,9 @@ p {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
+  min-height: 400px;
+  padding: 40px 30px;
+  justify-content: space-between;
   perspective: 1000px;
 }
 
