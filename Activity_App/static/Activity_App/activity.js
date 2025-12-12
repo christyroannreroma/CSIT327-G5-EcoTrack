@@ -12,6 +12,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutModal = document.getElementById('logoutModal');
     const cancelLogout = logoutModal.querySelector('.btn-logout-cancel');
     
+    const transportDateInput = document.getElementById('transportDate');
+    const mealDateInput = document.getElementById('mealDate');
+    const energyDateInput = document.getElementById('energyDate');
+
+
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -185,6 +190,22 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update URL without reload
         history.pushState({ category }, '', `#${category}`);
+
+        // AUTO-FILL TODAY'S DATE WHEN FORM OPENS
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const todayFormatted = `${yyyy}-${mm}-${dd}`;
+        
+        // Set date for the specific form that just opened
+        if (category === 'transportation' && transportDateInput) {
+            transportDateInput.value = todayFormatted;
+        } else if (category === 'diet' && mealDateInput) {
+            mealDateInput.value = todayFormatted;
+        } else if (category === 'energy' && energyDateInput) {
+            energyDateInput.value = todayFormatted;
+        }
     }
     
     function showActivitySelection() {
@@ -455,7 +476,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (transportType) transportType.selectedIndex = 0;
                 if (distance) distance.value = '';
-                if (transportDate) transportDate.value = '';
+                if (transportDate) {
+                    const today = new Date();
+                    const yyyy = today.getFullYear();
+                    const mm = String(today.getMonth() + 1).padStart(2, '0');
+                    const dd = String(today.getDate()).padStart(2, '0');
+                    transportDate.value = `${yyyy}-${mm}-${dd}`;
+                }
                 break;
                 
             case 'diet':
@@ -466,7 +493,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 // clear visual selection state on radio-option cards
                 const mealOptionCards = form.querySelectorAll('.radio-option.large');
                 mealOptionCards.forEach(card => card.classList.remove('selected'));
-                if (mealDate) mealDate.value = '';
+                if (mealDate) {
+                    const today = new Date();
+                    const yyyy = today.getFullYear();
+                    const mm = String(today.getMonth() + 1).padStart(2, '0');
+                    const dd = String(today.getDate()).padStart(2, '0');
+                    mealDate.value = `${yyyy}-${mm}-${dd}`;
+                }
                 break;
                 
             case 'energy':
@@ -479,7 +512,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 const energyOptionCards = form.querySelectorAll('.radio-option.large');
                 energyOptionCards.forEach(card => card.classList.remove('selected'));
                 if (energyAmount) energyAmount.value = '';
-                if (energyDate) energyDate.value = '';
+                if (energyDate) {
+                    const today = new Date();
+                    const yyyy = today.getFullYear();
+                    const mm = String(today.getMonth() + 1).padStart(2, '0');
+                    const dd = String(today.getDate()).padStart(2, '0');
+                    energyDate.value = `${yyyy}-${mm}-${dd}`;
+                }
                 break;
         }
         
