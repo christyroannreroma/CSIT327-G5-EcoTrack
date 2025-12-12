@@ -23,10 +23,15 @@ def carbon_footprint_timeseries(request):
     yearly = Activity.objects.filter(user=user).annotate(
         year=TruncYear('date')
     ).values('year').order_by('year').annotate(total=Sum('impact'))
+    # Aggregate overall (cumulative daily series for the full history)
+    overall = Activity.objects.filter(user=user).annotate(
+        day=TruncDay('date')
+    ).values('day').order_by('day').annotate(total=Sum('impact'))
     return JsonResponse({
         'success': True,
         'daily': list(daily),
         'weekly': list(weekly),
         'monthly': list(monthly),
         'yearly': list(yearly),
+        'overall': list(overall),
     })

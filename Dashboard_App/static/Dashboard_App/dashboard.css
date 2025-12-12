@@ -634,15 +634,16 @@ header::after {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 15px;
+  height: 100px;
+  padding: 20px;
   background: var(--light-green);
-  border: solid 2px rgba(174, 223, 174, 0.973);
+  border: solid 3px rgba(174, 223, 174, 0.973);
   border-radius: 8px;
 }
 
 .detail-icon {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   background-color: var(--accent-green);
   display: flex;
@@ -657,7 +658,7 @@ header::after {
 }
 
 .detail-label {
-  font-size: 14px;
+  font-size: 18px;
   color: var(--text-light);
 }
 
@@ -1052,5 +1053,5 @@ a p {
 }
 
 .pie-chart-resize {
-  height: 500px;
+  height: 450px;
 }

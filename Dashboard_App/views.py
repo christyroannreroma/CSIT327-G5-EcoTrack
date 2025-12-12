@@ -19,7 +19,10 @@ def dashboard(request):
     """
     user = request.user
 
-    totals = Activity.objects.filter(user=user).values('category').annotate(total=Sum('impact'))
+    from django.utils import timezone
+    now = timezone.now()
+    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    totals = Activity.objects.filter(user=user, date__gte=today_start).values('category').annotate(total=Sum('impact'))
     breakdown = {'transportation': 0.0, 'diet': 0.0, 'energy': 0.0}
     for t in totals:
         cat = t['category']

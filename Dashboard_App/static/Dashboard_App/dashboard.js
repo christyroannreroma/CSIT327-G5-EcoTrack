@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else if (range === 'monthly') {
                     labels = chartData.map(d => d.month ? d.month.substring(0, 7) : '');
                 } else {
+                    // daily or overall
                     labels = chartData.map(d => d.day ? d.day.substring(0, 10) : '');
                 }
                 values = chartData.map(d => d.total ? Number(d.total) : 0);
@@ -59,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: { display: false },
                     title: { display: false },
@@ -386,9 +388,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // helpers
     function resetAnalytics() {
         state.breakdown = { transport: 0, diet: 0, energy: 0 };
-        state.activities = [];
+        // Do NOT clear state.activities or recentActivities DOM on daily reset
+        // state.activities = [];
         updateUI();
-        recentActivities.innerHTML = '';
+        // recentActivities.innerHTML = '';
         // Store the last reset time in localStorage
         try {
             localStorage.setItem('carbon_last_reset', Date.now().toString());
@@ -435,11 +438,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- Daily Reset Timer Logic ---
     function pad(n) { return n < 10 ? '0' + n : n; }
     function getNextResetTime() {
-        // Reset at the same time every day (e.g., midnight local time)
+        // Reset at midnight local time
         const now = new Date();
         const next = new Date(now);
-        next.setHours(0, 0, 0, 0);
-        if (now >= next) next.setDate(next.getDate() + 1);
+        next.setHours(24, 0, 0, 0);
         return next;
     }
 
