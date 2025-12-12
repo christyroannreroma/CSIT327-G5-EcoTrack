@@ -1,96 +1,96 @@
-document.addEventListener('DOMContentLoaded', function() {
-        // --- Carbon Footprint Line Chart ---
-        let cfLineChart = null;
-        const cfLineChartEl = document.getElementById('cfLineChart');
-        const cfTimeRange = document.getElementById('cfTimeRange');
+document.addEventListener('DOMContentLoaded', function () {
+    // --- Carbon Footprint Line Chart ---
+    let cfLineChart = null;
+    const cfLineChartEl = document.getElementById('cfLineChart');
+    const cfTimeRange = document.getElementById('cfTimeRange');
 
-        function fetchAndRenderCFLineChart(range) {
-            fetch('/dashboard/api/carbon-timeseries/')
-                .then(r => r.json())
-                .then(data => {
-                    if (!data.success) return;
-                    let chartData = data[range] || [];
-                    let labels = [];
-                    let values = [];
-                    if (range === 'yearly') {
-                        labels = chartData.map(d => d.year ? d.year.substring(0, 4) : '');
-                    } else if (range === 'monthly') {
-                        labels = chartData.map(d => d.month ? d.month.substring(0, 7) : '');
-                    } else {
-                        labels = chartData.map(d => d.day ? d.day.substring(0, 10) : '');
-                    }
-                    values = chartData.map(d => d.total ? Number(d.total) : 0);
-                    renderCFLineChart(labels, values, range);
-                });
+    function fetchAndRenderCFLineChart(range) {
+        fetch('/dashboard/api/carbon-timeseries/')
+            .then(r => r.json())
+            .then(data => {
+                if (!data.success) return;
+                let chartData = data[range] || [];
+                let labels = [];
+                let values = [];
+                if (range === 'yearly') {
+                    labels = chartData.map(d => d.year ? d.year.substring(0, 4) : '');
+                } else if (range === 'monthly') {
+                    labels = chartData.map(d => d.month ? d.month.substring(0, 7) : '');
+                } else {
+                    labels = chartData.map(d => d.day ? d.day.substring(0, 10) : '');
+                }
+                values = chartData.map(d => d.total ? Number(d.total) : 0);
+                renderCFLineChart(labels, values, range);
+            });
+    }
+
+    function renderCFLineChart(labels, values, range) {
+        if (!cfLineChartEl) return;
+        if (cfLineChart) {
+            cfLineChart.destroy();
         }
-
-        function renderCFLineChart(labels, values, range) {
-            if (!cfLineChartEl) return;
-            if (cfLineChart) {
-                cfLineChart.destroy();
-            }
-            // If only one data point, duplicate it to make a visible line
-            let chartLabels = labels.slice();
-            let chartValues = values.slice();
-            if (chartLabels.length === 1) {
-                chartLabels = [chartLabels[0], chartLabels[0]];
-                chartValues = [chartValues[0], chartValues[0]];
-            }
-            // If no data, show a zero baseline
-            if (chartLabels.length === 0) {
-                chartLabels = ['No Data'];
-                chartValues = [0];
-            }
-            cfLineChart = new Chart(cfLineChartEl.getContext('2d'), {
-                type: 'line',
-                data: {
-                    labels: chartLabels,
-                    datasets: [{
-                        label: 'Total Carbon Footprint (kg CO2)',
-                        data: chartValues,
-                        borderColor: '#4A90E2',
-                        backgroundColor: 'rgba(76,175,80,0.08)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 3,
-                        pointBackgroundColor: '#4A90E2',
-                        spanGaps: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: { display: false },
-                        title: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return ` ${context.parsed.y.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1})} kg CO2`;
-                                }
+        // If only one data point, duplicate it to make a visible line
+        let chartLabels = labels.slice();
+        let chartValues = values.slice();
+        if (chartLabels.length === 1) {
+            chartLabels = [chartLabels[0], chartLabels[0]];
+            chartValues = [chartValues[0], chartValues[0]];
+        }
+        // If no data, show a zero baseline
+        if (chartLabels.length === 0) {
+            chartLabels = ['No Data'];
+            chartValues = [0];
+        }
+        cfLineChart = new Chart(cfLineChartEl.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: 'Total Carbon Footprint (kg CO2)',
+                    data: chartValues,
+                    borderColor: '#4A90E2',
+                    backgroundColor: 'rgba(76,175,80,0.08)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#4A90E2',
+                    spanGaps: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return ` ${context.parsed.y.toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 1 })} kg CO2`;
                             }
                         }
-                    },
-                    scales: {
-                        x: { title: { display: true, text: range.charAt(0).toUpperCase() + range.slice(1) } },
-                        y: { title: { display: true, text: 'kg CO2' }, beginAtZero: true }
                     }
+                },
+                scales: {
+                    x: { title: { display: true, text: range.charAt(0).toUpperCase() + range.slice(1) } },
+                    y: { title: { display: true, text: 'kg CO2' }, beginAtZero: true }
                 }
-            });
-        }
+            }
+        });
+    }
 
-        if (cfTimeRange) {
-            cfTimeRange.addEventListener('change', function() {
-                fetchAndRenderCFLineChart(cfTimeRange.value);
-            });
-            // Initial load
+    if (cfTimeRange) {
+        cfTimeRange.addEventListener('change', function () {
             fetchAndRenderCFLineChart(cfTimeRange.value);
-        }
+        });
+        // Initial load
+        fetchAndRenderCFLineChart(cfTimeRange.value);
+    }
 
-        // Update chart after activity add
-        function updateCFLineChartAfterActivity() {
-            if (cfTimeRange) fetchAndRenderCFLineChart(cfTimeRange.value);
-        }
-    
+    // Update chart after activity add
+    function updateCFLineChartAfterActivity() {
+        if (cfTimeRange) fetchAndRenderCFLineChart(cfTimeRange.value);
+    }
+
     const categorySelect = document.getElementById('category');
     const notification = document.getElementById('notification');
     const notificationText = document.getElementById('notificationText');
@@ -99,29 +99,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutBtn = document.getElementById('logoutBtn');
     const logoutModal = document.getElementById('logoutModal');
     const cancelLogout = logoutModal.querySelector('.btn-logout-cancel');
-    
+
     if (logoutBtn) {
-        logoutBtn.addEventListener('click', function(e) {
+        logoutBtn.addEventListener('click', function (e) {
             e.preventDefault();
             logoutModal.style.display = 'flex';
         });
     }
-    
+
     if (cancelLogout) {
-        cancelLogout.addEventListener('click', function() {
+        cancelLogout.addEventListener('click', function () {
             logoutModal.style.display = 'none';
         });
     }
-    
+
     // Close modal when clicking outside
-    window.addEventListener('click', function(e) {
+    window.addEventListener('click', function (e) {
         if (e.target === logoutModal) {
             logoutModal.style.display = 'none';
         }
     });
-    
+
     // Close modal when clicking outside
-    window.addEventListener('click', function(e) {
+    window.addEventListener('click', function (e) {
         if (e.target === logoutModal) {
             logoutModal.style.display = 'none';
         }
@@ -158,25 +158,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const userProfile = document.getElementById('userProfile');
     const profileMenu = document.getElementById('profileMenu');
     if (userProfile && profileMenu) {
-        userProfile.addEventListener('click', function(e) {
+        userProfile.addEventListener('click', function (e) {
             // Prevent toggle if clicking directly on the link (to avoid two-click issue)
             if (e.target.closest('a')) {
                 return; // Let the link handle the click (redirect)
             }
             profileMenu.classList.toggle('active');
         });
-        
+
         // Close dropdown when clicking elsewhere
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (!userProfile.contains(e.target)) {
                 profileMenu.classList.remove('active');
             }
         });
     }
-    
+
     // state
     const state = {
-        breakdown: { transport: 0, diet: 0, energy: 0},
+        breakdown: { transport: 0, diet: 0, energy: 0 },
         activities: []
     };
 
@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             }
                         } catch (e) { /* ignore */ }
                     })
-                    .catch(() => {});
+                    .catch(() => { });
             })
             .catch(err => console.warn('Failed to refresh dashboard data', err));
     }
@@ -385,14 +385,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // helpers
     function resetAnalytics() {
-        state.breakdown = { transport: 0, diet: 0, energy: 0};
+        state.breakdown = { transport: 0, diet: 0, energy: 0 };
         state.activities = [];
         updateUI();
         recentActivities.innerHTML = '';
         // Store the last reset time in localStorage
         try {
             localStorage.setItem('carbon_last_reset', Date.now().toString());
-        } catch (e) {}
+        } catch (e) { }
     }
 
     function updateUI() {
@@ -405,52 +405,7 @@ document.addEventListener('DOMContentLoaded', function() {
         scoreLabelEl.textContent = 'kg CO2';
         // Timer update handled separately
 
-        // --- Score Card Color & Warning Logic ---
-        const scoreCard = document.querySelector('.score-card');
-        const progressRing = document.querySelector('.progress-ring svg circle[stroke="#4CAF50"]');
-        const scoreWarning = document.getElementById('scoreWarning');
-        let color = '#4CAF50'; // green
-        let bg = 'linear-gradient(135deg, #4CAF50, #81C784)';
-        let ringColor = '#4CAF50';
-        let warningMsg = '';
-        let percent = Math.round((Math.min(Math.max(total, 0), 13.0) / 13.0) * 100);
-        if (total >= 13.0) {
-            color = '#fff';
-            bg = 'linear-gradient(135deg, #d32f2f, #ff6b6b)';
-            ringColor = '#d32f2f';
-            warningMsg = 'ALERT: YOU HAVE EXCEEDED YOUR DAILY LIMIT!';
-        } else if (total >= 9.0) {
-            color = '#fff';
-            bg = 'linear-gradient(135deg, #d32f2f, #ff6b6b)';
-            ringColor = '#d32f2f';
-            warningMsg = 'Warning: You are about to reach your daily limit.';
-        } else if (total >= 6.0) {
-            color = '#fff';
-            bg = 'linear-gradient(135deg, #FFD93D, #FF6B6B)';
-            ringColor = '#FFD93D';
-            warningMsg = 'Warning: You are about to reach your daily limit.';
-        } else {
-            color = '#fff';
-            bg = 'linear-gradient(135deg, #4CAF50, #81C784)';
-            ringColor = '#4CAF50';
-            warningMsg = '';
-        }
-        if (scoreCard) {
-            scoreCard.style.background = bg;
-            scoreCard.style.color = color;
-        }
-        if (scoreWarning) {
-            scoreWarning.textContent = warningMsg;
-            scoreWarning.style.color = (total >= 6.0) ? '#d32f2f' : '#fff';
-            scoreWarning.style.display = warningMsg ? 'block' : 'none';
-        }
-        // Progress ring color and fill
-        if (progressRing) {
-            progressRing.setAttribute('stroke', ringColor);
-            // Fill the wheel proportionally (220 is full circumference)
-            let dashoffset = 220 - (Math.min(percent, 100) / 100) * 220;
-            progressRing.setAttribute('stroke-dashoffset', dashoffset);
-        }
+
 
         // Update chart with absolute contributions (so negatives still appear proportionally)
         carbonChart.data.datasets[0].data = [
@@ -483,7 +438,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Reset at the same time every day (e.g., midnight local time)
         const now = new Date();
         const next = new Date(now);
-        next.setHours(0,0,0,0);
+        next.setHours(0, 0, 0, 0);
         if (now >= next) next.setDate(next.getDate() + 1);
         return next;
     }
@@ -492,7 +447,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let last = null;
         try {
             last = parseInt(localStorage.getItem('carbon_last_reset'), 10);
-        } catch (e) {}
+        } catch (e) { }
         return last || 0;
     }
 
@@ -514,7 +469,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const m = pad(Math.floor((diff % 3600) / 60));
         const s = pad(diff % 60);
         if (scoreTimerEl) {
-            scoreTimerEl.textContent = `Next reset: ${h}:${m}:${s}`;
+            scoreTimerEl.textContent = `${h}:${m}:${s}`;
         }
     }
 
@@ -584,7 +539,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function addActivityToList(activity, impactKg) {
-            updateCFLineChartAfterActivity();
+        updateCFLineChartAfterActivity();
         const li = document.createElement('li');
         li.className = 'activity-item';
         const icon = {
@@ -599,8 +554,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!str) return '';
             return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
         }
-        function formatNumber(n, decimals=1) {
-            return Number(n).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+        function formatNumber(n, decimals = 1) {
+            return Number(n).toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
         }
         let description = '';
         if (activity.category === 'transport') {
@@ -732,18 +687,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateBadgeUI(badgeKey) {
         const el = badgeEls[badgeKey];
-        if(!el) return;
+        if (!el) return;
         if (state.badges[badgeKey].earned) {
             el.classList.remove('locked');
             el.classList.add('badge-unlocked');
             // update tooltip to show earned
             const tt = el.querySelector('.badge-tooltip');
-            if(tt) tt.innerHTML = `${prettyName(badgeKey)}<br><small class="earned-text">Badge earned</small>`;
+            if (tt) tt.innerHTML = `${prettyName(badgeKey)}<br><small class="earned-text">Badge earned</small>`;
         } else {
             el.classList.remove('badge-unlocked');
             el.classList.add('locked');
             const tt = el.querySelector('.badge-tooltip');
-            if(tt) {
+            if (tt) {
                 // show prereq stored in data attribute
                 const prereq = el.getAttribute('data-prereq') || '';
                 tt.innerHTML = `${prettyName(badgeKey)}<br><small class="prereq">${prereq}</small>`;
@@ -751,7 +706,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function prettyName(key){
+    function prettyName(key) {
         return {
             eco_commuter: 'Eco Commuter',
             green_eater: 'Green Eater',
@@ -891,7 +846,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ensure resetAnalytics also resets badges
     const originalReset = resetAnalytics;
-    resetAnalytics = function() {
+    resetAnalytics = function () {
         originalReset();
         resetBadges();
     };
@@ -902,13 +857,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Listen for dashboard updates from history page (activity deletions)
     function handleDashboardUpdate(data) {
         if (!data) return;
-        
+
         // Update breakdown
         const bd = data.breakdown || {};
         state.breakdown.transport = Number(bd.transportation || bd.transport || 0) || 0;
         state.breakdown.diet = Number(bd.diet || 0) || 0;
         state.breakdown.energy = Number(bd.energy || 0) || 0;
-        
+
         // Update recent activities display
         const recent = data.recent || [];
         if (recentActivities) {
@@ -917,22 +872,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 const li = document.createElement('li');
                 li.className = 'activity-item';
                 li.setAttribute('data-activity-id', activity.id);
-                
+
                 const icon = {
                     transportation: '<i class="fas fa-car"></i>',
                     transport: '<i class="fas fa-car"></i>',
                     diet: '<i class="fas fa-utensils"></i>',
                     energy: '<i class="fas fa-bolt"></i>'
                 }[activity.category] || '<i class="fas fa-circle"></i>';
-                
+
                 let description = '';
 
                 function toCamelCase(str) {
                     if (!str) return '';
                     return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
                 }
-                function formatNumber(n, decimals=1) {
-                    return Number(n).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+                function formatNumber(n, decimals = 1) {
+                    return Number(n).toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
                 }
                 if (activity.category === 'transportation' || activity.category === 'transport') {
                     description = `${toCamelCase(activity.subtype || 'Transport')} (${formatNumber(activity.distance || 0)} km)`;
@@ -943,7 +898,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     description = toCamelCase(activity.subtype || 'Activity');
                 }
-                
+
                 const impactKg = Number(activity.impact) || 0;
                 li.innerHTML = `
                     <div class="activity-category">
@@ -954,7 +909,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
                 recentActivities.appendChild(li);
             });
-            
+
             // Show "No activities" message if empty
             if (recent.length === 0) {
                 const emptyLi = document.createElement('li');
@@ -965,21 +920,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 recentActivities.appendChild(emptyLi);
             }
         }
-        
+
         // Update UI with new breakdown
         updateUI();
-        
+
         // Re-evaluate badges based on new data
         evaluateBadges();
     }
-    
+
     // Listen for custom event (same tab)
-    window.addEventListener('dashboardUpdate', function(e) {
+    window.addEventListener('dashboardUpdate', function (e) {
         handleDashboardUpdate(e.detail);
     });
-    
+
     // Listen for localStorage changes (cross-tab)
-    window.addEventListener('storage', function(e) {
+    window.addEventListener('storage', function (e) {
         if (e.key === 'dashboard_updated' && e.newValue) {
             try {
                 const updateInfo = JSON.parse(e.newValue);
@@ -989,7 +944,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-    
+
     // Check for updates on page load
     try {
         const stored = localStorage.getItem('dashboard_updated');
