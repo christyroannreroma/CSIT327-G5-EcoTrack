@@ -67,25 +67,43 @@ def history_view(request):
 	"""
 	user = request.user
 
-	qs = Activity.objects.filter(user=user).order_by('-created_at')
+
+	# Sort by date descending (most recent first), fallback to created_at if date is null
+	from django.db.models import F, ExpressionWrapper, DateTimeField, Case, When
+	qs = Activity.objects.filter(user=user).annotate(
+		sort_date=Case(
+			When(date__isnull=False, then=F('date')),
+			default=F('created_at'),
+			output_field=DateTimeField()
+		)
+	).order_by('-sort_date', '-created_at')
 
 	history_items = []
+
+	def to_camel_case(s):
+		if not s:
+			return ''
+		return ' '.join([w.capitalize() for w in s.split()])
+	def format_number(n, decimals=1):
+		try:
+			return f"{float(n):,.{decimals}f}"
+		except Exception:
+			return str(n)
+
 	for a in qs:
-		# Map Activity model fields into the template-friendly shape
-		activity_label = a.category.title() if a.category else 'Activity'
-		subtype = a.subtype or ''
-		# Compose a short description depending on category
+		activity_label = to_camel_case(a.category) if a.category else 'Activity'
+		subtype = to_camel_case(a.subtype or '')
 		if a.category == 'transportation' or a.category == 'transport':
-			desc = f"{subtype or a.subtype or ''}"
-			duration = f"{a.distance or ''} km"
+			desc = f"{subtype or 'Transport'}"
+			duration = f"{format_number(a.distance or 0)} km"
 			notes = ''
 		elif a.category == 'diet':
-			desc = f"{subtype or 'Meal'}"
+			desc = f"{subtype or 'Meal'} Meal"
 			duration = '-'
 			notes = ''
 		elif a.category == 'energy':
-			desc = f"{subtype or 'Energy'}"
-			duration = f"{a.amount or ''} kWh"
+			desc = f"{format_number(a.amount or 0)} kWh"
+			duration = '-'
 			notes = ''
 		else:
 			desc = subtype or activity_label

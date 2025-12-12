@@ -1,4 +1,95 @@
 document.addEventListener('DOMContentLoaded', function() {
+        // --- Carbon Footprint Line Chart ---
+        let cfLineChart = null;
+        const cfLineChartEl = document.getElementById('cfLineChart');
+        const cfTimeRange = document.getElementById('cfTimeRange');
+
+        function fetchAndRenderCFLineChart(range) {
+            fetch('/dashboard/api/carbon-timeseries/')
+                .then(r => r.json())
+                .then(data => {
+                    if (!data.success) return;
+                    let chartData = data[range] || [];
+                    let labels = [];
+                    let values = [];
+                    if (range === 'yearly') {
+                        labels = chartData.map(d => d.year ? d.year.substring(0, 4) : '');
+                    } else if (range === 'monthly') {
+                        labels = chartData.map(d => d.month ? d.month.substring(0, 7) : '');
+                    } else {
+                        labels = chartData.map(d => d.day ? d.day.substring(0, 10) : '');
+                    }
+                    values = chartData.map(d => d.total ? Number(d.total) : 0);
+                    renderCFLineChart(labels, values, range);
+                });
+        }
+
+        function renderCFLineChart(labels, values, range) {
+            if (!cfLineChartEl) return;
+            if (cfLineChart) {
+                cfLineChart.destroy();
+            }
+            // If only one data point, duplicate it to make a visible line
+            let chartLabels = labels.slice();
+            let chartValues = values.slice();
+            if (chartLabels.length === 1) {
+                chartLabels = [chartLabels[0], chartLabels[0]];
+                chartValues = [chartValues[0], chartValues[0]];
+            }
+            // If no data, show a zero baseline
+            if (chartLabels.length === 0) {
+                chartLabels = ['No Data'];
+                chartValues = [0];
+            }
+            cfLineChart = new Chart(cfLineChartEl.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Total Carbon Footprint (kg CO2)',
+                        data: chartValues,
+                        borderColor: '#4A90E2',
+                        backgroundColor: 'rgba(76,175,80,0.08)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#4A90E2',
+                        spanGaps: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.parsed.y.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1})} kg CO2`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: range.charAt(0).toUpperCase() + range.slice(1) } },
+                        y: { title: { display: true, text: 'kg CO2' }, beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        if (cfTimeRange) {
+            cfTimeRange.addEventListener('change', function() {
+                fetchAndRenderCFLineChart(cfTimeRange.value);
+            });
+            // Initial load
+            fetchAndRenderCFLineChart(cfTimeRange.value);
+        }
+
+        // Update chart after activity add
+        function updateCFLineChartAfterActivity() {
+            if (cfTimeRange) fetchAndRenderCFLineChart(cfTimeRange.value);
+        }
     
     const categorySelect = document.getElementById('category');
     const notification = document.getElementById('notification');
@@ -39,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // UI elements for analytics
     const scoreValueEl = document.getElementById('scoreValue');
     const scoreLabelEl = document.getElementById('scoreLabel');
+    const scoreTimerEl = document.getElementById('scoreTimer');
     const transportValueEl = document.getElementById('transportValue');
     const dietValueEl = document.getElementById('dietValue');
     const energyValueEl = document.getElementById('energyValue');
@@ -297,6 +389,10 @@ document.addEventListener('DOMContentLoaded', function() {
         state.activities = [];
         updateUI();
         recentActivities.innerHTML = '';
+        // Store the last reset time in localStorage
+        try {
+            localStorage.setItem('carbon_last_reset', Date.now().toString());
+        } catch (e) {}
     }
 
     function updateUI() {
@@ -307,6 +403,54 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show total as kg CO2 (one decimal)
         scoreValueEl.textContent = total.toFixed(1);
         scoreLabelEl.textContent = 'kg CO2';
+        // Timer update handled separately
+
+        // --- Score Card Color & Warning Logic ---
+        const scoreCard = document.querySelector('.score-card');
+        const progressRing = document.querySelector('.progress-ring svg circle[stroke="#4CAF50"]');
+        const scoreWarning = document.getElementById('scoreWarning');
+        let color = '#4CAF50'; // green
+        let bg = 'linear-gradient(135deg, #4CAF50, #81C784)';
+        let ringColor = '#4CAF50';
+        let warningMsg = '';
+        let percent = Math.round((Math.min(Math.max(total, 0), 13.0) / 13.0) * 100);
+        if (total >= 13.0) {
+            color = '#fff';
+            bg = 'linear-gradient(135deg, #d32f2f, #ff6b6b)';
+            ringColor = '#d32f2f';
+            warningMsg = 'ALERT: YOU HAVE EXCEEDED YOUR DAILY LIMIT!';
+        } else if (total >= 9.0) {
+            color = '#fff';
+            bg = 'linear-gradient(135deg, #d32f2f, #ff6b6b)';
+            ringColor = '#d32f2f';
+            warningMsg = 'Warning: You are about to reach your daily limit.';
+        } else if (total >= 6.0) {
+            color = '#fff';
+            bg = 'linear-gradient(135deg, #FFD93D, #FF6B6B)';
+            ringColor = '#FFD93D';
+            warningMsg = 'Warning: You are about to reach your daily limit.';
+        } else {
+            color = '#fff';
+            bg = 'linear-gradient(135deg, #4CAF50, #81C784)';
+            ringColor = '#4CAF50';
+            warningMsg = '';
+        }
+        if (scoreCard) {
+            scoreCard.style.background = bg;
+            scoreCard.style.color = color;
+        }
+        if (scoreWarning) {
+            scoreWarning.textContent = warningMsg;
+            scoreWarning.style.color = (total >= 6.0) ? '#d32f2f' : '#fff';
+            scoreWarning.style.display = warningMsg ? 'block' : 'none';
+        }
+        // Progress ring color and fill
+        if (progressRing) {
+            progressRing.setAttribute('stroke', ringColor);
+            // Fill the wheel proportionally (220 is full circumference)
+            let dashoffset = 220 - (Math.min(percent, 100) / 100) * 220;
+            progressRing.setAttribute('stroke-dashoffset', dashoffset);
+        }
 
         // Update chart with absolute contributions (so negatives still appear proportionally)
         carbonChart.data.datasets[0].data = [
@@ -324,16 +468,69 @@ document.addEventListener('DOMContentLoaded', function() {
         dietValueEl.textContent = pct(totals.diet);
         energyValueEl.textContent = pct(totals.energy);
 
-        // progress toward a sample daily target (3.0 kg)
-        const dailyTarget = 3.0;
+        // progress toward a sample daily target (13.0 kg)
+        const dailyTarget = 13.0;
         const achieved = Math.min(Math.max(total, 0), dailyTarget);
-        const percent = Math.round((achieved / dailyTarget) * 100);
-        progressValueEl.textContent = percent + '%';
+        const percentDisplay = Math.round((achieved / dailyTarget) * 100);
+        progressValueEl.textContent = percentDisplay + '%';
         progressKgEl.textContent = total.toFixed(1) + ' kg of ' + dailyTarget.toFixed(1) + ' kg target';
     }
 
-    // initial reset on load
-    resetAnalytics();
+
+    // --- Daily Reset Timer Logic ---
+    function pad(n) { return n < 10 ? '0' + n : n; }
+    function getNextResetTime() {
+        // Reset at the same time every day (e.g., midnight local time)
+        const now = new Date();
+        const next = new Date(now);
+        next.setHours(0,0,0,0);
+        if (now >= next) next.setDate(next.getDate() + 1);
+        return next;
+    }
+
+    function getLastResetTime() {
+        let last = null;
+        try {
+            last = parseInt(localStorage.getItem('carbon_last_reset'), 10);
+        } catch (e) {}
+        return last || 0;
+    }
+
+    function checkAndResetIfNeeded() {
+        const now = Date.now();
+        const last = getLastResetTime();
+        const nextReset = getNextResetTime().getTime();
+        if (!last || now >= nextReset) {
+            resetAnalytics();
+        }
+    }
+
+    function updateTimerDisplay() {
+        const now = new Date();
+        const next = getNextResetTime();
+        let diff = Math.floor((next - now) / 1000);
+        if (diff < 0) diff = 0;
+        const h = pad(Math.floor(diff / 3600));
+        const m = pad(Math.floor((diff % 3600) / 60));
+        const s = pad(diff % 60);
+        if (scoreTimerEl) {
+            scoreTimerEl.textContent = `Next reset: ${h}:${m}:${s}`;
+        }
+    }
+
+    // On load, check if reset is needed
+    checkAndResetIfNeeded();
+    updateTimerDisplay();
+    setInterval(() => {
+        checkAndResetIfNeeded();
+        updateTimerDisplay();
+    }, 1000);
+    // --- End Daily Reset Timer Logic ---
+
+    // initial reset on load if no reset time exists
+    if (!getLastResetTime()) {
+        resetAnalytics();
+    }
 
     // Modal handlers
     openModalBtn && openModalBtn.addEventListener('click', () => { modal.style.display = 'flex'; });
@@ -387,6 +584,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function addActivityToList(activity, impactKg) {
+            updateCFLineChartAfterActivity();
         const li = document.createElement('li');
         li.className = 'activity-item';
         const icon = {
@@ -395,13 +593,25 @@ document.addEventListener('DOMContentLoaded', function() {
             energy: '<i class="fas fa-bolt"></i>'
         }[activity.category] || '<i class="fas fa-circle"></i>';
 
-        const description = (activity.category === 'transport')
-            ? `${activity.transportType || ''} (${(Number(activity.distance) || 0).toFixed(1)} km)`
-            : (activity.category === 'diet')
-                ? `${activity.mealType || ''} meal`
-                : (activity.category === 'energy')
-                    ? `${(Number(activity.energyAmount) || 0).toFixed(1)} kWh`
-                    : 'Activity';
+
+        // Helper to camel case and add thousand separators
+        function toCamelCase(str) {
+            if (!str) return '';
+            return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+        }
+        function formatNumber(n, decimals=1) {
+            return Number(n).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+        }
+        let description = '';
+        if (activity.category === 'transport') {
+            description = `${toCamelCase(activity.transportType || '')} (${formatNumber(activity.distance || 0)} km)`;
+        } else if (activity.category === 'diet') {
+            description = `${toCamelCase(activity.mealType || '')} Meal`;
+        } else if (activity.category === 'energy') {
+            description = `${formatNumber(activity.energyAmount || 0)} kWh`;
+        } else {
+            description = toCamelCase(activity.subtype || 'Activity');
+        }
 
         li.innerHTML = `
             <div class="activity-category">
@@ -716,14 +926,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 }[activity.category] || '<i class="fas fa-circle"></i>';
                 
                 let description = '';
+
+                function toCamelCase(str) {
+                    if (!str) return '';
+                    return str.replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+                }
+                function formatNumber(n, decimals=1) {
+                    return Number(n).toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
+                }
                 if (activity.category === 'transportation' || activity.category === 'transport') {
-                    description = `${activity.subtype || 'Transport'} (${(Number(activity.distance) || 0).toFixed(1)} km)`;
+                    description = `${toCamelCase(activity.subtype || 'Transport')} (${formatNumber(activity.distance || 0)} km)`;
                 } else if (activity.category === 'diet') {
-                    description = `${activity.subtype || 'Meal'}`;
+                    description = `${toCamelCase(activity.subtype || 'Meal')} Meal`;
                 } else if (activity.category === 'energy') {
-                    description = `${(Number(activity.amount) || 0).toFixed(1)} kWh`;
+                    description = `${formatNumber(activity.amount || 0)} kWh`;
                 } else {
-                    description = activity.subtype || 'Activity';
+                    description = toCamelCase(activity.subtype || 'Activity');
                 }
                 
                 const impactKg = Number(activity.impact) || 0;

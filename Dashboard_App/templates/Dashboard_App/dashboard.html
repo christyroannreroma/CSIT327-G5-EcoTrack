@@ -104,10 +104,12 @@
       <div class="left-column">
         <!-- Carbon Footprint Score -->
         <div class="card score-card">
-          <h2 style="text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);">⭐ Your Carbon Footprint Score ⭐</h2>
+          <h2 style="text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);">⭐ Your Daily Carbon Footprint Score ⭐</h2>
           <div class="score-value" id="scoreValue">0.0</div>
           <div class="score-label" id="scoreLabel">kg CO2</div>
-          <div class="score-description">All analytics reset to 0.</div>
+          <div class="score-description" id="scoreResetMsg" style="font-size:1em;margin-top:4px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,0.2);font-weight:600;">Your Daily Score will reset in</div>
+          <div class="score-timer" id="scoreTimer" style="font-size:1.2em;margin-top:2px;color:#f5f5f5;text-shadow:0 1px 2px rgba(0,0,0,0.2);">Next reset: 24:00:00</div>
+          <div class="score-warning" id="scoreWarning" style="font-size:1.1em;margin-top:8px;font-weight:700;"></div>
           <div class="trend-indicator trend-down" id="trendIndicator" style="display:none;">
             <i class="fas fa-arrow-down"></i>
             <span id="trendText">Trending down this week</span>
@@ -162,22 +164,20 @@
         <!-- Daily Target -->
         <div class="card-right">
           <div class="card-header">
-            <h3 class="card-title">Daily Target</h3>
-            <i class="fas fa-bullseye"></i>
+            <h3 class="card-title">Total Carbon Footprint Over Time</h3>
+            <i class="fas fa-chart-line"></i>
           </div>
-          <div class="target-goal">
-            <div class="progress-ring">
-              <svg width="80" height="80" viewBox="0 0 80 80">
-                <circle cx="40" cy="40" r="35" stroke="#E8F5E9" stroke-width="6" fill="none"></circle>
-                <circle cx="40" cy="40" r="35" stroke="#4CAF50" stroke-width="6" fill="none" 
-                        stroke-dasharray="220" stroke-dashoffset="220" stroke-linecap="round" transform="rotate(-90 40 40)"></circle>
-              </svg>
-            </div>
-            <div>
-              <div class="progress-value" id="progressValue">0%</div>
-              <div class="progress-text">of daily goal achieved</div>
-              <div class="progress-text" id="progressKg">0.0 kg of 3.0 kg target</div>
-            </div>
+          <div style="margin-bottom: 10px;">
+            <label for="cfTimeRange" style="font-weight:600;">View by:</label>
+            <select id="cfTimeRange" style="margin-left:8px;">
+              <option value="yearly">Year</option>
+              <option value="monthly">Month</option>
+              <option value="weekly">Week</option>
+              <option value="daily">Day</option>
+            </select>
+          </div>
+          <div class="chart-container">
+            <canvas id="cfLineChart" height="120"></canvas>
           </div>
         </div>
         
