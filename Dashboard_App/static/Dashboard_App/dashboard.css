@@ -1,18 +1,22 @@
 .score-card {
   transition: background 0.4s, color 0.4s;
 }
+
 .score-card.bg-green {
   background: linear-gradient(135deg, #4CAF50, #81C784) !important;
   color: #fff !important;
 }
+
 .score-card.bg-yellow {
   background: linear-gradient(135deg, #FFD93D, #FF6B6B) !important;
   color: #fff !important;
 }
+
 .score-card.bg-red {
   background: linear-gradient(135deg, #d32f2f, #ff6b6b) !important;
   color: #fff !important;
 }
+
 .score-warning {
   font-size: 1.1em;
   margin-top: 8px;
@@ -21,6 +25,7 @@
   display: none;
   transition: color 0.3s;
 }
+
 :root {
   --primary-green: #4CAF50;
   --light-green: #E8F5E9;
@@ -34,7 +39,7 @@
   --transition: all 0.3s ease;
   --white: #FFFFFF;
   --mid-green: #4CAF50;
-  
+
   /* New fun colors */
   --fun-blue: #4A90E2;
   --fun-yellow: #FFD93D;
@@ -70,25 +75,25 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
+  background-image:
     radial-gradient(circle at 10% 20%, rgba(76, 175, 80, 0.05) 0%, transparent 20%),
     radial-gradient(circle at 90% 60%, rgba(74, 144, 226, 0.05) 0%, transparent 20%),
     radial-gradient(circle at 50% 80%, rgba(255, 217, 61, 0.05) 0%, transparent 20%);
   z-index: -1;
 }
 
-.welcome-text{
-  font-family: 'Montserrat', sans-serif; 
-  font-weight: 800;  
-  font-size: 2rem;  
-  color: rgb(54, 139, 189);  
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  
+.welcome-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 2rem;
+  color: rgb(54, 139, 189);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar {
   width: 240px;
   background-color: var(--white);
-  box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -100,12 +105,12 @@ body::before {
   z-index: 100;
   border-radius: 0 20px 20px 0;
   transform: translateX(0);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-              box-shadow 0.4s ease;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.4s ease;
 }
 
 .sidebar:hover {
-  box-shadow: 6px 0 25px rgba(0,0,0,0.15);
+  box-shadow: 6px 0 25px rgba(0, 0, 0, 0.15);
 }
 
 .sidebar-logo {
@@ -114,7 +119,7 @@ body::before {
   text-align: center;
   margin-bottom: 2rem;
   font-size: 1.5rem;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   letter-spacing: 0.5px;
 }
 
@@ -142,7 +147,7 @@ body::before {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   transition: left 0.5s;
 }
 
@@ -153,7 +158,7 @@ body::before {
 .nav-item:hover {
   background-color: var(--light-green);
   transform: translateX(5px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .nav-item.active {
@@ -161,7 +166,7 @@ body::before {
   color: var(--white);
   font-weight: 600;
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-bottom {
@@ -175,9 +180,9 @@ body::before {
 header {
   position: fixed;
   top: 0;
-  left: 0;  
-  width: 100vw;  
-  z-index: 50; 
+  left: 0;
+  width: 100vw;
+  z-index: 50;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -189,6 +194,7 @@ header {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   border-radius: 0;
 }
+
 header::after {
   content: '';
   position: absolute;
@@ -199,10 +205,12 @@ header::after {
   background: var(--fun-gradient);
   border-radius: 4px;
 }
+
 /* Dashboard - Push content below the fixed header */
 .dashboard {
   margin-left: 240px;
-  margin-top: 120px;  /* Push content below the header */
+  margin-top: 120px;
+  /* Push content below the header */
   padding: 20px;
   flex: 1;
   margin-bottom: 20px;
@@ -216,13 +224,13 @@ header::after {
   font-size: 28px;
   font-weight: 800;
   color: var(--dark-green);
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .logo img {
   width: 40px;
   height: 40px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .user-profile {
@@ -236,13 +244,13 @@ header::after {
   transition: all 0.3s ease;
   background: rgba(181, 233, 248, 0.973);
   backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .user-profile:hover {
   background: rgba(128, 211, 235, 0.973);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
 .avatar {
@@ -256,7 +264,7 @@ header::after {
   font-weight: bold;
   font-size: 1.1rem;
   background: var(--fun-gradient);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
 }
 
@@ -271,7 +279,7 @@ header::after {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   width: 200px;
   padding: 10px 0;
   display: none;
@@ -290,6 +298,7 @@ header::after {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -308,11 +317,11 @@ header::after {
 
 .profile-menu-item:hover {
   background: rgba(212, 211, 211, 0.596);
-  border-radius: 12px; 
+  border-radius: 12px;
   margin-right: 5px;
   margin-left: 5px;
   padding: 12px 15px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
 
@@ -377,7 +386,7 @@ header::after {
 }
 
 .score-card {
-  background:linear-gradient(135deg, var(--primary-green), var(--accent-green));
+  background: linear-gradient(135deg, var(--primary-green), var(--accent-green));
   color: white;
   text-align: center;
   padding: 30px;
@@ -392,7 +401,7 @@ header::after {
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
   transform: rotate(30deg);
 }
 
@@ -403,17 +412,19 @@ header::after {
   color: rgb(28, 126, 28);
   animation: bounce 2s ease-in-out infinite;
 }
+
 .score-label {
   font-size: 18px;
   opacity: 0.8;
   margin-top: 4px;
   font-weight: bold;
 }
+
 .score-description {
   font-size: 12px;
   opacity: 0.7;
   margin-top: 5px;
-  color:#0f0f0f;
+  color: #0f0f0f;
 }
 
 /* Enhanced Badges styling */
@@ -434,7 +445,8 @@ header::after {
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: visible; /* Changed from hidden to visible */
+  overflow: visible;
+  /* Changed from hidden to visible */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
@@ -460,12 +472,12 @@ header::after {
   opacity: 1 !important;
   transform: scale(1.06) !important;
   box-shadow: 0 6px 18px rgba(76, 175, 80, 0.18) !important;
-  border: 1px solid rgba(76,175,80,0.12) !important;
+  border: 1px solid rgba(76, 175, 80, 0.12) !important;
 }
 
 .badge.badge-unlocked.locked {
-    filter: none !important;
-    opacity: 1 !important;
+  filter: none !important;
+  opacity: 1 !important;
 }
 
 /* Hover effects for all badges */
@@ -488,7 +500,8 @@ header::after {
 /* Enhanced tooltip styling */
 .badge-tooltip {
   position: absolute;
-  bottom: -9999px; /* Hidden by default */
+  bottom: -9999px;
+  /* Hidden by default */
   left: 50%;
   transform: translateX(-50%) translateY(10px);
   background: rgba(0, 0, 0, 0.9);
@@ -512,7 +525,8 @@ header::after {
 .badge:hover .badge-tooltip {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
-  bottom: -85px; /* Positioned well below the badge */
+  bottom: -85px;
+  /* Positioned well below the badge */
 }
 
 /* Tooltip arrow */
@@ -556,8 +570,15 @@ header::after {
 
 /* Floating animation for unlocked badges */
 @keyframes gentleFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 .badge.badge-unlocked {
@@ -574,10 +595,12 @@ header::after {
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .reset-btn:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 12px rgba(255, 217, 61, 0.4);
 }
+
 .trend-indicator {
   display: flex;
   align-items: center;
@@ -740,9 +763,11 @@ header::after {
 }
 
 .icon-svg {
-  width: 3em;  /* Default to 1em for scalability, adjust per icon if needed */
+  width: 3em;
+  /* Default to 1em for scalability, adjust per icon if needed */
   height: 3em;
-  fill: currentColor;  /* If SVG uses fill, inherit color from parent */
+  fill: currentColor;
+  /* If SVG uses fill, inherit color from parent */
 }
 
 .badge {
@@ -796,17 +821,17 @@ header::after {
   background: linear-gradient(135deg, #66bb6a, #2e7d32);
   color: #fff;
   transform: scale(1.03);
-  box-shadow: 0 6px 18px rgba(46,125,50,0.18);
+  box-shadow: 0 6px 18px rgba(46, 125, 50, 0.18);
 }
 
 .badge .prereq {
   font-size: 11px;
-  color: rgba(255,255,255,0.9);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .badge .earned-text {
   font-size: 12px;
-  color: rgba(255,255,255,0.95);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 /* keep locked hover showing prereq text */
@@ -814,7 +839,7 @@ header::after {
   background: rgba(0, 0, 0, 0.85);
   color: #ffffff;
   padding: 6px 10px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   border-radius: 6px;
   white-space: normal;
 }
@@ -839,7 +864,7 @@ header::after {
   transform: translateX(-50%);
   border-width: 6px;
   border-style: solid;
-  border-color: transparent transparent rgba(0,0,0,0.85) transparent;
+  border-color: transparent transparent rgba(0, 0, 0, 0.85) transparent;
 }
 
 .notification {
@@ -867,19 +892,26 @@ header::after {
 
 .notification i {
   font-size: 20px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 a p {
-  font-family: 'Inter', sans-serif; 
+  font-family: 'Inter', sans-serif;
   text-decoration: none;
   color: black;
 }
 
 /* Add some floating animation for fun */
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .floating {
@@ -986,8 +1018,15 @@ a p {
 
 /* Bounce animation for score */
 @keyframes bounce {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 /* Responsive adjustments */
@@ -995,24 +1034,24 @@ a p {
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .score-value {
     font-size: 48px;
   }
-  
+
   .chart-details {
     grid-template-columns: 1fr;
   }
-  
+
   .dashboard {
     margin-left: 0;
   }
-  
+
   .sidebar {
     transform: translateX(-100%);
     transition: transform 0.3s ease;
   }
-  
+
   /* Responsive adjustments for tooltips */
   .badge-tooltip {
     font-size: 12px;
@@ -1020,22 +1059,26 @@ a p {
     min-width: 150px;
     white-space: normal;
   }
-  
+
   .badge:hover .badge-tooltip {
     bottom: -75px;
   }
-  
+
   .badges-container {
     gap: 8px;
   }
-  
+
   .badges-container .badge {
     width: 60px;
     height: 60px;
   }
-  
+
   .badges-container .badge .icon-svg {
     width: 60px;
     height: 60px;
   }
+}
+
+.pie-chart-resize {
+  height: 400px;
 }
