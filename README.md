@@ -75,6 +75,7 @@ EcoTrack is a sustainability-focused web application developed in partial fulfil
     ├── Homepage_App/
     ├── Login_App/
     ├── Profile_App/
+    ├── Recycling_App/
     ├── Signup_App/
     └── static/...
 
