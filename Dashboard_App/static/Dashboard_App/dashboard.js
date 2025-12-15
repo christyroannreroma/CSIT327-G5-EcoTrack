@@ -436,49 +436,58 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- Daily Reset Timer Logic ---
     function pad(n) { return n < 10 ? '0' + n : n; }
-    function getNextResetTime() {
-        // Reset at midnight local time
+
+    // Explicitly find next midnight
+    function getNextMidnight() {
         const now = new Date();
-        const next = new Date(now);
-        next.setHours(24, 0, 0, 0);
+        const next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
         return next;
     }
 
-    function getLastResetTime() {
-        let last = null;
-        try {
-            last = parseInt(localStorage.getItem('carbon_last_reset'), 10);
-        } catch (e) { }
-        return last || 0;
-    }
-
     function checkAndResetIfNeeded() {
-        const now = Date.now();
-        const last = getLastResetTime();
-        const nextReset = getNextResetTime().getTime();
-        if (!last || now >= nextReset) {
+        // Logic to reset if we've crossed midnight since last reset
+        // For now, relies on server side or manual reset, or simple daily check:
+        const lastResetStr = localStorage.getItem('carbon_last_reset');
+        if (!lastResetStr) {
+            // First run, set it
+            localStorage.setItem('carbon_last_reset', Date.now().toString());
+            return;
+        }
+
+        const lastReset = new Date(parseInt(lastResetStr, 10));
+        const now = new Date();
+
+        // If last reset was on a different day (and we are past midnight), allow reset
+        // Simplified: just check if 'day' is different
+        if (lastReset.getDate() !== now.getDate() || lastReset.getMonth() !== now.getMonth()) {
             resetAnalytics();
         }
     }
 
     function updateTimerDisplay() {
         const now = new Date();
-        const next = getNextResetTime();
+        const next = getNextMidnight();
         let diff = Math.floor((next - now) / 1000);
+
         if (diff < 0) diff = 0;
+
         const h = pad(Math.floor(diff / 3600));
         const m = pad(Math.floor((diff % 3600) / 60));
         const s = pad(diff % 60);
-        if (scoreTimerEl) {
-            scoreTimerEl.textContent = `${h}:${m}:${s}`;
+
+        const timerEl = document.getElementById('scoreTimer');
+        if (timerEl) {
+            timerEl.textContent = `${h}:${m}:${s}`;
         }
     }
 
-    // On load, check if reset is needed
+    // Run once immediately
     checkAndResetIfNeeded();
     updateTimerDisplay();
+
+    // Start interval
     setInterval(() => {
-        checkAndResetIfNeeded();
+        // checkAndResetIfNeeded(); // Optional: run less frequently if heavy
         updateTimerDisplay();
     }, 1000);
     // --- End Daily Reset Timer Logic ---
@@ -584,9 +593,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    let isSubmitting = false;
+
     // form submission: calculate emissions and update analytics
     trackingForm && trackingForm.addEventListener('submit', (e) => {
         e.preventDefault();
+
+        if (isSubmitting) return;
+        isSubmitting = true;
+        // Re-enable after 1.5 seconds
+        setTimeout(() => { isSubmitting = false; }, 2000);
 
         const category = categorySelect.value;
         if (!category) {
