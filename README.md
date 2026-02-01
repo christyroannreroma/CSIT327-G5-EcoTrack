@@ -229,7 +229,7 @@ Project Management Team:
 - **Scrum Master:** Karl Miguel Penida/karlmiguel.penida@cit.edu
 
 Development Team:
-- **Lead Developer:** Sang'gre Terra/joji.matsuda@cit.edu
+- **Lead Developer:** Sang'gre Terra/sanggre.terra@cit.edu
 - **Backend Developer:** Dharell Dave H. Melliza/dharelldave.melliza@cit.edu
 - **Frontend Developer/Designer:** Sittie Sharimah M. Macasindel/sittiesharima.macasindel@cit.edu
 ------------------------------------------------------------------------
